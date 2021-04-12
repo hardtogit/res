@@ -1,0 +1,75 @@
+html{-webkit-tap-highlight-color:transparent}
+body{padding:0;margin:0;font-size:14px;color:#333}
+body,input,textarea{font-family:"Microsoft YaHei UI","Microsoft YaHei","\5fae\8f6f\96c5\9ed1","\5b8b\4f53",sans-serif}
+*{box-sizing:border-box}
+a{color:#2a42e9;text-decoration:none}
+a:hover{color:red}
+a:active,a:focus,a:hover{text-decoration:none}
+a,button,input,select,textarea,p,h1,h2,h3,h4,h5{outline:0;margin:0;padding:0}
+li,ol,ul,dl,dd{list-style:none;outline:0;margin:0;padding:0}
+label{font-weight:500;position:relative;vertical-align:middle;display:inline-block;margin-right:15px;white-space:nowrap}
+img{max-width:100%;height:auto;border:0;border-radius:2px;vertical-align:middle;-ms-interpolation-mode:bicubic}
+td,th{vertical-align:middle}
+pre{white-space:pre-line!important}
+a,button,input[type="button"]{cursor:pointer}
+
+
+
+input[type="text"],input[type="password"],input[type="datetime-local"],input[type="datetime"],textarea{border:1px solid #ccc;border-radius:2px;padding:6px;font-size:14px;resize:none}
+input:hover,textarea:hover{box-shadow:rgb(0,0,0,0.15) 0 0 8px 0px}
+input[type="button"]{border:1px solid #ccc;padding:8px 20px}
+select{border:1px solid #ccc;padding:6px;border-radius:2px;font-size:14px;}
+
+.header{background:#f1f1f1;line-height:40px;text-align:center;border-bottom:1px solid #ccc;height:40px;}
+.header a{display:inline-block;margin:0 15px}
+.header a.active{color:#fff;background:#5d5d5d;padding:0 15px;}
+
+
+.mainer{margin:0 auto;max-width:1440px;padding:50px 20px}
+.wah-list{width:700px;}
+.wah-list .head{display:flex;border:1px solid #ccc;}
+.wah-list .head span{text-align:center;line-height:40px;font-size:12px;flex:1;font-weight:bold;border-right:1px solid #ccc}
+.wah-list .head span:last-child{border-right:none}
+.wah-list .item{display:flex;border:1px solid #ccc;border-top:none}
+.wah-list .item input{border:none;flex:1;text-align:center;font-size:12px;line-height:20px;;border-right:1px solid #ccc}
+.wah-list .item input:last-child{border-right:none}
+
+@keyframes inner{from{stroke-dashoffset:300}to{stroke-dashoffset:0}}
+.upload-files .file{text-align:center;display:inline-block;position:relative;cursor:pointer;background:#fafafa;border:1px dashed rgba(0,0,0,0.15);border-radius:4px;width:80px;height:80px;margin-right:10px;overflow:hidden;}
+.upload-files .file:hover{background:#fffadf;border-color:rgba(0,0,0,0.2)}
+.upload-files .file:after{content:attr(title);position:absolute;top:0;left:0;width:100%;height:100%;text-align:center;line-height:80px;font-size:12px;z-index:1;color:#bbb}
+.upload-files .loader{position:absolute;background:rgba(0,0,0,0.6);left:0;bottom:0;width:100%;z-index:90;-webkit-box-align:center;align-items:center;display:flex;height:100%;-webkit-box-pack:center;justify-content:center}
+.upload-files .process{stroke-linecap:round;stroke-width:4;fill:none;width:60px;height:60px}
+.upload-files .process-inner-circle{stroke:#fff;stroke-dasharray:30;stroke-dashoffset:0;transform-origin:center center;animation:5s linear 0s infinite normal none running inner}
+.upload-files img,.upload-files video{max-width:80px;max-height:80px}
+.upload-files input[type='file']{position:absolute;left:0;right:0;top:0;bottom:0;opacity:0;cursor:pointer;z-index:100}
+
+
+
+
+.group-input{display:inline-flex;}
+.group-input input[type="text"]{flex:auto;border-radius:2px 0 0 2px;}
+.group-input input[type="button"], .group-input button{flex:auto;border-left:none;border-radius:0 2px 2px 0;}
+
+
+.paging{padding:10px;display:flex}
+.paging p{flex:auto}
+.paging p.button a{margin-right:15px}
+.paging p.page{text-align:right}
+.paging p.page a,.paging p.page strong{display:inline-block;line-height:20px;min-width:14px;text-align:center;margin:0 5px;color:#333}
+.paging p.page .active,.paging p.page strong{color:red;pointer-events:none;cursor:default;}
+
+table{width:100%;border:1px solid #ccc;border-collapse:0;border-spacing:0;border-radius:1px}
+table[role='list'] td,table[role='list'] th{padding:8px;border-top:1px solid #ccc;border-right:1px solid #ccc}
+table[role='list'] th{background:#f1f1f1;border-top:none;text-align:left}
+table[role='list'] td:last-child,table[role='list'] th:last-child{border-right:none}
+table[role='list'] .button a{display:inline-block;margin-right:10px}
+table[role='list'] .button a:last-child{margin-right:0}
+
+table[role='edit']{width:1000px;margin:0 auto}
+table[role='edit'] th{text-align:right;vertical-align:middle;}
+table[role='edit'] td{padding:8px;}
+table[role='edit'] td span.error{display:inline-block;margin-left:15px;font-size:12px;color:#aaa;}
+
+
+table.no th:first-child,table.no td:first-child{text-align:center}

@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="content-type" content="text/html;charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, minimum-scale=1.0"/>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge,chrome=1"/>
+    <title>创作者列表</title>
+    <link href="/static/css/admin.css?v=2021021916" rel="stylesheet" type="text/css"/>
+    <script src="/static/scripts/jquery-2.2.0.min.js?v=20210218" type="text/javascript"></script>
+    <script src="/static/scripts/admin.js?v=20210218" type="text/javascript"></script>
+    <script src="/static/js/api.js?v=20210218" type="text/javascript"></script>
+    <script src="/static/js/util.js?v=20210218" type="text/javascript"></script>
+</head>
+<body>
+<div th:replace="admin/navi::naviBar"></div>
+<div class="mainer">
+    <table id="table" role="list" class="no">
+        <tr>
+            <th width="70">编号</th>
+            <th width="150">活动类型</th>
+            <th width="150">活动主题</th>
+            <th width="150">活动名称</th>
+            <th width="180">活动开始时间</th>
+            <th width="180">活动结束时间</th>
+            <th width="100">状态</th>
+            <th width="180">创建时间</th>
+            <th>操作</th>
+        </tr>
+    </table>
+    <div class="paging">
+        <p class="button">
+            <a href="./add">添加活动</a>
+        </p>
+        <p id="page" class="page">
+        </p>
+    </div>
+</div>
+</body>
+<script type="text/javascript">
+
+    var curPage = 1;
+
+    function updateStatus(btn) {
+        let status = $(btn).attr('data-status');
+        let id = $(btn).attr('data-id');
+        let targetStatus;
+        if (status == 1) {
+            targetStatus = 0;
+        } else {
+            targetStatus = 1;
+        }
+
+        activityAdminSetStatus(id, targetStatus, function () {
+            refreshPage();
+        })
+    }
+
+    function btnHtml(record) {
+        let str = "";
+        if (record.status === 1) {
+            str += ('<a class="button-status" onclick="updateStatus(this)" data-status="{0}" data-id="{1}">禁用</a>'.format(record.status, record.id));
+        } else {
+            str += ('<a class="button-status" onclick="updateStatus(this)" data-status="{0}" data-id="{1}">启用</a>'.format(record.status, record.id));
+        }
+        str += ('<a href="./add?id={0}">编辑</a>'.format(record.id));
+        str += ('<a class="button-delete" data-id="{0}" title="{1}">删除</a>'.format(record.id, record.title));
+        return str;
+    }
+
+    function refreshPage() {
+        showPage(curPage);
+    }
+
+    function showPage(page) {
+        activityAdminListActivity({"page.pageSize": 10, "page.current": page}, function (data) {
+            $(".table_row").remove();
+            curPage = data.pageResult.current;
+            let records = data.pageResult.records;
+            for (const idx in records) {
+                let record = records[idx];
+                record.startTime = formatDateTime(record.startTime);
+                record.endTime = formatDateTime(record.endTime);
+                record.createTime = formatDateTime(record.createTime);
+                debugger
+                $("#table").append(('<tr class="table_row">' +
+                    '<td>{0}</td>' +
+                    '<td>{1}</td>' +
+                    '<td>{2}</td>' +
+                    '<td>{3}</td>' +
+                    '<td>{4}</td>' +
+                    '<td>{5}</td>' +
+                    '<td>{6}</td>' +
+                    '<td>{7}</td>' +
+                    '<td class="button">{8}</td>' +
+                    '</tr>').format(record.id, record.type === 1 ? "融合活动" : "未知", record.title, record.name, record.startTime,
+                    record.endTime, (record.status === 1) ? '启用' : '禁用', record.createTime,
+                    btnHtml(record))
+                )
+            }
+
+            let totalPage = data.pageResult.pages;
+            let current = data.pageResult.current;
+            $("#page").empty()
+            for (let i = 1; i <= totalPage; i++) {
+                $("#page").append('<a href="#" onclick="showPage(' + i + ')" class="' + ((i === current) ? 'active' : '') + '">' + i + '</a>')
+            }
+
+            $('.button-delete').click(function (e) {
+                var that = $(e.target), id = that.attr('data-id'), title = that.attr('title')
+                if (!confirm('确定要删除【' + title + '】活动吗？')) return;
+                activityAdminDelActivity(id, function () {
+                    refreshPage();
+                });
+            });
+        });
+    }
+
+    $(document).ready(function () {
+        showPage(1)
+    })
+
+</script>
+</html>

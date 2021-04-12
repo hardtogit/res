@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta http-equiv="content-type" content="text/html;charset=utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, minimum-scale=1.0"/>
+	<meta http-equiv="X-UA-Compatible" content="ie=edge,chrome=1"/>
+	<title>系列列表</title>
+	<link href="/static/css/admin.css?v=2021021916" rel="stylesheet" type="text/css" />
+	<script src="/static/scripts/jquery-2.2.0.min.js?v=20210218" type="text/javascript"></script>
+	<script src="/static/scripts/admin.js?v=20210218" type="text/javascript"></script>
+</head>
+<body>
+	<div th:replace="admin/navi::naviBar"></div>
+	
+	<div class="mainer">
+		<table role="list" class="no">
+			<tr>
+				<th width="60">编号</th>
+				<th width="400">名称</th>
+				<th width="100">作者数量</th>
+				<th width="170">单次抽取金额</th>
+				<th width="80">状态</th>
+				<th>操作</th>
+			</tr>
+			<tr th:each="item,stat:${model.items}">
+				<td th:text="${item.id}">0</td>
+				<td th:text="${item.name}"></td>
+				<td th:text="${item.nftType}">0</td>
+				<td th:text="${item.unitPrice}">0.00</td>
+				<td th:text="${item.statusName}"></td>
+				<td class="button">
+					<a th:if="${item.status} ne 2" class="button-status" data-status="2" th:attr="data-id=${item.id}">禁用</a>
+					<a th:if="${item.status} ne 9" class="button-status" data-status="9" th:attr="data-id=${item.id}">未售</a>
+					<a th:if="${item.status} ne 1" class="button-status" data-status="1" th:attr="data-id=${item.id}">开售</a>
+					<a th:if="${item.status} ne 10" class="button-status" data-status="10" th:attr="data-id=${item.id}">售完</a>
+					<a th:if="${PROFILE} != 'prod'" class="button-clear" th:attr="data-id=${item.id}">清除库存</a>
+					<a th:href="@{./edit/{id}(id=${item.id})}">编辑</a>
+					<a class="button-delete" th:attr="data-id=${item.id},data-title=${item.name}">删除</a>
+				</td>
+			</tr>
+		</table>
+		<div class="paging">
+			<p class="button">
+				<a href="./edit/0">添加系列</a>
+			</p>
+			<p class="page">
+				<a th:each="i:${#numbers.sequence(1,model.pages)}" th:href="@{./list?index={pn}(pn=${i})}" th:classappend="${model.index} eq ${i} ? 'active'" th:text="${i}"></a>
+			</p>
+		</div>
+	</div>
+	<script type="text/javascript">
+		$('.button-delete').click(function(e) {
+			var that = $(e.target), id = that.data('id'), title = that.data('title')
+			if (!confirm('确定要删除【' + title + '】系列吗？')) return;
+			$.getJSON("./delete?id=" + id, function(model) {
+				alert(model.message);
+				top.location.reload()
+			});
+		});
+		$('.button-status').click(function(e) {
+			var that = $(e.target), id = that.data('id'), status = that.data('status');
+			$.getJSON(["./updateStatus?id=",id,'&status=',status].join(''), function(model) {
+				alert(model.message);
+				top.location.reload()
+			});
+		});
+		$('.button-clear').click(function(e) {
+			var that = $(e.target), id = that.data('id');
+			$.getJSON(["./clearInventory?id=",id].join(''), function(model) {
+				alert(model.message);
+				top.location.reload()
+			});
+		});
+	</script>
+	
+</body>
+</html>

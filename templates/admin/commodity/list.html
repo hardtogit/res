@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta http-equiv="content-type" content="text/html;charset=utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, minimum-scale=1.0"/>
+	<meta http-equiv="X-UA-Compatible" content="ie=edge,chrome=1"/>
+	<title>作品列表</title>
+	<link href="/static/css/admin.css?v=2021021916" rel="stylesheet" type="text/css" />
+	<script src="/static/scripts/jquery-2.2.0.min.js?v=20210218" type="text/javascript"></script>
+	<script src="/static/scripts/admin.js?v=20210218" type="text/javascript"></script>
+</head>
+<body>
+	<div th:replace="admin/navi::naviBar"></div>
+	<div class="mainer">
+		<table role="list" class="no">
+			<tr>
+				<th width="80">NFT编号</th>
+				<th width="300">所属系列</th>
+				<th width="200">商品名称</th>
+				<th width="150">作者名称</th>
+				<th width="110">发售量</th>
+				<th width="100">艺术价值</th>
+				<th width="80">作品权重</th>
+				<th width="130">状态</th>
+				<th>操作</th>
+			</tr>
+			<tr th:each="item,stat:${model.items}">
+				<td th:text="${item.nftCode}"></td>
+				<td th:text="${item.seriesName}"></td>
+				<td th:text="${item.name}"></td>
+				<td th:text="${item.creatorName}"></td>
+				<td th:text="${item.quantity} + '/' + ${item.inventory}"></td>
+				<td th:text="${item.marketPrice}"></td>
+				<td th:text="${item.weight}"></td>
+				<td>[(${item.statusName})]，[(${item.mintStatusName})]</td>
+				<td class="button">
+					<a th:if="${item.status} eq 1" class="button-status" data-status="2" th:attr="data-id=${item.id}">禁用</a>
+					<a th:if="${item.status} eq 2 or ${item.status} eq 0" class="button-status" data-status="1" th:attr="data-id=${item.id}">启用</a>
+					<a th:if="${item.mintStatus} eq 0" class="button-mint" th:attr="data-id=${item.id},data-title=${item.name}">申请铸造</a>
+					<a th:href="@{./edit/{id}(id=${item.id})}">编辑</a>
+					<a class="button-delete" th:attr="data-id=${item.id},data-title=${item.name}">删除</a>
+				</td>
+			</tr>
+		</table>
+		<div class="paging">
+			<p class="button">
+				<a href="./edit/0">添加作品</a>
+			</p>
+			<p class="page">
+				<a th:each="i:${#numbers.sequence(1,model.pages)}" th:href="@{./list?index={pn}(pn=${i})}" th:classappend="${model.index} eq ${i} ? 'active'" th:text="${i}"></a>
+			</p>
+		</div>
+	</div>
+	<script type="text/javascript">
+		$('.button-delete').click(function(e) {
+			var that = $(e.target), id = that.data('id'), title = that.data('title')
+			if (!confirm('确定要删除【' + title + '】系列吗？')) return;
+			$.getJSON("./delete?id=" + id, function(model) {
+				alert(model.message);
+				top.location.reload()
+			});
+		});
+		$('.button-status').click(function(e) {
+			var that = $(e.target), id = that.data('id'), status = that.data('status');
+			$.getJSON(["./updateStatus?id=",id,'&status=',status].join(''), function(model) {
+				alert(model.message);
+				top.location.reload()
+			});
+		});
+		$('.button-mint').click(function(e) {
+			var that = $(e.target), id = that.data('id'),title = that.data('title');
+			if (!confirm('确定要为【' + title + '】申请铸造吗？')) return;
+			$.getJSON(["./mintStatus?id=",id].join(''), function(model) {
+				alert(model.message);
+				top.location.reload()
+			});
+		});
+	</script>
+</body>
+</html>

@@ -1,0 +1,21 @@
+*{margin:0;padding:0}
+body,html{font-size:14px}
+::-webkit-scrollbar{width:7px;height:7px;background-color:#000}
+::-webkit-scrollbar-track{box-shadow:inset 0 0 6px rgba(0,0,0,.3);-webkit-box-shadow:inset 0 0 6px rgba(0,0,0,.3);border-radius:10px;background-color:#aaa}
+::-webkit-scrollbar-thumb{border-radius:10px;box-shadow:inset 0 0 6px rgba(0,0,0,.1);-webkit-box-shadow:inset 0 0 6px rgba(0,0,0,.1);background-color:#c8c8c8}
+body,button,input,select,textarea{font:1em/1.8 'Poppins','PingFang SC','Lantinghei SC','Microsoft Yahei','Hiragino Sans GB','Microsoft Sans Serif','WenQuanYi Micro Hei',sans-serif}
+img{display:block;display:-webkit-block;display:-moz-block;display:-ms-block}
+.w1440{width:75%}
+a{text-decoration:none}
+a:hover{cursor:hand}
+.white{color:#fff}
+.flex{display:flex;display:-webkit-flex;display:-moz-flex;display:-ms-flex}
+.jc_sb{justify-content:space-between;-webkit-justify-content:space-between;-moz-justify-content:space-between;-ms-justify-content:space-between}
+.jc_sa{justify-content:space-around;-webkit-justify-content:space-around;-moz-justify-content:space-around;-ms-justify-content:space-around}
+.jc_cen{justify-content:center;-webkit-justify-content:center;-moz-justify-content:center;-ms-justify-content:center}
+.jc_end{justify-content:flex-end;-webkit-justify-content:flex-end;-moz-justify-content:flex-end;-ms-justify-content:flex-end}
+.ali_center{align-items:center;-webkit-align-items:center;-moz-align-items:center;-ms-align-items:center}
+.flex_d{flex-direction:row;-webkit-flex-direction:row;-moz-flex-direction:row;-ms-flex-direction:row}
+.flex_w{flex-wrap:wrap;-webkit-flex-wrap:wrap;-moz-flex-wrap:wrap;-ms-flex-wrap:wrap}
+.shrink{flex-shrink:0;-webkit-flex-shrink:0;-moz-flex-shrink:0;-ms-flex-shrink:0}
+.bor_radius{border:.5px solid rgba(255,255,255,.2);box-sizing:border-box;border-radius:15px}

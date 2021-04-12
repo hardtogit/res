@@ -1,0 +1,145 @@
+@media screen and (min-width: 1200px)
+{
+	.num {
+		width: 768px !important;		
+		margin: auto !important;	
+	}
+}
+@media screen and (max-width: 1200px)
+{
+	.num {
+		width: 768px !important;		
+		margin: auto !important;		
+	}
+	body{max-width:none !important;}
+	.tab-content {
+	left:11.7% !important;
+	top: 39% !important;
+}
+}
+
+.new_select {
+    position: relative;
+    display: inline-block;
+    margin-bottom: 15px;
+    width: 167px;
+}
+.new_select select {
+	font-family: 'Arial';
+	display: inline-block;
+	width: 165px;
+	cursor: pointer;
+	padding: 10px 15px;
+	outline: 0;
+	border: 1px solid #4b4a57;
+	border-radius: 17px;
+	background: #1e1e2d;
+	color: #cccccc;
+	    height: 59px;
+    font-size: 13px;
+	appearance: none;
+	-webkit-appearance: none;
+	-moz-appearance: none;
+}
+.new_select select::-ms-expand {
+	display: none;
+}
+.new_select select:hover,
+.new_select select:focus {
+	color: #ccc;
+	background: #1e1e2d;
+}
+.new_select select:disabled {
+	opacity: 0.5;
+	pointer-events: none;
+}
+.new_select_arrow {
+    position: absolute;
+    top: 21px;
+    right: 19px;
+    width: 3px;
+    height: 3px;
+    border: solid #cccccc;
+    border-width: 0 3px 3px 0;
+    display: inline-block;
+    padding: 3px;
+    transform: rotate(45deg);
+    -webkit-transform: rotate(45deg);
+}
+.new_select select:hover ~ .select_arrow,
+.new_select select:focus ~ .select_arrow {
+    border-color: #cccccc;
+}
+.new_select select:disabled ~ .select_arrow {
+    border-top-color: #cccccc;
+}
+
+
+.tab-content .wah-box .coin {
+    width: 563px !important;
+    padding: 16px 0px 0 !important;
+   margin-top: 34px;
+}
+.tab-content .tab-box {
+   
+    font-size: 20px  !important;
+}
+
+
+.new_select_block
+{
+	display:inline-block;
+	float:left;
+	margin-left:5px;
+	
+}
+.new_select_block_span
+{
+    font-size: 17px;
+    width: 200px;
+    height: 52px;
+    border: 1px solid #4b4a57;
+    margin-top: 3px;
+    border-radius: 17px;
+}
+.new_select_block_span_left{
+    float: left;
+    margin-top: 7px;
+    margin-left: 8px;
+    font-size: 20px;
+	font-weight: bolder;
+}
+.new_select_block_right{
+    width: 60px;
+    float: right;
+    margin-top: 13px;
+    font-size: 13px;
+    margin-right: -17px;
+
+    font-weight: bolder;
+	
+}
+.monwy_clear
+{
+	clear:both;
+}
+
+.new_claim {
+color: #fff;
+    font-size: 14px;
+    width: 100px;
+    font-weight: 700;
+    height: 55px;
+    background: rgba(70,70,70,.66);
+    cursor: pointer;
+    border-radius: 17px;
+    /* position: absolute; */
+    right: 10px;
+    bottom: 60px;
+   margin-top: 3px;
+}
+
+.tab-content {
+    
+    top: 43% !important;
+}

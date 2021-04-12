@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<th:block th:replace="common/metas::metaConfig" />
+		<title>NFT Staking</title>
+		<link rel="stylesheet" href="/static/css/common.css?v=20210318" />
+		<script src="/static/js/jquery.min.js?v=2021022122"></script>
+		<script src="https://unpkg.com/@metamask/legacy-web3@latest/dist/metamask.web3.min.js"></script>
+		<style type="text/css">
+			*{color:#fff}
+			body{padding-top:125px}
+			table{margin:auto}
+			table input{color:#333;font-size:14px;padding:10px;border-radius:5px;margin:5px;cursor:pointer;}
+			table input[type='text']{width:450px}
+			#logs{font-size:18px}
+			.footer-box{position:inherit}
+		</style>
+	</head>
+	<body>
+		<header class="header">
+			<img class="logo" src="/static/images/logo.png" alt="FM Gallery" />
+			<img class="mobile-nav" src="/static/images/icon-dian.png" />
+			<div class="head-right" th:replace="common/navi::naviBar"></div>
+		</header>
+		<div class="pc-page">
+			<img class="wait" style="display:none" src="/static/images/nft.jpg?v=20210221" />
+			
+			<table>
+				<tr>
+					<td><br /><br /></td>
+					<td></td>
+				</tr>
+				<tr>
+					<td>Stak Contract Address:</td>
+					<td><input type="text" id="StakContractAddress" /></td>
+				</tr>
+				<tr>
+					<td>Yield Contract Address:</td>
+					<td><input type="text" id="YieldContractAddress" /></td>
+				</tr>
+				<tr>
+					<td>UniLP Contract Address:</td>
+					<td><input type="text" id="UniLPContractAddress" /></td>
+				</tr>
+				<tr>
+					<td></td>
+					<td id="logs">logs...</td>
+				</tr>
+				<tr>
+					<td></td>
+					<td>
+						<br><br>
+						<input class="auth" type="button" value="请求授权" />
+					</td>
+				</tr>
+				<tr>
+					<td>UniLPToken：</td>
+					<td>
+						<input type="button" value="allowance" class="allowance" />
+						<input type="button" value="approve" class="approve" />
+					</td>
+				</tr>
+				<tr>
+					<td>Staking：</td>
+					<td>
+						<input type="button" value="Deposit" class="deposit" />
+						<input type="button" value="getCurrentEpoch" class="getCurrentEpochs" />
+						<input type="button" value="balanceOf" class="balanceOf" />
+						<input type="button" value="withdraw" class="withdraw" />
+						<input type="button" value="epochDuration" class="epochDuration" />
+						<input type="button" value="epoch1Start" class="epoch1Start" />
+					</td>
+				</tr>
+				<tr>
+					<td>YieldFarmLP：</td>
+					<td>
+						<input type="button" value="getCurrentEpoch" class="getCurrentEpochy" />
+						<input type="button" value="massHarvest" class="massHarvest" />
+						<input type="button" value="getPoolSize" class="getPoolSize" />
+						<input type="button" value="getEpochStake" class="getEpochStake" />
+						<input type="button" value="getTotalDistributedAmount" class="getTotalDistributedAmount" />
+					</td>
+				</tr>
+			</table>
+			
+			
+			
+		</div>
+		<div class="mobile-page">
+			<img class="wait" src="/static/images/mobile/nft-mobile.jpg?v=20210221" />
+		</div>
+		<script src="/static/js/common.js"></script>
+		<script src="/static/js/nft_staking.js?v=1.0.1"></script>
+		<script type="text/javascript">
+			var walletId,epochId;
+			$(".auth").click(function(e){
+	            window.ethereum.enable().then(function (accounts) {
+	            	walletId = accounts[0];
+	            	log(['enable', accounts]);
+	            	
+	            	NFT.init()
+	            	
+	            	alert('授权成功')
+	           	}).catch(function (reason) {
+	           		console.log(['enable.error', reason])
+	           	  	console.log(reason === "User rejected provider access")
+	           	})
+			});
+			
+			var keys = Object.keys(NFT.Mainnet);
+			for (var i = 0; i < keys.length; i++) {
+				var N = keys[i];
+				$('#' + N).val(NFT.Mainnet[N])
+			}
+			
+			
+			$('input[type="text"]').blur(function(e){
+				var O=e.target,N=O.id,V=O.value;
+				if (V) NFT.Mainnet[N]=V;
+				console.log(NFT.Mainnet[N])
+			})
+			
+			
+			// approve
+			$(".allowance").click(function(){
+				NFT.UniLPToken.allowance(walletId)
+			})
+			$(".approve").click(function(){
+				NFT.UniLPToken.approve(10)
+			})
+			
+			
+			// Staking
+			$('.deposit').click(function(){
+				NFT.Staking.deposit(10)
+			});
+			$('.getCurrentEpochs').click(function(){
+				NFT.Staking.getCurrentEpoch()
+			})
+			$('.balanceOf').click(function(){
+				NFT.Staking.balanceOf()
+			})
+			$('.withdraw').click(function(){
+				
+			})
+			$('.epochDuration').click(function(){
+				NFT.Staking.epochDuration()
+			})
+			$('.epoch1Start').click(function(){
+				NFT.Staking.epoch1Start()
+			})
+			
+			
+			
+			// YieldFarmLP
+			$('.getCurrentEpochy').click(function(){
+				NFT.YieldFarmLP.getCurrentEpoch()
+			})
+			$('.getPoolSize').click(function(){
+				NFT.YieldFarmLP.getPoolSize(epochId)
+			})
+			$('.massHarvest').click(function(){
+				NFT.YieldFarmLP.massHarvest()
+			})
+			$('.getEpochStake').click(function(){
+				NFT.YieldFarmLP.getEpochStake(walletId,epochId)
+			})
+			$('.getTotalDistributedAmount').click(function(){
+				NFT.YieldFarmLP.getTotalDistributedAmount()
+			})
+		</script>
+	</body>
+</html>

@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:replace="common/metas::metaConfig"/>
+    <title>Wallets</title>
+    <link rel="stylesheet" type="text/css" href="/static/css/common.css?v=202102222066"/>
+    <link rel="stylesheet" type="text/css" href="/static/css/zhang.css"/>
+    <link rel="stylesheet" type="text/css" href="/static/css/money.css"/>
+    <script src="https://unpkg.com/@metamask/legacy-web3@latest/dist/metamask.web3.min.js"></script>
+    <script src="/static/js/jquery.min.js?v=2021022122"></script>
+    <style type="text/css">
+        .extraction {
+            background: url(/static/images/Group179.png);
+            background-repeat: no-repeat;
+            background-size: 100% auto;
+            display: inline-block;
+            height: 50px;
+            width: 373px;
+            text-align: center;
+            line-height: 50px;
+            color: #fff;
+            font-size: 16px
+        }
+    </style>
+</head>
+<body>
+<header class="header">
+    <img class="logo" src="/static/images/logo.png" alt="FM Gallery"/>
+    <img class="mobile-nav" src="/static/images/icon-dian.png" alt=""/>
+    <div class="head-right" th:replace="common/navi::naviBar"></div>
+</header>
+<div class="wallet">
+    <div th:replace="common/mine_header::naviBar"></div>
+    <div class="cont">
+        <div class="num show">
+            <div class="tab-content">
+                <div class="tab-body">
+                    <div class="tab-con usdt-extr show">
+                        <span class="key-name">Receipt address</span>
+                        <span class="key-addr" th:text="${user?.walletId}">0xB289b6f8e998EA75B039DcD24031</span>
+                        <div class="input_area_row">
+                            <div id="usdt_input_container">
+                                <input id="usdt_input" placeholder="Enter the number of top-ups" type="number"/>
+                                <span id="usdt_input_mark">USDT</span>
+                            </div>
+                        </div>
+                        <div class="coin">
+                            <img src="/static/images/USDT_1.png">
+                            <span class="number" th:text="${user?.balanceUsdtString}"></span>
+                            <span class="unit">USDT</span>
+                            <a class="record" href="/my/extraction/record.html" target="_black">Record Search ></a>
+                        </div>
+                        <div style="text-align:center;padding-top:35px;">
+                            <a href="#" class="extraction">Extraction</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<footer class="footer-box" th:replace="common/footer::footerBar"></footer>
+<img class="back-top" src="/static/images/back-top.png"/>
+<script src="/static/js/jquery.min.js"></script>
+<script src="/static/js/common.js"></script>
+<script type="text/javascript">
+    var extractionBtn = $('.extraction')
+    var number = $('.number')
+    var usdtVal = $('#usdt_input')
+    extractionBtn.click(function () {
+        if (usdtVal.val() <= 0 || usdtVal.val() > parseFloat(number.text())) {
+            window.alert("Please enter the valid usdt number！")
+            return;
+        }
+        $.getJSON(["/api/my/withdraw/apply?token=", 'USDT', '&amount=', usdtVal.val()].join(''), function (model) {
+            window.alert("The withdrawal request has been sent We will finish processing within 48 hours Thank you for your patience!");
+            top.location.reload()
+        });
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta http-equiv="content-type" content="text/html;charset=utf-8">
+	<title>资讯管理</title>
+	<link href="/static/css/admin.css?v=2021021916" rel="stylesheet" type="text/css" />
+	<script src="/static/scripts/jquery-2.2.0.min.js?v=20210218" type="text/javascript"></script>
+	<script src="/static/scripts/admin.js?v=20210218" type="text/javascript"></script>
+</head>
+<body>
+	<div th:replace="admin/navi::naviBar"></div>
+	
+	<div class="mainer">
+		<table role="list">
+			<tr>
+				<th width="100">编号</th>
+				<th width="100">状态</th>
+				<th width="100">排序</th>
+				<th>标题名称</th>
+				<th width="170">发布时间</th>
+				<th width="180">操作</th>
+			</tr>
+			<tr th:each="item,stat:${model.items}">
+				<td th:text="${item.id}"></td>
+				<td th:text="${item.statusName}"></td>
+				<td th:text="${item.sort}"></td>
+				<td th:text="${item.title}"></td>
+				<td th:text="${#dates.format(item.createTime,'yyyy-MM-dd HH:mm:ss')}"></td>
+				<td class="button">
+					<a th:if="${item.status} eq 1" class="button-status" data-status="2" th:attr="data-id=${item.id}">取消发布</a>
+					<a th:if="${item.status} eq 2" class="button-status" data-status="1" th:attr="data-id=${item.id}">立即发布</a>
+					<a th:href="@{./edit/{id}(id=${item.id})}">编辑</a>
+					<a class="button-delete" th:attr="data-id=${item.id},data-title=${item.title}">删除</a>
+				</td>
+			</tr>
+		</table>
+		<div class="paging">
+			<p class="button">
+				<a href="./edit/0">发布资讯</a>
+			</p>
+			<p class="page">
+				<a th:each="i:${#numbers.sequence(1,model.pages)}" th:href="@{./list?index={pn}(pn=${i})}" th:classappend="${model.index} eq ${i} ? 'active'" th:text="${i}"></a>
+			</p>
+		</div>
+	</div>
+	<script type="text/javascript">
+		$('.button-delete').click(function(e) {
+			var that = $(e.target), id = that.data('id'), title = that.data('title')
+			if (!confirm('确定要删除【' + title + '】资讯吗？')) return;
+			$.getJSON("./delete?id=" + id, function(model) {
+				alert(model.message);
+				top.location.reload()
+			});
+		});
+		$('.button-status').click(function(e) {
+			var that = $(e.target), id = that.data('id'), status = that.data('status');
+			$.getJSON(["./updateStatus?id=",id,'&status=',status].join(''), function(model) {
+				alert(model.message);
+				top.location.reload()
+			});
+		});
+	</script>
+</body>
+</html>

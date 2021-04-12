@@ -1,0 +1,35 @@
+.news-btn{width:129px;height:60px;display:flex;background:url(../static/images/news-btn.png)}
+.news-bor{display:block;margin-top:60px}
+.page{font-style:normal;font-weight:400;font-size:10px;line-height:30px;color:#fff;margin-top:10px}
+.news-btn a{width:50%;height:100%;display:block}
+.news-logo{margin-bottom:180px;margin-top:60px}
+.non{background:url(../static/images/h-5.jpg?v=20210222) no-repeat;background-size:100%;padding-top:300px;padding-bottom:200px}
+.news-con{width:1400px;display:flex;margin:0 auto}
+.news-left{flex:0 0 305px}
+.news-right{flex:1;overflow:auto;white-space:nowrap;height:683px}
+.news-item{width:432px;height:682px;margin-right:140px;display:inline-block}
+.news-item a{display:block}
+.item-img{display:block;width:432px;height:337px}
+.news-right .item-con{margin-top:40px;display:flex;white-space:initial}
+.time{font-style:normal;font-weight:400;font-size:14px;line-height:30px;color:#fff;flex:0 0 150px}
+.title{font-style:normal;font-weight:700;font-size:16px;line-height:30px;color:#fff;display:-webkit-box!important;-webkit-box-orient:vertical;-webkit-line-clamp:1;overflow:hidden}
+.con{font-style:normal;font-weight:400;font-size:14px;line-height:30px;color:#fff;display:-webkit-box!important;-webkit-box-orient:vertical;-webkit-line-clamp:4;overflow:hidden}
+.item-detail{display:flex;align-items:center;justify-content:center;font-style:normal;font-weight:700;font-size:16px;color:#fff;padding-top:57px;padding-bottom:71px;background:url(../static/images/news-item-bor.png) no-repeat bottom;background-size:100%}
+@media screen and (max-width:720px){.mobile-ban{position:relative}
+body{background-color:#0f0e20}
+.mobile-ban-btn{width:144px;height:68px;position:absolute;bottom:80px;left:40px}
+.mobile-ban-btn img{width:100%;height:100%}
+.news-con{width:100%}
+.non-box{max-width:100%;padding:0 30px;box-sizing:border-box;margin-bottom:100px!important}
+.news-logo{margin:80px 0;width:158px}
+.news-con{display:block}
+.pc-news{display:none}
+.news-right{white-space:initial}
+.news-item{max-width:100%;height:auto;margin-bottom:50px;margin-right:0}
+.item-img{width:100%;height:auto}
+.item-detail{padding-top:30px;padding-bottom:40px}
+.mobile-news{display:block;margin:0 auto;margin-top:30px;width:100px}
+.news-btn{width:100px;height:50px;background-size:100% 100%}
+.news-bor{margin-top:30px}
+.page{text-align:center}
+}

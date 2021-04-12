@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <th:block th:replace="common/metas::metaConfig" />
+    <title>Edit Profile</title>
+    <link rel="stylesheet" href="/static/css/cxcalendar.css" />
+    <link rel="stylesheet" href="/static/css/common.css" />
+    <link rel="stylesheet" href="/static/css/my-base.css"/>
+    <link rel="stylesheet" href="/static/css/mineMess.css" />
+  </head>
+  <body>
+    <header class="header">
+      <img class="logo" src="/static/images/logo.png" alt="FM Gallery" />
+      <img class="mobile-nav" src="/static/images/icon-dian.png" alt="" />
+      <div class="head-right" th:replace="common/navi::naviBar"></div>
+    </header>
+    <div class="head-padd"></div>
+    <form method="post" id="form1" enctype="multipart/form-data">
+    	<input name="walletId" type="hidden" th:value="${user?.walletId}" />
+    	<input name="avatar" type="hidden" th:value="${user?.avatar}" />
+      <div class="mine-ban">
+        <img class="pc-page" src="/static/images/mine/mine-ban.png" alt="" />
+        <img
+          class="mobile-page"
+          src="/static/images/mine/mine-ban-mobile.png"
+          alt=""
+        />
+      </div>
+      <div class="mine-nav">
+        <div class="mine-user">
+          <div class="user-logo">
+            <input type="file" id="file" name="file1" />
+            <img
+              class="mine-logo"
+              th:src="${user?.avatar}"
+            />
+            <img
+              class="icon-upload"
+              src="/static/images/mine/icon-upload.png"
+            />
+          </div>
+          <p class="mine-name" th:text="${user?.nickName}">Nickname</p>
+          <p class="mine-id">ID: <span th:text="${user?.hashId}"></span></p>
+          <p class="mine-desc">Profile: <span th:text="${user?.introduce}"></span></p>
+          
+        </div>
+        <div class="mine-nav-left">
+          <input type="button" class="nav-item button-save" value="Save" />
+          <a class="nav-item mess-back" href="/my/index.html">Return</a>
+        </div>
+      </div>
+      <div class="form-box">
+        <div class="input-item">
+          <input
+            type="text"
+            name="nickName"
+            placeholder="User Name"
+            maxlength="6"
+            th:value="${user?.nickName}"
+          />
+        </div>
+        <div class="input-item">
+          <select name="gender" class="gender" data-placeholder="Choose generader" th:attr="data-value=${user?.gender}">
+            <option value="" th:if="${user?.gender} == ''">Choose generader</option>
+            <option value="male">male</option>
+            <option value="female">female</option>
+          </select>
+          <img
+            class="icon-input"
+            src="/static/images/mine/icon-down.png"
+          />
+        </div>
+
+        <div class="input-item">
+          <input id="my_day" name="birthday" th:value="${user?.birthday}" type="text" data-start-date="1900/1/1" placeholder="Date of Birth" />
+          <img
+            class="icon-input"
+            src="/static/images/mine/icon-time.png"
+          />
+        </div>
+
+        <div class="input-item">
+          <input
+            type="text"
+            name="introduce"
+            th:value="${user?.introduce}"
+            placeholder="Edit personal profile, up to 30 characters"
+            maxlength="30"
+          />
+        </div>
+        <div class="input-item">
+          <input type="email" name="email" th:value="${user?.email}" placeholder="Email" />
+        </div>
+      </div>
+    </form>
+    <br><br><br><br><br>
+    <footer class="footer-box" th:replace="common/footer::footerBar"></footer>
+  </body>
+  <script src="/static/js/jquery.min.js"></script>
+  <script src="/static/js/cxcalendar.min.js"></script>
+  <script src="/static/js/cxcalendar.languages.js"></script>
+  <script src="/static/js/common.js"></script>
+
+  <script>
+  	var gender = $('.gender').data('value');
+  	if (gender) $('.gender').val(gender);
+  	
+    $("#my_day").cxCalendar();
+    $("#file").change(function () {
+      $(".icon-upload").hide();
+      var simpleFile = document.getElementById("file").files[0];
+      var reader = new FileReader();
+      reader.readAsDataURL(simpleFile);
+      reader.onload = function (e) {
+        $(".mine-logo").attr("src", this.result);
+      };
+    });
+    $(".mess-back").click(function (e) {
+      e.preventDefault();
+      window.location.href = "javascript:history.go(-1)";
+    });
+    
+    
+    var isok = false;
+    $('.button-save').click(function(e){
+    	if (isok) return;
+		
+		var target = e.currentTarget, form = target.form;
+		target.value='Saving data...';
+		isok = true;
+		var fd = new FormData(form);
+		
+		$.ajax({
+	        url: '/api/user/profile/save', 
+	        type:'POST',
+	        cache: false, 
+	        processData: false,
+	        contentType: false,
+	        data: fd,
+	        success: function(model) {
+	        	alert('Set successfully');
+				isok = false;
+				target.value='Save';
+				top.location.href='/my/index.html';
+	        },
+	        error: function(err) {
+	 			alert(err);
+	 			isok = false;
+	 			target.value='Save';
+	        }
+	    })
+	    
+    });
+    
+    
+    
+  </script>
+</html>

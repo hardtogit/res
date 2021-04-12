@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<th:block th:replace="common/metas::metaConfig" />
+		<title>Fracments list</title>
+		<link rel="stylesheet" type="text/css" href="/static/css/common.css" />
+		<link rel="stylesheet" type="text/css" href="/static/css/zhang.css" />
+		<link rel="stylesheet" type="text/css" href="/static/css/fracments_list.css" />
+	</head>
+	<body>
+		<header class="header">
+			<img class="logo" src="/static/images/logo.png" alt="FM Gallery" />
+			<img class="mobile-nav" src="/static/images/icon-dian.png" />
+			<div class="head-right" th:replace="common/navi::naviBar"></div>
+	    </header>
+		<div class="content flex">
+			<div class="back"><a th:href="@{/art/series/{id}.html(id=${seriesId})}" class="flex bor_radius"><img src="/static/images/preve.png"></a></div>
+			<div class="w1440">
+				<div class="title white">NFT List</div>
+				<div class="cate flex ali_center bor_radius">
+					<a th:href="@{/art/type/{id}.html(id=${seriesId})}">Box Details</a>
+					<a th:href="@{/art/sold/{id}.html(id=${seriesId})}" class="active">List of items</a>
+				</div>
+				<div class="list">
+					<div class="fracments show">
+						<div class="flex jc_sb ali_center name white">
+							<span>Pictures</span>
+							<span>Name</span>
+							<span>NFT#</span>
+							<span>Weights</span>
+							<span>Owner ID</span>
+							<span>Block Address</span>
+						</div>
+						<ul class="fracments_list">
+							<li class="flex jc_sb ali_center bor_radius" th:each="item,eStat:${result.items}">
+								<div class="headimg"><img th:src="@{(${item.imageUrl})}"></div>
+								<span th:text="${item.name}"></span>
+								<span th:text="${item.nftCode}"></span>
+								<span th:text="${item.weight}"></span>
+								<span th:text="${item.hashUserId}"></span>
+								<span class="address" th:text="${item.walletId}"></span>
+							</li>
+						</ul>
+					</div>
+				</div>
+				<div class="page bor_radius flex ali_center">
+					<a th:href="@{?index={pn}(pn=${result.index}-1)}" class="flex"><img src="/static/images/preve.png"></a>
+					<div class="page_num">
+						<a th:each="i:${#numbers.sequence(1,result.pages)}" th:href="@{?index={pn}(pn=${i})}" th:classappend="${result.index} eq ${i} ? 'active'" th:text="${i}">1</a>
+					</div>
+					<a th:href="@{?index={pn}(pn=${result.index}+1)}" class="flex"><img src="/static/images/next.png"></a>
+				</div>
+			</div>
+		</div>
+	</body>
+	<script src="/static/js/jquery.min.js?v=2021022122"></script>
+	<script src="/static/js/common.js"></script>
+</html>

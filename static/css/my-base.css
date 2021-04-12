@@ -1,0 +1,12 @@
+.my-header{}
+.my-header .my-navi{}
+.my-header .blind{right:1007px}
+.my-header .wallets{right:860px}
+.my-header .sex span{background-repeat:no-repeat !important}
+
+@media screen and (max-width:750px) {
+	.my-header .blind{right:115px}
+	.my-header .wallets{right:45px}
+	.my-header .my-info button{font-size:0}
+	.my-header .age,.my-header .sex{display:none}
+}

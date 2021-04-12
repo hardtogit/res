@@ -1,0 +1,40 @@
+.mine-ban{display:block;padding:0 60px;box-sizing:border-box}
+.mine-ban img{display:block;width:100%}
+.mine-nav{height:60px;display:flex;justify-content:space-between;margin:0 60px;margin-left:317px;border-bottom:.5px solid rgba(255,255,255,.2);border-right:.5px solid rgba(255,255,255,.2);position:relative;padding-left:207px}
+.mine-user{width:111px;position:absolute;top:-52px;left:-111px;text-align:center}
+.mine-desc,.mine-id,.mine-name{font-size:12px;display:-webkit-box!important;-webkit-box-orient:vertical;-webkit-line-clamp:1;overflow:hidden}
+.mine-logo{width:111px;height:111px}
+.mine-name{font-style:normal;font-weight:600;font-size:16px;line-height:22px;color:#fff;padding-left:0}
+.mine-id{font-style:normal;font-weight:500;font-size:10px;line-height:14px;color:#fff;margin:5px 0}
+.mine-desc{font-style:normal;font-weight:400;font-size:10px;line-height:14px;color:#fff}
+.nav-item{display:inline-block;width:140px;height:60px;text-align:center;line-height:60px;background-size:100% 100%;font-style:normal;font-weight:500;font-size:14px;color:#fff}
+.nav-item .selected{background:url(/static/images/mine/mine-nav-item.png?v=20210224) no-repeat}
+.mine-nav-right{height:100%;display:flex}
+.mess-item{width:204px;height:100%;display:flex;justify-content:center;align-items:center;font-style:normal;font-weight:500;font-size:14px;color:#fff;border-left:.5px solid rgba(255,255,255,.2)}
+.mess-item a{display:block;width:100%;height:100%;font-style:normal;font-weight:500;font-size:14px;color:#fff;display:flex;justify-content:center;align-items:center}
+.mess-item span{margin-left:13px}
+.mess-item img{width:20px;height:20px}
+.back{width:85px}
+.back img{width:28px;height:28px}
+.sex{width:18px;height:18px}
+.nomore{padding:350px 0}
+.nomore img{display:block;width:184px;height:131px;margin:0 auto}
+.pc-page{display:block!important}
+.mobile-page{display:none!important}
+@media screen and (max-width:720px){.pc-page{display:none!important}
+.mobile-page{display:block!important}
+.mine-ban{padding:0}
+.mine-nav{height:30px;margin:0;justify-content:flex-end;padding:0}
+.nav-item{width:60px;height:100%;line-height:30px;font-size:12px}
+.mess-item{width:75px;font-size:12px}
+.mess-item img{width:10px;height:10px}
+.mess-item span{margin-left:5px}
+.edit{width:38px}
+.mess-item a{font-size:12px}
+.back{width:29px}
+.mine-logo{width:50px;height:50px}
+.nomore{padding:111px 0}
+.mine-desc,.mine-id,.mine-name{font-size:12px;display:-webkit-box!important;-webkit-box-orient:vertical;-webkit-line-clamp:1;overflow:hidden}
+.mine-user{width:60px;top:-26px;left:20px}
+.nomore img{width:94px;height:67px}
+}

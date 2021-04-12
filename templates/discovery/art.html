@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html style="padding:0px !important;" xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<th:block th:replace="common/metas::metaConfig" />
+		<title>Discovery Author</title>
+		<link rel="stylesheet" href="/static/css/common.css?v=20210221154444" />
+		<link rel="stylesheet" href="/static/css2/discovery.css" />
+	</head>
+	<body>
+		<header class="header">
+			<img class="logo" src="/static/images/logo.png" alt="FM Gallery" />
+			<img class="mobile-nav" src="/static/images/icon-dian.png" />
+			<div class="head-right" th:replace="common/navi::naviBar"></div>
+		</header>
+		
+		<div class="dia_frame">
+			<div class="dia_frame_left">
+				<img th:src="@{{url}?imageMogr2/auto-orient/thumbnail/1500x/format/webp(url=${commodityInfo?.imageUrl})}" />
+			</div>
+			<div class="dia_frame_right">
+				<div class="dia_frame_info">
+					<div class="dia_frame_title" th:text="${commodityInfo?.name}">Fountain of Life</div>
+					<a th:href="@{/discovery/author/{id}.html(id=${authorInfo?.id})}">
+						<div class="dia_author_frame">
+							<div class="dia_author_left">
+								<img th:src="@{(${authorInfo?.avatar})}" />
+							</div>
+							<div class="dia_author_middle">
+								<div class="dia_author_middle_top">
+									<div class="dia_author_middle_top_float_1" th:text="${authorInfo?.name}">Author Name</div>
+									<div class="dia_author_middle_top_float_2">
+										<img src="/static/images2/discovery/di_author_1.png" />
+									</div>
+									<div class="dia_author_middle_top_float_3" th:text="${authorInfo?.country}">Country</div>
+									<div class="di_clear"></div>
+								</div>
+								<div class="dia_author_middle_bottom">
+									<b style="font-weight:900;">Artist Profile:</b>[(${authorInfo?.introduce})]
+								</div>
+							</div>
+							<div class="dia_author_right">
+								<img src="/static/images2/discovery/dia_author_arrow.png" />
+							</div>
+							<div class="di_clear"></div>
+						</div>
+					</a>
+					<div class="dia_frame_subtitle" th:utext="${commodityInfo?.introduce}">Introduction to the artwork</div>
+					<div class="dia_frame_content" th:utext="${commodityInfo?.content}">blah blah wahah dubiadbu blah blah wahah dubiadbu blah blah wahah dubiadbu</div>
+				</div>
+				<a th:href="@{(${commodityInfo?.externalLink})}" target="_black">
+					<div class="dia_frame_button">
+						<div class="dia_frame_button_1">
+							<img src="/static/images2/discovery/opensea-logo.png" />
+						</div>
+						<div class="dia_frame_button_2">Opensea</div>
+						<div class="dia_frame_button_3">
+							<img src="/static/images2/discovery/dia_author_arrow.png" alt="" />
+						</div>
+					</div>
+				</a>
+			</div>
+			<div class="di_clear"></div>
+		</div>
+		<div class="foot-padd"></div>
+		<footer class="footer-box" th:replace="common/footer::footerBar"></footer>
+		<img class="back-top" src="/static/images/back-top.png" />
+		<script src="/static/grid/js/imagesloaded.pkgd.min.js"></script>
+		<script src="/static/js/jquery.min.js?v=20210221"></script>
+		<script src="/static/js/common.js"></script>
+	</body>
+</html>

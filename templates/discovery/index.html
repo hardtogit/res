@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<th:block th:replace="common/metas::metaConfig" />
+		<title>Discovery</title>
+		<link rel="stylesheet" href="/static/css/common.css?v=202102222066" />
+		<link rel="stylesheet" href="/static/css2/discovery.css" />
+		<link rel="stylesheet" type="text/css" href="/static/grid/css/demo.css" />
+		<link rel="stylesheet" type="text/css" href="/static/grid/css/component.css" />
+		<script src="/static/grid/js/modernizr.custom.js"></script>
+		<link href="/static/css2/custom.css" rel="stylesheet" />
+		<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"/>
+		<style>.mySlides{display:none}</style>
+	</head>
+	<body>
+		<header class="header">
+			<img class="logo" src="/static/images/logo.png" alt="FM Gallery" />
+			<img class="mobile-nav" src="/static/images/icon-dian.png" alt="" />
+			<div class="head-right" th:replace="common/navi::naviBar"></div>
+		</header>
+		
+		<div class="di_slider_frame">
+			<div id="exampleSlider" class="exampleSlider">
+				<div class="MS-content">
+				
+					<div class="item" th:each="item,eStat:${authorList}">
+						<a th:href="@{/discovery/author/{id}.html(id=${item.id})}">
+							<div class="slide_avatar">
+								<img th:src="@{(${item.avatar})}" />
+							</div>
+							<div class="slide_name" th:text="${item.name}">作者名称</div>
+						</a>
+					</div>
+					
+				</div>
+				<div class="MS-controls">
+					<button class="MS-left">
+						<i aria-hidden="true">
+							<img src="/static/images2/discovery/di_left_arrow.png"></i>
+					</button>
+					<button class="MS-right">
+						<i aria-hidden="true">
+							<img src="/static/images2/discovery/di_right_arrow.png"></i>
+					</button>
+				</div>
+			</div>
+		</div>
+		
+		<div class="di_slider_frame2">
+			<div id="exampleSlider2" class="exampleSlider2">
+			
+			   <div class="MS-content">
+			   
+				   <div class="item" th:each="item,eStat:${seriesList}">
+					    <div class="my_slide_box" >
+							<div class="my_slide_box_title" th:text="${item.name}">Fides Blind Box Collection 1- Rare Pack</div>
+							<div class="my_slide_box_under" style="display:none" th:text="'No. of artworks '+${item.nftType}">No. of artworks 10</div>
+						</div>
+				   </div>
+				   
+			   </div>
+			   
+			   <div class="MS-controls">		  
+					<button class="MS-left"><i aria-hidden="true"><img src="/static/images2/discovery/di_left_arrow.png"></i></button>
+				    <button class="MS-right"><i aria-hidden="true"><img src="/static/images2/discovery/di_right_arrow.png"></i></button>
+			   </div>
+			</div>
+		</div>
+		
+		
+		<div class="container">
+			<div id="grid-gallery" class="grid-gallery">
+				<section class="grid-wrap">
+					<ul class="grid">
+						<li class="grid-sizer"></li>
+						
+						<li th:each="item,eStat:${commodityModel.items}">
+							<figure><img th:src="@{(${item.imageUrl})}" /></figure>
+						</li>
+					</ul>
+				</section>
+				<!-- // grid-wrap -->
+				<section class="slideshow">
+					<ul>
+						<li th:each="item,eStat:${commodityModel.items}">
+							<figure class="di_slide">
+								<figcaption>
+									<div class="di_slide_title" th:text="${item.name}">Art Name 1</div>
+									<div class="di_slide_avatar">
+										<img th:src="@{(${item.creatorAvatar})}" />
+									</div>
+									<div class="di_slide_name" th:text="${item.creatorName}">Author Name</div>
+									<div class="di_slide_des" th:text="${item.creatorSummary}">Author Description</div>
+									<div class="di_slide_more">
+										<a th:href="@{/discovery/author/{id}.html(id=${item.creatorId})}" target="_black">View More ></a></div>
+								</figcaption>
+							</figure>
+						</li>
+					</ul>
+					<nav>
+						<span class="icon nav-prev"></span>
+						<span class="icon nav-next"></span>
+						<span class="icon nav-close"></span>
+					</nav>
+				</section>
+			</div>
+		</div>
+		<div class="foot-padd"></div>
+		<footer class="footer-box" th:replace="common/footer::footerBar"></footer>
+		<img class="back-top" src="/static/images/back-top.png" />
+		<script src="/static/grid/js/imagesloaded.pkgd.min.js"></script>
+		<script src="/static/grid/js/masonry.pkgd.min.js"></script>
+		<script src="/static/grid/js/classie.js"></script>
+		<script src="/static/grid/js/cbpGridGallery.js"></script>
+		<script src="/static/js/jquery.min.js?v=20210221"></script>
+		<script src="/static/js/common.js"></script>
+		<script src="/static/js2/multislider.min.js"></script>
+		<script>
+			new CBPGridGallery( document.getElementById( 'grid-gallery' ) );
+		    $('#exampleSlider').multislider({
+		        interval: 800000000,
+		        slideAll: true,
+		        duration: 1100
+		    });
+			$(".my_slide_box_title").hover(function(e){
+				$(e.target.parentNode).find('.my_slide_box_under').show();	
+			},function(e){
+				$(e.target.parentNode).find('.my_slide_box_under').hide();
+			});
+			
+			
+			var slideIndex = 1;
+			showDivs(slideIndex);
+
+			function plusDivs(n) {
+			  showDivs(slideIndex += n);
+			}
+
+			function showDivs(n) {
+			  var i;
+			  var x = document.getElementsByClassName("mySlides");
+			  if (n > x.length) {slideIndex = 1}
+			  if (n < 1) {slideIndex = x.length}
+			  for (i = 0; i < x.length; i++) {
+			    x[i].style.display = "none";  
+			  }
+			  x[slideIndex-1].style.display = "block";  
+			}
+		</script>
+		
+	</body>
+</html>

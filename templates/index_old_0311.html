@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <th:block th:replace="common/metas::metaConfig" />
+    <title>FM Gallery</title>
+    <link rel="stylesheet" href="/static/css/common.css?v=202102222066" />
+    <link rel="stylesheet" href="/static/css/index.css?v=2021022311" />
+  </head>
+  <body>
+    <header class="header">
+      <img class="logo" src="./static/images/logo.png" alt="FM Gallery" />
+      <img class="mobile-nav" src="./static/images/icon-dian.png" alt="" />
+      <div class="head-right" th:replace="common/navi::naviBar"></div>
+    </header>
+
+    <div class="pc-page">
+      <div class="banner" style="position: relative">
+        <img src="/static/images/h-1.jpg" />
+        <a
+          style="position: absolute; left: 215px; bottom: 100px"
+          href="/uploads/FM_White_paper_v1.2.10.pdf"
+          target="_blank"
+        >
+          <img src="/static/images/whilepager.png" />
+        </a>
+      </div>
+
+      <img src="/static/images/h-2.jpg" />
+
+      <img src="/static/images/h-3.jpg" />
+
+      <img src="/static/images/h-4.jpg" />
+
+      <div class="non">
+        <div class="news-con">
+          <div class="news-right"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="mobile-page">
+      <div class="mobile-ban">
+        <img src="/static/images/mobile/home1.jpg" alt="" />
+        <a href="" class="mobile-ban-btn">
+          <img src="/static/images/mobile/ban-btn.png" alt="" />
+        </a>
+      </div>
+
+      <img src="/static/images/mobile/home2.jpg" alt="" />
+      <img src="/static/images/mobile/home3.jpg" alt="" />
+      <img src="/static/images/mobile/home4.jpg" alt="" />
+
+      <div class="non-box">
+        <img class="news-logo" src="/static/images/news-logo.png" alt="" />
+        <div class="news-con">
+          <div class="news-right"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="foot-padd"></div>
+    <footer class="footer-box" th:replace="common/footer::footerBar"></footer>
+    <img class="back-top" src="/static/images/back-top.png" alt="" />
+  </body>
+  <script type="text/template" id="news_list_item">
+    <div class="news-item">
+    	<a target="_black" href="{jumpUrl}">
+    		<img class="item-img" src="{imageUrl}"/>
+    		<div class="item-con">
+    			<p class="time">{createTime}</p>
+    			<div class="item-con-right">
+    				<p class="title">{title}</p>
+    				<p class="con">{summary}</p>
+    			</div>
+    		</div>
+    		<div class="item-detail">
+    			<img src="./static/images/news-item-right.png" />
+    			<span>Explore</span>
+    		</div>
+    	</a>
+    </div>
+  </script>
+  <script src="/static/js/jquery.min.js?v=2021022122"></script>
+  <script src="/static/js/common.js?v=2021022312"></script>
+  <script type="text/javascript">
+    $.getJSON("/api/news/top/10", function (resp) {
+      if (resp && resp.data) {
+        var h = [],
+          tmp = $("#news_list_item").text();
+        for (var i = 0; i < resp.data.length; i++) {
+          var m = resp.data[i];
+          m.jumpUrl = m.jumpUrl || "#";
+          h.push(tmp.format(m));
+        }
+        $(".news-right").html(h.join(""));
+      }
+    });
+  </script>
+</html>

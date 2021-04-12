@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<th:block th:replace="common/metas::metaConfig" />
+		<title>Wallets</title>
+		<link rel="stylesheet" type="text/css" href="/static/css/common.css?v=202102222066" />
+		<link rel="stylesheet" type="text/css" href="/static/css/zhang.css" />
+		<link rel="stylesheet" type="text/css" href="/static/css/money.css" />
+		<script src="https://unpkg.com/@metamask/legacy-web3@latest/dist/metamask.web3.min.js"></script>
+		<script src="/static/js/jquery.min.js?v=2021022122"></script>
+		<style type="text/css">
+			.claim{color:#fff;font-size:16px;width:100px;height:60px;background:rgba(70,70,70,.66);cursor:pointer;border-radius:10px;position:absolute;right:10px;bottom:60px}
+		</style>
+	</head>
+	<body>
+		<header class="header">
+			<img class="logo" src="/static/images/logo.png" alt="FM Gallery" />
+			<img class="mobile-nav" src="/static/images/icon-dian.png" alt="" />
+			<div class="head-right" th:replace="common/navi::naviBar"></div>
+		</header>
+		<div class="wallet">
+			<div th:replace="common/mine_header::naviBar"></div>
+			<div class="cont">
+				<div class="num show">
+					<div class="tab-content">
+						<div class="tab-box">
+			                <div class="active">USDT</div>
+							<div><a href="https://wah.art/my/wallet.html">GFM</a></div>
+			            </div>
+			            <div class="tab-body">
+			            	<div class="tab-con usdt-box show">
+			                    <div class="input_area_row">
+			                        <div id="usdt_input_container">
+			                            <input id="usdt_input" placeholder="Enter the number of top-ups" type="number" />
+			                            <span id="usdt_input_mark">USDT</span>
+			                        </div>
+			                        <button id="recharge_btn">Recharge</button>
+			                    </div>
+			                    <div class="coin">
+			                    	<img src="/static/images/USDT_1.png">
+			                    	<span class="number" th:text="${user?.balanceUsdtString}"></span>
+									<span class="unit">USDT</span>
+									<a class="record" th:href="@{https://etherscan.io/address/0x46DC38E5d685b092f88242a01b5e747311b8801f?fromaddress={txt}#tokentxns(txt=${user?.walletId})}" target="_black">Record Search ></a>
+			                    </div>
+			            	</div>
+			            	<div class="tab-con wah-box">
+								<div class="txt">
+									<p>Blockchain Wallet Address</p>
+									<p th:text="${user?.walletId}"></p>
+								</div>
+								<div class="coin">
+									<img src="/static/images/moneyimgs/Group149.png">
+									<span class="number wah-balance" th:text="${user?.wahCoinString}">0</span>
+									<span class="unit">[(${TOKEN})](unclaimed)</span>
+								</div>
+								<input type="button" value="claim" class="claim" />
+							</div>
+			            </div>
+		            </div>
+				</div>
+			</div>
+		</div>
+		<footer class="footer-box" th:replace="common/footer::footerBar"></footer>
+		<img class="back-top" src="/static/images/back-top.png" />
+		<script src="/static/js/common.js"></script>
+		<script src="/static/js/recharge.js"></script>
+		<script th:src="@{/static/js/nft_staking{mode}.js?v=1.0.0.21(mode=${MODE})}"></script>
+		<script type="text/javascript">
+	    $(function () {
+	    	
+	    	$.get("/api/user/wallet/claim", function(data){
+    			if (data.message=='OK' && data.errCode=='OK') {
+    				var Obj = data.data;
+    				NFT.Airdrop.isClaimed(Obj.index, function(flag){
+    					if (flag) {
+    						$(".wah-balance").text('0')
+    					} else {
+    						if (Obj.amount > 0) {
+    	    					$(".wah-balance").text(Obj.amount/NFT.UNILP_WEI);
+    	    				}
+    					}
+    				})
+    			}
+    		});
+	    	
+	    	$('.claim').click(function(){
+	    		if (confirm('Are you sure you want to claim [(${TOKEN})]?')) {
+		    		$.get("/api/user/wallet/claim?type=100", function(data){
+		    			if (data.message=='OK' && data.errCode=='OK') {
+		    				var Obj = data.data;
+		    				NFT.Airdrop.claim(Obj.index,Obj.address,Obj.amount, Obj.proof);
+		    				$(".wah-balance").text('0')
+		    			} else {
+		    				alert(data.message)
+		    			}
+		    		})
+	    		}
+	    	})
+	    	
+	    	
+	        $('.tab-box > div').click(function () {
+	            $(this).addClass('active').siblings().removeClass('active');
+	            if ($(this).index() === 0) {
+	                $('.usdt-box').addClass('show');
+	                $('.wah-box').removeClass('show');
+	            } else {
+	                $('.usdt-box').removeClass('show');
+	                $('.wah-box').addClass('show');
+	            }
+	        });
+	        
+	        $('#recharge_btn').click(function() {
+	        	var num = $('#usdt_input').val();
+	        	if (num <= 0) {
+	        		alert('Please input usdt quantity.');
+	        		$('#usdt_input').focus();
+	        		return;
+	        	}
+				alert("test")
+	        	sendTransfer(num);
+	        });
+	        
+	    })
+		</script>
+	</body>
+</html>

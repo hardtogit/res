@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html;charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, minimum-scale=1.0"/>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge,chrome=1"/>
+    <title>添加/修改</title>
+    <link href="/static/css/admin.css?v=2021021916" rel="stylesheet" type="text/css"/>
+    <link rel="stylesheet" href="https://unpkg.com/multiple-select@1.5.2/dist/multiple-select.min.css">
+    <script src="/static/scripts/jquery-2.2.0.min.js?v=20210218" type="text/javascript"></script>
+    <script src="/static/scripts/admin.js?v=20210218" type="text/javascript"></script>
+    <script src="/static/js/util.js" type="text/javascript"></script>
+    <script src="/static/js/api.js" type="text/javascript"></script>
+    <script src="https://unpkg.com/multiple-select@1.5.2/dist/multiple-select.min.js"  type="text/javascript"></script>
+    <script src="/static/w_date_picker/WdatePicker.js" type="text/javascript"></script>
+</head>
+<body>
+<div class="mainer">
+    <form id="form1" method="post" onsubmit="return false">
+        <input type="hidden" name="id"/>
+        <table role="edit">
+            <tr>
+                <th width="120">选择分类：</th>
+                <td>
+                    <select name="drType" style="width: 100%">
+                        <option value="Series Blind Box">Series Blind Box</option>
+                        <option value="Special Blind Box">Special Blind Box</option>
+                        <option value="Long-Termism">Long-Termism</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <th width="120">名称：</th>
+                <td>
+                    <input type="text" style="width: 100%" minlength="150" size="150" placeholder="输入名称" name="drName"
+                           autocomplete="off"/>
+                </td>
+            </tr>
+            <tr>
+                <th width="120">&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;排序：</th>
+                <td>
+                    <table role="edit">
+                        <tr>
+                            <th></th>
+                            <td width="50%"><input type="text" style="width: 100%" minlength="50" size="50"
+                                                   placeholder="输入序号：0为最上面" name="drOrder" autocomplete="off"/></td>
+                            <th style="width: 130px;text-align: left">是否展示系列主题：</th>
+                            <td>
+                                是 <input type="radio" name="isShowSeries" checked value="Y"/>
+                                否 <input type="radio" name="isShowSeries" value="N"/>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <th width="120">介绍：</th>
+                <td><textarea rows="10" style="width:100%" name="drContent" id="drContent"
+                              placeholder="输入介绍的内容"></textarea></td>
+            </tr>
+            <tr>
+                <th width="120">活动图片：</th>
+                <td>
+                    <div class="upload-files">
+                        <div class="file" title="上传图片">
+                            <input type="file"/>
+                            <input type="hidden" name="drImg"/>
+                            <img id="img1"/>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <th width="120">选择系列：</th>
+                <td>
+                    <select name="drSeries" multiple="multiple" style="width: 100%">
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <th width="120">活动开始时间：</th>
+                <td>
+                    <input type="text" name="acBeginTime" size="100" style="height:28px;width: 100%" readonly="readonly"
+                           onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" class="Wdate" autocomplete="off"/>
+                </td>
+            </tr>
+            <tr>
+                <th width="120">活动结束时间：</th>
+                <td>
+                    <input type="text" name="acEndTime" size="100" style="height:28px;width: 100%" readonly="readonly"
+                           onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" class="Wdate" autocomplete="off"/>
+                </td>
+            </tr>
+
+            <tr>
+                <th></th>
+                <td>
+                    <input class="button-submit" type="button" value="保存并提交"/>
+                    <a href="javascript:history.back()">返回</a>
+                </td>
+            </tr>
+        </table>
+    </form>
+</div>
+<script type="text/javascript">
+
+    //系列数据、原始数据、校对数据
+    var isok = false;
+    uploadfiles('input[type=file]');
+    init();
+
+    function init() {
+        let sendForInit = function (res) {
+            //系列所有
+            let selectEle = $("select[name='drSeries']");
+            res = res.list;
+            let data = [];
+            for (let i = 0; i < res.length; i++) {
+                let option = res[i];
+                data.push({'text': option.name, 'value': option.id})
+            }
+            selectEle.attr('size', res.length);
+            selectEle.multipleSelect('refreshOptions', {data: data});
+
+            let editMode = false;
+            let id = getUrlParam("id");
+            if (id != null) {
+                //是update
+                editMode = true;
+                formAjax('get', 'admin/drops/get_one', {id: id}, function (res) {
+                    //初始化数据
+                    res.acBeginTime = formatDateTime(res.acBeginTime);
+                    res.acEndTime = formatDateTime(res.acEndTime);
+                    populateForm('form1', res);
+                    //系列
+                    selectEle.multipleSelect('setSelects', res.drSeries);
+                    //分类
+                    $("select[name='drType']").val(res.drType);
+                    //图片
+                    if (res.drImg) {
+                        $('#img1').attr('src', res.drImg);
+                    }
+                })
+            }
+
+            $('.button-submit').click(function (e) {
+                if (isok) return;
+
+                let target = e.currentTarget, form = target.form;
+
+                if (form['drName'].value == 0) {
+                    alert('请输入名称。');
+                    form['drName'].focus();
+                    return;
+                }
+                if (form['drContent'].value.length == 0) {
+                    alert('请输入介绍。');
+                    form['drContent'].focus();
+                    return;
+                }
+                if (form['drSeries'].value == '0') {
+                    alert('请选择系列。');
+                    form['drSeries'].focus();
+                    return;
+                }
+                if (form['drOrder'].value.length != 0 && isNaN(parseInt(form['drOrder'].value))) {
+                    alert('排序需为数字。');
+                    form['drOrder'].focus();
+                    return;
+                }
+                target.value = '正在提交数据...';
+                isok = true;
+
+                var fd = serializeObject(form);
+                fd.drSeries=selectEle.multipleSelect('getSelects').toString();
+                if (editMode) {
+                    fd.id = id;
+                    formAjax('post', 'admin/drops/upd', fd, function () {
+                        top.location.href = './list';
+                        isok = false;
+                        target.value = '保存并提交';
+                        alert('成功');
+                    }, function () {
+                        isok = false;
+                        target.value = '保存并提交';
+                    });
+                } else {
+                    formAjax('post', 'admin/drops/add', fd, function () {
+                        top.location.href = './list';
+                        isok = false;
+                        target.value = '保存并提交';
+                        alert('成功');
+                    }, function () {
+                        isok = false;
+                        target.value = '保存并提交';
+                    })
+                }
+            });
+        }
+        formAjax('get', 'api/admin/other/serial/list_id_and_name', {}, sendForInit)
+    }
+
+
+    function formAjax(method, url, param, successFunc, errorFunc) {
+        $.ajax({
+            type: method,
+            url: "/" + url,
+            contentType: "application/x-www-form-urlencoded;charset=utf-8",
+            data: param,
+            dataType: "json",
+            success: function (res) {
+                let message = res['message'];
+                if (message !== 'OK') {
+                    alert(res.message);
+                    if (errorFunc != null) {
+                        errorFunc.call(this, message);
+                    }
+                    return;
+                }
+                if (successFunc) {
+                    successFunc.call(this, res.data);
+                }
+            },
+            error: function (message) {
+                if (errorFunc != null) {
+                    errorFunc.call(this, message);
+                } else {
+                    alert("请求失败");
+                }
+            }
+        });
+    }
+
+</script>
+</body>
+</html>

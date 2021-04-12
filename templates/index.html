@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <th:block th:replace="common/metas::metaConfig" />
+    <title>FM Gallery</title>
+    <meta name="google-site-verification" content="WfnRGM4UsrPGAcVxNX2diWb43HH_k-2CUynRWtMu0mk" />
+    <link rel="stylesheet" href="/static/css/common.css?v=202102222066" />
+    <link rel="stylesheet" href="/static/css/shouye.css" />
+  </head>
+  <body>
+    <header class="header">
+      <img class="logo" src="./static/images/logo.png" alt="FM Gallery" />
+      <img class="mobile-nav" src="./static/images/icon-dian.png" alt="" />
+      <div class="head-right" th:replace="common/navi::naviBar"></div>
+    </header>
+
+	<div class="content">
+		<div class="web">
+			<img src="/static/index_img/web/index_1.jpg" >
+			<img src="/static/index_img/web/index_2.jpg" >
+			<img src="/static/index_img/web/index_3.jpg" >
+			<img src="/static/index_img/web/index_4.jpg" >
+			<a href="/uploads/FM_White_paper_v1.35.pdf" target="_blank">
+				<img class="btn" src="/static/index_img/web/btn.png"/>
+			</a>
+			
+			<div class="non">
+				<div class="news-con">
+					<div class="news-right"></div>
+				</div>
+			</div>
+		</div>
+		<div class="phone">
+			<img src="/static/index_img/phone/phone_1.jpg" >
+			<img src="/static/index_img/phone/phone_2.jpg" >
+			<img src="/static/index_img/phone/phone_3.jpg" >
+			<img src="/static/index_img/phone/phone_4.jpg" >
+			<a href="/uploads/FM_White_paper_v1.35.pdf" target="_blank">
+				<img class="btn phone_btn" src="/static/index_img/phone/btn.png" />
+			</a>
+			
+			<div class="non">
+				<div class="news-con">
+					<div class="news-right"></div>
+				</div>
+			</div>
+		</div>
+
+
+
+	</div>
+
+    <div class="foot-padd"></div>
+    <footer class="footer-box" th:replace="common/footer::footerBar"></footer>
+    <img class="back-top" src="/static/images/back-top.png" alt="" />
+  </body>
+  <script type="text/template" id="news_list_item">
+    <div class="news-item">
+    	<a target="_black" href="{jumpUrl}">
+    		<img class="item-img" src="{imageUrl}"/>
+    		<div class="item-con">
+    			<p class="time">{createTime}</p>
+    			<div class="item-con-right">
+    				<p class="title">{title}</p>
+    				<p class="con">{summary}</p>
+    			</div>
+    		</div>
+    		<div class="item-detail">
+    			<img src="/static/images/news-item-right.png" />
+    			<span>Explore</span>
+    		</div>
+    	</a>
+    </div>
+  </script>
+  <script src="/static/js/jquery.min.js?v=2021022122"></script>
+  <script src="/static/js/common.js"></script>
+  <script type="text/javascript">
+    $.getJSON("/api/news/top/10", function (resp) {
+      if (resp && resp.data) {
+        var h = [],
+          tmp = $("#news_list_item").text();
+        for (var i = 0; i < resp.data.length; i++) {
+          var m = resp.data[i];
+          m.jumpUrl = m.jumpUrl || "#";
+          h.push(tmp.format(m));
+        }
+        $(".news-right").html(h.join(""));
+      }
+    });
+  </script>
+</html>

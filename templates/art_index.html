@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<th:block th:replace="common/metas::metaConfig" />
+		<title>Blind Box</title>
+		<link rel="stylesheet" href="/static/css/common.css?v=20210221154444" />
+		<link rel="stylesheet" href="/static/css/art.css?v=20210329" />
+		<link rel="stylesheet" type="text/css" href="/static/css/zhang.css"/>
+	</head>
+	<body>
+		<header class="header">
+			<img class="logo" src="/static/images/logo.png" alt="FM Gallery" />
+			<img class="mobile-nav" src="/static/images/icon-dian.png" alt="" />
+			<div class="head-right" th:replace="common/navi::naviBar"></div>
+		</header>
+		<div class="pc-page">
+			<img style="position:absolute;left:212px;top:479px;" src="/static/images/artimg/Group110.png">
+			<div class="itembox">
+				<div class="item" th:each="item,eStat:${seriesModel}">
+					<div class="people">
+						<div class="photolist">
+							<img th:each="child,childStat:${item.creatorList}" th:src="@{(${child.avatar})}" />
+						</div>
+						<div class="property">
+							<div class="propertylist">
+								<p>NFT Types:</p>
+								<span th:text="${item.nftType}"></span>
+							</div>
+							<div class="propertylist">
+								<p>MY NTF:</p>
+								<span th:text="${item.userNftTotal}"></span>
+							</div>
+							<div class="propertylist">
+								<p>Total NFT:</p>
+								<span th:text="${item.nftTotal}"></span>
+							</div>
+						</div>
+					</div>
+					<a th:href="@{/art/series/{id}.html(id=${item.id})}" style="display:block;padding-top:30px;">
+						<img th:src="@{(${item.imageUrl})}" style="margin-top:22px;max-height:290px" />
+					</a>
+					<div class="itemtext" style="padding:10px 0">
+						<span th:text="${item.name}"></span>
+						<!-- <span th:text="${item.introduce}"></span> -->
+					</div>
+					<a th:href="@{/art/series/{id}.html(id=${item.id})}" class="itembutton"><b th:text="${item.price}"></b>[(${UNIT})]  /  DRAW</a>
+				</div>
+			</div>
+		</div>
+		<div class="mobile-page">
+			<img class="wait_phone" src="/static/images/artphone/Art-fragment.png" alt="" />
+			<img  class="topinmg"  src="/static/images/artimg/Group110.png">
+			<div class="itembox_phone">
+				<div class="item_phone" th:each="item,eStat:${seriesModel}">
+					<div class="people_phone" >
+						<div class="photolist">
+							<img th:each="child,childStat:${item.creatorList}" th:src="@{(${child.avatar})}" />
+						</div>
+						<!-- <img src="../../static/images/artimg/icon-dian.png" style="display: block;float: right;" class="dian"> -->
+						<div class="property">
+						  <div class="propertylist">
+							<p>NFT Types:</p>
+							<span>[(${item.nftType})]</span>
+						  </div>
+						  <div class="propertylist">
+							<p>MY NTF:</p>
+							<span>[(${item.userNftTotal})]</span>
+						  </div>
+						  <div class="propertylist">
+							<p>Total NFT:</p>
+							<span>[(${item.nftTotal})]</span>
+						  </div>
+						</div>
+					</div>
+					<a th:href="@{/art/series/{id}.html(id=${item.id})}">
+						<img th:src="@{(${item.imageUrl})}" style="margin-bottom: 24px;width: 288px;height: 164px;" /></a>
+					<div class="itemtext_phone">
+						<span th:text="${item.name}"></span>
+						<!-- <span th:text="${item.introduce}"></span> -->
+					</div>
+					<button class="itembutton_phone">
+						<span th:text="${item.price}">0</span>[(${UNIT})] / DRAW</button></div>
+			</div>
+			<div class="more_phone" style="display:none">
+				<p>Load More</p>
+			</div>
+		</div>
+		<div class="foot-padd"></div>
+		<footer class="footer-box" th:replace="common/footer::footerBar"></footer>
+		<script src="/static/js/jquery.min.js?v=20210221"></script>
+		<script src="/static/js/common.js"></script>
+		<script>
+			$(".itembox").on("click",'.dian', function() {
+				var index = $(this).parents('.item').index();
+				if (!$(this).parents('.item').find(".property").hasClass('act')) {
+					$(this).parents('.item').find(".property").addClass('act');
+					$(this).parents('.item').siblings().find('.property').removeClass('act');
+				} else {
+					$(this).parents('.item').find(".property").removeClass('act');
+				}
+			})
+			$(".itembox").on("mouseleave",'.dian', function() {
+					$(this).parents('.item').find(".property").removeClass('act');
+			})
+			$(".itembox_phone").on("click",'.dian', function() {
+				var index = $(this).parents('.item').index();
+				if (!$(this).parents('.item_phone').find(".property").hasClass('act')) {
+					$(this).parents('.item_phone').find(".property").addClass('act');
+					$(this).parents('.item_phone').siblings().find('.property').removeClass('act');
+				} else {
+					$(this).parents('.item_phone').find(".property").removeClass('act');
+				}
+			})
+			$(".itembox_phone").on("mouseleave",'.dian', function() {
+					$(this).parents('.item_phone').find(".property").removeClass('act');
+			})
+		</script>
+	</body>
+</html>

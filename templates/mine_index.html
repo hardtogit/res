@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<th:block th:replace="common/metas::metaConfig" />
+		<title>Personal homepage</title>
+		<link rel="stylesheet" type="text/css" href="/static/css/common.css?v=202102222066" />
+		<link rel="stylesheet" type="text/css" href="/static/css/zhang.css" />
+		<link rel="stylesheet" type="text/css" href="/static/css/money.css" /></head>
+	<body>
+		<header class="header">
+			<img class="logo" src="/static/images/logo.png" alt="FM Gallery" />
+			<img class="mobile-nav" src="/static/images/icon-dian.png" alt="" />
+			<div class="head-right" th:replace="common/navi::naviBar"></div>
+		</header>
+		<div class="wallet">
+			<div th:replace="common/mine_header::naviBar"></div>
+			<div class="cont">
+				<div class="flex list jc_sb flex_w first show">
+					<div class="item" th:each="item,eStat:${seriesModel}">
+						<div class="people flex jc_sb ali_center">
+							<div class="photolist flex">
+								<div th:each="child,childStat:${item.creatorList}" class="headimg shrink">
+									<img th:src="@{(${child.avatar})}" />
+								</div>
+							</div>
+							<!-- <img class="more" src="/static/images/artimg/icon-dian.png"> -->
+						</div>
+						<div class="property">
+							<p>NFT Types:[(${item.nftType})]</p>
+							<p>MY NTF:[(${item.userNftTotal})]</p>
+							<p>Total NFT:[(${item.nftTotal})]</p>
+						</div>
+						<div class="item_img">
+							<img th:src="@{(${item.coverImageUrl})}">
+						</div>
+						<div class="itemtext">
+							<span th:text="${item.name}"></span>
+							<span>My NFT: [(${item.userNftTotal})]</span>
+							<!--<span>Total fragments: [(${item.nftTotal})]</span>-->
+						</div>
+						<a th:href="@{/my/nft/{id}.html(id=${item.id})}" class="itembutton">View more</a>
+					</div>
+				</div>
+			</div>
+		</div>
+		<footer class="footer-box" th:replace="common/footer::footerBar"></footer>
+		<img class="back-top" src="/static/images/back-top.png" alt="" />
+		<script src="/static/js/jquery.min.js?v=2021022122"></script>
+		<script src="/static/js/common.js"></script>
+		<script>
+		$(".list").on("click",'.more', function() {
+			var index = $(this).parents('.item').index();
+			if (!$(this).parents('.item').find(".property").hasClass('act')) {
+				$(this).parents('.item').find(".property").addClass('act');
+				$(this).parents('.item').siblings().find('.property').removeClass('act');
+			} else {
+				$(this).parents('.item').find(".property").removeClass('act');
+			}
+		})
+	</script>
+	</body>
+</html>

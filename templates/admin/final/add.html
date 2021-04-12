@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html;charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, minimum-scale=1.0"/>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge,chrome=1"/>
+    <title>添加/修改作品</title>
+    <link href="/static/css/admin.css?v=2021021916" rel="stylesheet" type="text/css"/>
+    <link rel="stylesheet" href="https://unpkg.com/multiple-select@1.5.2/dist/multiple-select.min.css">
+    <script src="/static/scripts/jquery-2.2.0.min.js?v=20210218" type="text/javascript"></script>
+    <script src="/static/scripts/admin.js?v=20210218" type="text/javascript"></script>
+    <script src="/static/js/util.js" type="text/javascript"></script>
+    <script src="/static/js/api.js" type="text/javascript"></script>
+    <script src="/static/js/Sortable.min.js" type="text/javascript"></script>
+    <script src="https://unpkg.com/multiple-select@1.5.2/dist/multiple-select.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="/static/ueditor/ueditor.config.js"></script>
+    <script type="text/javascript" charset="utf-8" src="/static/ueditor/ueditor.all.min.js?v=1.4.3"></script>
+    <script type="text/javascript" charset="utf-8" src="/static/ueditor/lang/zh-cn/zh-cn.js"></script>
+</head>
+<body>
+<div class="mainer">
+    <form id="form1" method="post" onsubmit="return false">
+        <input type="hidden" name="id"/>
+        <table role="edit">
+            <tr>
+                <th width="120">融合作品名称：</th>
+                <td>
+                    <input type="text" minlength="1" size="100" name="name" autocomplete="off"/>
+                </td>
+            </tr>
+            <tr>
+                <th width="120">盲盒系列：</th>
+                <td>
+                    <select id="serialId" name="serialId"></select>
+                </td>
+            </tr>
+            <tr>
+                <th width="120">碎片作品：</th>
+                <td>
+                    <select style="width:85%" id="commodityIds" multiple="multiple" name="commodityIds"></select>
+                </td>
+            </tr>
+            <tr>
+                <th width="120">选中碎片排序：</th>
+                <td>
+                    <div id="itxst">
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <th>融合作品图片：</th>
+                <td>
+                    <div class="upload-files">
+                        <div class="file" title="上传图片">
+                            <input type="file"/>
+                            <input type="hidden" name="pic"/>
+                            <img id="picImg"/>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <th width="120">总奖励BTC：</th>
+                <td>
+                    <input type="number" size="20" maxlength="8" name="bonusBtc" autocomplete="off"/>
+                </td>
+            </tr>
+            <tr>
+                <th>融合手续费：</th>
+                <td>
+                    <input type="text" maxlength="8" size="20" name="composeFee" autocomplete="off"/>
+                    <span class="error">[(${TOKEN})]</span>
+                </td>
+            </tr>
+            <tr>
+                <th>提取手续费：</th>
+                <td>
+                    <input type="text" name="takeFee" size="20" maxlength="8" autocomplete="off"/>
+                    <span class="error">[(${TOKEN})]</span>
+                </td>
+            </tr>
+            <tr>
+                <th>作品详情：</th>
+                <td><textarea rows="15" style="width:100%" id="content" name="content"></textarea></td>
+            </tr>
+            <tr>
+                <th></th>
+                <td>
+                    <input class="button-submit" type="button" value="保存并提交"/>
+                    <a href="javascript:history.back()">返回</a>
+                </td>
+            </tr>
+        </table>
+    </form>
+</div>
+<script type="text/javascript">
+    var isok = false;
+    uploadfiles('input[type=file]');
+    let editor = UE.getEditor('content', {initialFrameHeight: 400});
+    let serialIdEle = $("#serialId");
+    let commodityEle = $("#commodityIds");
+
+    var el = document.getElementById('itxst');
+    //设置配置
+    var ops = {
+        animation: 1000,
+        //拖动结束
+        onEnd: function (evt) {
+            console.log(evt);
+            //获取拖动后的排序
+            var arr = sortable.toArray();
+        },
+    };
+    //初始化
+    var sortable = Sortable.create(el, ops);
+
+    function initSerialSelect(initFunc) {
+        otherGetSerialIdAndNames({}, function (res) {
+            res = res.list;
+
+            for (let i = 0; i < res.length; i++) {
+                let option = res[i];
+                serialIdEle.append("<option value={0}>{1}</option>".format(option.id, option.name))
+            }
+            if (initFunc) {
+                initFunc();
+            }
+        });
+    }
+
+    function composeArray(texts, values) {
+        let res = [];
+        for (let i = 0; i < texts.length; i++) {
+            res.push({text:texts[i], value: values[i]})
+        }
+        return res;
+    }
+
+    function findById(composed, id) {
+        for (let i = 0; i < composed.length; i++) {
+            if (composed[i].value === id) {
+                return composed[i];
+            }
+        }
+        return null;
+    }
+
+    function showSortableChosenCommodity(init) {
+        let texts = commodityEle.multipleSelect('getSelects', 'text');
+        let values = commodityEle.multipleSelect('getSelects', 'value');
+        let composed = composeArray(texts, values);
+
+        let ele = $("#itxst");
+        if (init != null) {
+            ele.empty();
+            for (let i = 0; i < init.length; i++) {
+                let id = init[i];
+                let data = findById(composed, id);
+                if (data == null) {
+                    continue;
+                }
+                ele.append('<div data-id="{0}">{1}</div>'.format(data.value, data.text));
+            }
+
+            return;
+        }
+
+        let exists = ele.find("div[data-id]");
+        let toRemove = [];
+        for (let i = 0; i < exists.length; i++) {
+            let div = exists[i]
+            let valueId = $(div).attr('data-id');
+            if (values.indexOf(parseInt(valueId)) === -1) {
+                toRemove.push(valueId);
+            }
+        }
+        for (let i = 0; i < toRemove.length; i++) {
+            removeSortableItem(toRemove[i]);
+        }
+
+        for (let i = 0; i < texts.length; i++) {
+            let text = texts[i];
+            let value = values[i];
+            if (existSortableItem(value)) {
+                continue;
+            }
+            ele.append('<div data-id="{0}">{1}</div>'.format(value, text));
+        }
+    }
+
+    function removeSortableItem(id) {
+        $("#itxst div[data-id=" + id + "]").remove();
+    }
+
+    function existSortableItem(id) {
+        return $("#itxst div[data-id=" + id + "]").length !== 0;
+    }
+
+    function getSortIds() {
+        let eles = $("#itxst div[data-id]");
+        let res = [];
+        for (let i = 0; i < eles.length; i++) {
+            res.push($(eles[i]).attr('data-id'));
+        }
+        return res;
+    }
+
+    function showCommoditySelect(finishFunc) {
+        let serialId = serialIdEle.val()
+        if (serialId == 0) {
+            if (finishFunc) finishFunc();
+            return;
+        }
+
+        otherGetCommodityIdAndName(serialId, function (res) {
+            res = res.list;
+            let data = [];
+            for (let i = 0; i < res.length; i++) {
+                let option = res[i];
+                data.push({'text': option.name, 'value': option.id})
+            }
+
+            commodityEle.attr('size', res.length)
+            commodityEle.multipleSelect('refreshOptions', {
+                data: data,
+                onClose: function () {
+                    showSortableChosenCommodity();
+                },
+            });
+            showSortableChosenCommodity();
+            if (finishFunc) finishFunc();
+        });
+    }
+
+    initSerialSelect(function () {
+        let id = getUrlParam("id");
+        let editMode = false;
+        if (id != null) {
+            //是update
+            editMode = true;
+            commodityFinalGetCommodityFinal(id, function (res) {
+                let initCommodityIds = res['commodityIds'];
+                let serialId = res['serialId']
+                res['commodityIds'] = null;
+                populateForm('form1', res);
+                $("#picImg").attr("src", res.pic)
+
+                editor.ready(function () {
+                    editor.setContent(res.content);
+                })
+
+                serialIdEle.val(serialId)
+                showCommoditySelect(function () {
+                    commodityEle.multipleSelect('setSelects', initCommodityIds);
+                    showSortableChosenCommodity(initCommodityIds);
+                    serialIdEle.change(function () {
+                        showCommoditySelect();
+                    });
+                })
+            });
+        } else {
+            showCommoditySelect(function () {
+                serialIdEle.change(function () {
+                    showCommoditySelect();
+                });
+            })
+        }
+
+        $('.button-submit').click(function (e) {
+            if (isok) return;
+
+            var target = e.currentTarget, form = target.form;
+            let data = serializeObject(form);
+            
+            data.commodityIds = getSortIds();
+            data.content = editor.getContent();
+
+            /*if (form['type'].value == 0) {
+                alert('请选择活动类型。');
+                form['type'].focus();
+                return;
+            }
+            if (form['commodityFinalId'].value == 0) {
+                alert('请选择作品融合作品。');
+                form['commodityFinalId'].focus();
+                return;
+            }
+            if (form['title'].value.length == 0) {
+                alert('请输入活动主题。');
+                form['title'].focus();
+                return;
+            }
+            if (form['name'].value == '0') {
+                alert('请选择活动名称。');
+                form['name'].focus();
+                return;
+            }*/
+            target.value = '正在提交数据...';
+            isok = true;
+
+            if (editMode) {
+                data.id = id;
+                commodityFinalEditCommodityFinal(data, function () {
+                    top.location.href = './list';
+                    isok = false;
+                    target.value = '保存并提交';
+                }, function () {
+                    isok = false;
+                    target.value = '保存并提交';
+                });
+            } else {
+                commodityFinalAddCommodityFinal(data, function () {
+                    top.location.href = './list';
+                    isok = false;
+                    target.value = '保存并提交';
+                }, function () {
+                    isok = false;
+                    target.value = '保存并提交';
+                });
+            }
+        });
+    })
+
+</script>
+</body>
+</html>

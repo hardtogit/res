@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<th:block th:replace="common/metas::metaConfig" />
+		<title>Wallets</title>
+		<link rel="stylesheet" type="text/css" href="/static/css/common.css?v=202102222066" />
+		<link rel="stylesheet" type="text/css" href="/static/css/zhang.css" />
+		<link rel="stylesheet" type="text/css" href="/static/css/money.css" />
+		<script src="https://unpkg.com/@metamask/legacy-web3@latest/dist/metamask.web3.min.js"></script>
+		<script src="/static/js/jquery.min.js?v=2021022122"></script>
+		<style type="text/css">
+			.num::before {padding-bottom:0}
+			.num{width:934px;height:628px;background-image:url(/static/images/moneyimgs/tx_list_bg.png)}
+		</style>
+	</head>
+	<body>
+		<header class="header">
+			<img class="logo" src="/static/images/logo.png" alt="FM Gallery" />
+			<img class="mobile-nav" src="/static/images/icon-dian.png" alt="" />
+			<div class="head-right" th:replace="common/navi::naviBar"></div>
+		</header>
+		<div class="wallet">
+			<div th:replace="common/mine_header::naviBar"></div>
+			<div class="cont">
+				<div class="num show">
+					<div class="tab-content history">
+			           
+						<div class="list_cont">
+							<div class="list_tit">USDT History</div>
+							<div class="bor_radius tit flex jc_sb ali_center">
+								<span>Token</span>
+								<span>Amount</span>
+								<span>Status</span>
+								<span>Date</span>
+							</div>
+							<ul class="tx_list">
+								<li class="flex jc_sb ali_center" th:each="item,stat:${model.items}">
+									<span th:text="${item.token}"></span>
+									<span th:text="${item.amount}"></span>
+									<span th:if="${item.status == 1}">Being processed</span>
+									<span th:if="${item.status == 2}">Succeed</span>
+									<span th:if="${item.status == 3}">Failure</span>
+									<span th:text="${#dates.format(item.createTime,'yyyy-MM-dd')}"></span>
+								</li>
+							</ul>
+							<div class="page bor_radius flex ali_center">
+								<a th:href="@{./record.html?index={pn}(pn=${model.index}-1)}" class="flex"><img src="/static/images/preve.png"></a>
+								<div class="page_num">
+									<a th:each="i:${#numbers.sequence(1,model.pages)}" th:href="@{./record.html?index={pn}(pn=${i})}"
+									   th:classappend="${model.index} eq ${i} ? 'active'" th:text="${i}"></a>
+								</div>
+								<a th:href="@{./record.html?index={pn}(pn=${model.index}+1)}" class="flex"><img src="/static/images/next.png"></a>
+							</div>
+			           	</div>
+		            </div>
+				</div>
+			</div>
+		</div>
+		<footer class="footer-box" th:replace="common/footer::footerBar"></footer>
+		<img class="back-top" src="/static/images/back-top.png" />
+		<script src="/static/js/common.js"></script>
+		<script type="text/javascript">
+
+		</script>
+	</body>
+</html>

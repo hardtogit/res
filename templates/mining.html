@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<th:block th:replace="common/metas::metaConfig" />
+		<title>Mining</title>
+		<link rel="stylesheet" href="/static/css/common.css" />
+		<link rel="stylesheet" type="text/css" href="/static/css/zhang.css" />
+        <link rel="stylesheet" type="text/css" href="/static/css/mining.css" />
+        <script src="https://unpkg.com/@metamask/legacy-web3@latest/dist/metamask.web3.min.js"></script>
+        <style type="text/css">
+        	i{font-style:normal}
+        	button{cursor:pointer}
+        	button[disabled]{cursor:progress;color:#aaa !important;opacity:0.7;}
+        	.console{position:fixed;left:0px;top:20%;color:#fff;z-index:1000;background:rgba(0,0,0,0.5);max-width:480px;}
+        	.console input{color:#333;font-size:14px;padding:5px 10px;border-radius:5px;margin:5px;cursor:pointer}
+			.console input[type='text']{width:450px}
+			#logs{font-size:14px;overflow:auto;max-height:400px;padding:0 15px;}
+			#logs p{padding-bottom:5px}
+        </style>
+	</head>
+	<body>
+		<header class="header">
+			<img class="logo" src="/static/images/logo.png" alt="FM Gallery" />
+			<img class="mobile-nav" src="/static/images/icon-dian.png" />
+			<div class="head-right" th:replace="common/navi::naviBar"></div>
+		</header>
+		<div class="box">
+	        <div class="content">
+	            <p class="txt" style="height: 150px;"></p>
+	            <img src="/static/images/mining/textline.png">
+	            <div class="from">
+	            
+					<div class="timebox_top">
+	                    <p>Epoch <i class="total-wah-epoch-next">1</i> Starting in</p>
+	                </div>
+	                <div class="timebox_center" >
+	                    <p class="timeblock">
+	                        <span>D</span>
+	                        <span>H</span>
+	                        <span>Min</span>
+	                    </p>
+	                    <div class="timeblock time">
+	                        <span>0</span>
+	                        <span>0</span>
+	                    </div>
+	                    <div class="timeblock time">
+	                        <span>0</span>
+	                        <span>0</span>
+	                    </div>
+	                    <div class="timeblock time">
+	                        <span>0</span>
+	                        <span>0</span>
+	                    </div>
+	                    <p class="timeEndTxt">this epoch has ENDED</p>
+	                </div>
+	                <div class="timebox_bot">
+	                    <div>
+	                        <img src="/static/images/mining/logoleft.png" style="float:left;">
+	                        <img src="/static/images/mining/logoright.png">
+	                    </div>
+	                    <p style="flex:8">[(${TOKEN})]/ETH Uniswap LP</p>
+	                </div>
+	                
+	                
+	                <div class="txtbox">
+	                    <div class="txtboxone">
+	                        <p class="total-distributed-amount">0.00</p>
+	                        <p>Total [(${TOKEN})] for epoch <i class="total-wah-epoch">1</i></p>
+	                    </div>
+	                    <div>
+	                        <p class="total-lp-tokens">0.00</p>
+	                        <p>Total LP tokens deposited</p>
+	                    </div>
+	                    <div>
+	                        <p class="estimated-token-reward">To be Calculated</p>
+	                        <p>Estimated [(${TOKEN})] Reward</p>
+	                    </div>
+	                </div>
+					<div class="MAX">
+	                    <div class="MAXleft">
+	                        <input type="number" class="deposit-value" style="color:#fff" placeholder="0.00">
+	                        <span class="deposit-max">MAX</span>
+	                    </div>
+	                    <div class="MAXright">
+	                        <button class='loading deposit'>Approve</button>
+	                    </div>
+	                </div>
+	                <div class="profit">
+	                    <span style="text-align:left;">Your wallet LP token balance : <i class="lp-tokens-balance">0.00</i></span>
+	                    <!-- <span style="text-align:right;">Wallet balance: <i class="lp-balance">0</i> LP</span> -->
+	                </div>
+	                
+	                <div class="MAX">
+	                    <div class="MAXleft">
+	                        <input type="number" style="color:#fff" class="withdraw-value" placeholder="0.00" />
+	                        <span class="withdraw-max">MAX</span>
+	                    </div>
+	                    <div class="MAXright">
+	                        <button class="shouyi withdraw-confirm">Withdraw</button>
+	                    </div>
+	                </div>
+	                <div class="profit">
+	                    <span style="text-align: left;">Your LP tokens deposited : <i class="lp-tokens-deposited">0.00</i></span>
+	                    <!-- <span style="text-align:right;">Wallet balance: <i class="lp-balance">0</i> LP</span> -->
+	                </div>
+	                <div class="claim">
+	                    <span>APY = <i class="apy-mass-harvest">0.00</i>%</span>
+	                    <button onclick="NFT.YieldFarmLP.massHarvest()" class="claimbutton">claim</button>
+	                </div>
+	                <div class="bottom">
+	                    <div>
+	                        <span><a href="https://info.uniswap.org/pair/0x8815ee66cbb8fd7adaf199cc5564eb2ac52a9c00" target="_black">Buy [(${TOKEN})]</a></span>
+	                        <img src="/static/images/mining/shou.png" />
+	                    </div>
+	                    <div>
+	                        <span><a href="https://app.uniswap.org/#/add/0x2991341D28Eaea277785D20e1d878D478c7bA4C7/ETH" target="_black">Get LP tokens</a></span>
+	                        <img src="/static/images/mining/shou.png" />
+	                    </div>
+	                </div>
+	            </div>
+	       
+	            
+	        </div>
+	        <div class="miningart">
+	            <div class="artone">
+	                <p>Are you sure you'd like to unstake</p>
+	                <div class="buttonbox">
+	                    <img src="/static/images/art/artone_left.png" class="withdraw-submit">
+	                    <img src="/static/images/art/artone_right.png" class="artonerightbutton">
+	                </div>
+	            </div>
+	            <div class="arttwo">
+	                <img src="/static/images/art/arttwo_close.png" class="close">
+	                <p style="text-align:center">You've unstaked your tokens <br>Awaiting block confirmation</p>
+	            </div>
+	            <div class="atrthree">
+	                <img src="/static/images/art/artlod.png">
+	                <p>Processing</p>
+	            </div>
+	            <div class="artfour">
+	                <img src="/static/images/art/artwaring.png">
+	                <p>Transaction Cancelled</p>
+	                <img src="/static/images/art/artworing_button.png" class="warningbutton">
+	            </div>
+	            <div class="artfive">
+	                <img src="/static/images/art/arttwo_close.png" class="artfiveclose">
+	                <p>We’ve sent the tokens to your wallet</p>
+	            </div>
+	        </div>
+	    </div>
+	    <div class="foot-padd"></div>
+		<footer class="footer-box" th:replace="common/footer::footerBar"></footer>
+		<table class="console" th:if="${PROFILE=='dev'}">
+			<tr>
+				<td>
+					Stak Contract Address:<br>
+					<input type="text" id="StakContractAddress" />
+				</td>
+			</tr>
+			<tr>
+				<td>
+					Yield Contract Address:<br>
+					<input type="text" id="YieldContractAddress" />
+				</td>
+			</tr>
+			<tr>
+				<td>
+					UniLP Contract Address:<br>
+					<input type="text" id="UniLPContractAddress" />
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<div id="logs">logs...</div>
+				</td>
+			</tr>
+		</table>
+	</body>
+	<script src="/static/js/jquery.min.js?v=2021022122"></script>
+    <script src="/static/js/common.js?v=2021022312"></script>
+    <script th:src="@{/static/js/nft_staking{mode}.js?v=1.0.1.5(mode=${MODE})}"></script>
+	<script th:if="${PROFILE=='dev'}">
+		window.product=true;
+		var keys = Object.keys(NFT.Mainnet);
+		for (var i = 0; i < keys.length; i++) {
+			var N = keys[i];
+			$('#' + N).val(NFT.Mainnet[N])
+		}
+		$('input[type="text"]').blur(function(e){
+			var O=e.target,N=O.id,V=O.value;
+			if (V) NFT.Mainnet[N]=V;
+			console.log(NFT.Mainnet[N])
+		})
+	</script>
+	<script>
+		NFT.init()
+		// Deposit按钮事件
+		$('.deposit-max').click(function(){
+			NFT.UniLPToken.balanceOf(NFT.walletAccount(), function(balance){
+				var t = (balance - 100000000) /NFT.UNILP_WEI;
+				$(".deposit-value").val(t)
+			})
+		});
+		$('.deposit').click(function(e){
+			var amount=parseFloat($('.deposit-value').val() || 0),target=e.currentTarget,txt=target.innerText;
+			if (amount <= 0){
+				alert('Please input quantity.');
+				$('.deposit-value').focus()
+				return
+			}
+			
+			target.disabled=true;
+			if (!NFT.isAllowance) {
+				NFT.UniLPToken.allowance(function(data){
+					if (data <= amount) {
+						NFT.UniLPToken.approve(function(){
+							document.setCookie('isAllowance','1',360);
+							target.innerText='Deposit',target.disabled=false
+						})
+					} else {
+						NFT.isAllowance = true;
+						target.innerText='Deposit',target.disabled=false
+					}
+				},function(er){
+					target.disabled=false
+				})
+			} else {
+				$('.miningart').addClass('alt2')
+				$('.atrthree').show();
+				NFT.Staking.deposit(amount, function(txn){
+					$('.atrthree').hide();
+					target.disabled=false;
+					alert('Successful deposit.');
+				}, function(er){
+					target.disabled=false;
+					$('.atrthree').css("display", 'none')
+			        $('.artfour').css("display", 'block')
+				})
+			}
+		})
+		
+		// Withdraw 事件
+		$('.withdraw-max').click(function(){
+			NFT.Staking.balanceOf(function(balance){
+				var t = (balance - 100000000) / NFT.UNILP_WEI;
+				$(".withdraw-value").val(t)
+			})
+		});
+ 		$('.withdraw-confirm').click(function(){
+			var amount = parseFloat($('.withdraw-value').val() || 0);
+			if (amount <= 0){
+				alert('Please input quantity.');
+				$('.withdraw-value').focus()
+				return
+			}
+			$('.artone').css("display", 'block');
+			$('.miningart').addClass('alt1');
+		});
+ 		
+	     $('.withdraw-submit').on("click", function () {
+	        $('.arttwo').css("display", 'block')
+	        $('.artone').css("display", 'none')
+	        var amount = parseFloat($('.withdraw-value').val() || 0);
+	        NFT.Staking.withdraw(amount, function(){
+	        	$('.artone').css("display", 'none')
+		        $('.miningart').removeClass('alt1')
+	        })
+	    })
+	    // 弹窗1右按钮
+	    $('.artonerightbutton').on("click", function () {
+	        $('.artone,.artfive').css("display", 'none')
+	        $('.miningart').removeClass('alt1 alt2')
+	    })
+	    
+	    
+	    
+	    
+	    
+	    //弹框2顶部关闭/表单2中的返回
+	     $('.close,.back').on("click", function () {
+	        $('.from2,.arttwo').css("display", 'none')
+	        $('.from').css("display", 'block')
+	        $('.miningart').removeClass('alt1')
+	    })
+	    //点击弹窗4按钮
+	    $(".warningbutton").on("click",function(){
+	        $('.artfour').css("display", 'none')
+	        $('.miningart').removeClass('alt2')
+	    })
+	    
+	    //claim按钮
+	    $(".claimbutton").on("click",function(){
+	        $('.artfive').css("display", 'block')
+	        $('.miningart').addClass('alt2')
+	    })
+	    //弹窗5关闭按钮
+	    $(".artfiveclose").on('click',function(){
+	        $('.artfive').css("display", 'none')
+	        $('.miningart').removeClass('alt2')
+	        // 结束表单展示
+	        //$('.txtbox').css('justify-content','space-around')
+	        //$('.timeEndTxt').css("display", 'block')
+	    })
+	</script>
+</html>

@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:replace="common/metas::metaConfig"/>
+    <title th:text="${result?.name}">Activity Detail</title>
+    <link rel="stylesheet" href="/static/css/common.css?v=202102222066"/>
+    <link rel="stylesheet" href="/static/css2/activity_detail.css"/>
+    <script src="https://unpkg.com/@metamask/legacy-web3@latest/dist/metamask.web3.min.js"></script>
+</head>
+<body>
+<header class="header">
+    <img class="logo" src="/static/images/logo.png" alt="FM Gallery"/>
+    <img class="mobile-nav" src="/static/images/icon-dian.png"/>
+    <div class="head-right" th:replace="common/navi::naviBar"></div>
+</header>
+<div>
+    <div class="acd_top ">
+        <div class="acd_top_left">
+            <a href="activity.html">
+                <img src="/static/images2/activity/back_arrow.png">
+            </a>
+        </div>
+        <div class="acd_top_right">
+            <a href="#">
+                <div class="acd_top_right_3">
+                    <div class="acd_text_center_v">My BTC</div>
+                </div>
+            </a>
+            <a href="#">
+                <div class="acd_top_right_2" id="exg">
+                    <div class="acd_text_center_v">Artwork Exchange</div>
+                </div>
+            </a>
+            <a href="#">
+                <div class="acd_top_right_1" id="btc_list">
+                    <div class="acd_text_center_v">BTC herose list</div>
+                </div>
+            </a>
+        </div>
+        <div class="ac_clear"></div>
+    </div>
+    <div class="acd_title">
+        <div class="acd_title_left">
+            <img src="/static/images2/activity/ac_detail_header.png">
+        </div>
+        <div class="acd_title_text" th:text="${result?.name}">Fuse Fragments To Share BTC Rewards</div>
+        <div class="acd_title_right">
+            <img src="/static/images2/activity/ac_detail_header.png">
+        </div>
+        <div class="ac_clear"></div>
+    </div>
+    <div class="acd_subttitle">
+        <div class="acd_subttitle_left">
+            Works fused
+            <span class="acd_subttitle_left_num" th:text="${result?.composedFinalCount}">--</span>
+        </div>
+        <div class="acd_subttitle_right">
+            Works not yet fused
+            <span class="acd_subttitle_left_num" th:text="${result?.notComposeFinalCount}">--</span>
+        </div>
+    </div>
+    <div class="acd_content">
+        <div class="acd_content_top">
+            <div th:each="item,eStat:${result?.commodityInfos}" class="acd_content_top_single"
+                 th:attr="id='acd_pic_'+${eStat.index+1}">
+                <div class="acd_content_top_text" th:attr="data=${item.getCommodityTypeId()}">My NFT : [(${item.nftCount})]</div>
+                <div class="acd_content_top_img">
+                    <img th:src="@{{url}?imageMogr2/auto-orient/thumbnail/1000x/format/webp(url=${item.pic})}">
+                </div>
+            </div>
+            <div class="ac_clear"></div>
+        </div>
+
+
+        <div th:each="item,eStat:${result?.commodityInfos}" class="acd_content_top_single_hover" style="display:none"
+             th:attr="id='acd_detail_'+${eStat.index+1}">
+            <div class="acd_content_top_single_hover_left">
+                <img th:src="@{{url}?imageMogr2/auto-orient/thumbnail/1000x/format/webp(url=${item.pic})}">
+            </div>
+            <div class="acd_content_top_single_hover_right">
+                <div class="acd_content_top_single_hover_right_text_1" th:text="${item.creatorName}">Kali 1</div>
+                <div class="acd_content_top_single_hover_right_text_2">
+                    <img th:src="@{(${item.creatorHeadIcon})}">
+                    <span class="acd_content_top_single_hover_right_text_2_span">NFT Kali</span>
+                </div>
+                <div class="acd_content_top_single_hover_right_text_3" th:utext="${item.content}"></div>
+            </div>
+        </div>
+
+        <div class="ac_clear"></div>
+
+
+        <div class="acd_content_bottom">
+            <a href="activity.html">
+                <div class="acd_content_bottom_left">
+                    <div class="acd_content_bottom_text">View Artworks</div>
+                </div>
+            </a>
+            <div class="acd_content_bottom_right" id="fusion">
+                <div class="acd_content_bottom_text">Fusion</div>
+            </div>
+        </div>
+
+        <div class="ac_clear"></div>
+        <a href="#">
+            <div class="acd_hint" style="display:none;" id="mbt_window">
+                <div class="acd_hint_button" id="no_hover">
+                    <img src="/static/images2/activity/acd_hint_close.png">
+                </div>
+                <div class="acd_hint_text" id="no_hover">Please check back after the event</div>
+            </div>
+            <div class="ac_clear"></div>
+        </a>
+
+        <div class="acd_hint_fusion" style="display:none;" id="fusion_window">
+            <div class="acd_hint_fusion_text">Fusion requires [(${result?.composeFee})][(${TOKEN})]</div>
+            <div class="acd_hint_fusion_content">
+                Your current FMG balance in your website account:[(${user?.getBalanceFmgString()})][(${TOKEN})]
+                Please ensure that you have sufficient FMG in your account, FMG will be deducted from your account after
+                successful fusion and the fused work and BTC reward will be issued to your account
+            </div>
+            <div class="acd_hint_fusion_button">
+                <a href="#">
+                    <div class="acd_hint_fusion_button_left" id="fusion_close_button">
+                        <div class="acd_hint_fusion_button_text">Back</div>
+                    </div>
+                </a>
+                <a href="#">
+                    <div class="acd_hint_fusion_button_right" id="Insufficient_button">
+                        <!--如果余额充足就去掉 id="Insufficient_button"-->
+                        <div class="acd_hint_fusion_button_text">Confirm</div>
+                    </div>
+                </a>
+            </div>
+        </div>
+
+        <div class="acd_hint" style="margin-top:-524px;display:none;" id="Insufficient_window">
+            <div class="acd_hint_button" id="Insufficient_button_close">
+                <img src="/static/images2/activity/acd_hint_close.png">
+            </div>
+            <div class="acd_hint_text">
+                Insufficient balance to integrate
+            </div>
+        </div>
+        <div class="ac_clear"></div>
+
+        <div class="acd_artwork" style="display:none;" id="artwork_window">
+            <div class="acd_hint_button" id="artwork_button_close">
+                <img src="/static/images2/activity/acd_hint_close.png">
+            </div>
+            <div class="acd_art_img">
+                <img src="/static/images2/activity/activity_content.jpg">
+            </div>
+        </div>
+
+        <div class="ac_clear"></div>
+    </div>
+</div>
+<div class="foot-padd"></div>
+<footer class="footer-box" th:replace="common/footer::footerBar"></footer>
+<img class="back-top" src="/static/images/back-top.png"/>
+<script src="/static/js/jquery.min.js?v=2021022122"></script>
+<script src="/static/js/common.js"></script>
+</body>
+</html>
+<script>
+    let activityId = [[${activityId}]]
+    let nftReceiveAddr = "[[${nftReceiveAddr}]]";
+    let fmgBalance = [[${user?.getBalanceFmgString()}]];
+    let needComposeFee = [[${result?.composeFee}]]
+    let nftContractAddr = '[[${nftContractAddr}]]';
+    let token_ids = [[${tokenIds}]];
+    let walletNfts=[];
+
+    $(function(){
+        let walletIds =[]
+        for (let tokenIdsKey in token_ids) {
+            walletIds.push(FMG.Wallet.walletAddress())
+        }
+        NFT.Wallet.at('nft.balanceOfBatch',nftContractAddr, walletIds, token_ids, function (error, result) {
+            if (error) {
+                return;
+            }
+            for (let i = 0; i < token_ids.length; i++) {
+                $(".acd_content_top_text[data='"+token_ids[i]+"']").text("My NFT : "+result[i]);
+            }
+            walletNfts=result;
+        })
+    })
+    $("#Insufficient_button").click(function () {
+        if(walletNfts.filter(function(v){return v<=0;}).length>0){
+            $('#fusion_window').hide();
+            alert("nft count not enough");
+            return;
+        }
+        if (fmgBalance <= needComposeFee) {
+            $('#Insufficient_window').show();
+            $('#fusion_window').hide();
+        } else {
+            let nums = []
+            for (let tokenIdsKey in token_ids) {
+                nums.push(1);
+            }
+            NFT.Wallet.at('nft.safeBatchTransferFrom',nftContractAddr, FMG.Wallet.walletAddress(), nftReceiveAddr, token_ids, nums, [], function (error, txid) {
+                if (error) {
+                    if(error['code']==4001){
+                        console.log("operate cancel");
+                        $('#fusion_window').hide();
+                        return;
+                    }
+                    alert("contract execute error.")
+                    return;
+                }
+                $('#fusion_window').hide();
+                $.get("/api/activity/compose_finish?txId=" + txid + "&activityId=" + activityId, function (data) {
+                    console.log("report finish");
+                });
+            })
+        }
+    });
+    $("#Insufficient_button_close").click(function () {
+        $('#Insufficient_window').hide();
+    });
+
+    $("#artwork_button").click(function () {
+        $('#artwork_window').show();
+    });
+
+    $("#artwork_button_close").click(function () {
+        $('#artwork_window').hide();
+    });
+
+    $("#exg").click(function () {
+        $('#mbt_window').show();
+    });
+    $("#btc_list").click(function () {
+        $('#mbt_window').show();
+    });
+    $("#mbt_window").click(function () {
+        $('#mbt_window').hide();
+    });
+    $("#fusion").click(function () {
+        $('#fusion_window').show();
+    });
+    $("#fusion_close_button").click(function () {
+        $('#fusion_window').hide();
+    });
+
+
+    $("#acd_detail_1").hover(function () {
+        $('#acd_detail_1').show();
+        $('#acd_detail_2').hide();
+        $('#acd_detail_3').hide();
+        $('#acd_detail_4').hide();
+        $('#acd_detail_5').hide();
+        $('#acd_detail_6').hide();
+    });
+
+    $("#acd_detail_2").hover(function () {
+        $('#acd_detail_2').show();
+        $('#acd_detail_1').hide();
+        $('#acd_detail_3').hide();
+        $('#acd_detail_4').hide();
+        $('#acd_detail_5').hide();
+        $('#acd_detail_6').hide();
+    });
+
+    $("#acd_detail_3").hover(function () {
+        $('#acd_detail_3').show();
+        $('#acd_detail_2').hide();
+        $('#acd_detail_1').hide();
+        $('#acd_detail_4').hide();
+        $('#acd_detail_5').hide();
+        $('#acd_detail_6').hide();
+    });
+
+    $("#acd_detail_4").hover(function () {
+        $('#acd_detail_4').show();
+        $('#acd_detail_2').hide();
+        $('#acd_detail_3').hide();
+        $('#acd_detail_1').hide();
+        $('#acd_detail_5').hide();
+        $('#acd_detail_6').hide();
+    });
+
+    $("#acd_detail_5").hover(function () {
+        $('#acd_detail_5').show();
+        $('#acd_detail_2').hide();
+        $('#acd_detail_3').hide();
+        $('#acd_detail_4').hide();
+        $('#acd_detail_1').hide();
+        $('#acd_detail_6').hide();
+    });
+
+    $("#acd_detail_6").hover(function () {
+        $('#acd_detail_6').show();
+        $('#acd_detail_2').hide();
+        $('#acd_detail_3').hide();
+        $('#acd_detail_4').hide();
+        $('#acd_detail_5').hide();
+        $('#acd_detail_1').hide();
+    });
+
+    $("#mbt_window").hover(function () {
+        $('#acd_detail_6').hide();
+        $('#acd_detail_2').hide();
+        $('#acd_detail_3').hide();
+        $('#acd_detail_4').hide();
+        $('#acd_detail_5').hide();
+        $('#acd_detail_1').hide();
+    });
+
+    $("#acd_pic_1").hover(function () {
+        $('#acd_detail_1').show();
+        $('#acd_detail_2').hide();
+        $('#acd_detail_3').hide();
+        $('#acd_detail_4').hide();
+        $('#acd_detail_5').hide();
+        $('#acd_detail_6').hide();
+    }, function () {
+        $('#acd_detail_1').hide();
+    });
+
+
+    $("#acd_pic_2").hover(function () {
+        $('#acd_detail_2').show();
+        $('#acd_detail_1').hide();
+        $('#acd_detail_3').hide();
+        $('#acd_detail_4').hide();
+        $('#acd_detail_5').hide();
+        $('#acd_detail_6').hide();
+    }, function () {
+        $('#acd_detail_2').hide();
+    });
+
+    $("#acd_pic_3").hover(function () {
+        $('#acd_detail_3').show();
+        $('#acd_detail_2').hide();
+        $('#acd_detail_1').hide();
+        $('#acd_detail_4').hide();
+        $('#acd_detail_5').hide();
+        $('#acd_detail_6').hide();
+    }, function () {
+        $('#acd_detail_3').hide();
+    });
+
+    $("#acd_pic_4").hover(function () {
+        $('#acd_detail_4').show();
+        $('#acd_detail_2').hide();
+        $('#acd_detail_3').hide();
+        $('#acd_detail_1').hide();
+        $('#acd_detail_5').hide();
+        $('#acd_detail_6').hide();
+    }, function () {
+        $('#acd_detail_4').hide();
+    });
+
+    $("#acd_pic_5").hover(function () {
+        $('#acd_detail_5').show();
+        $('#acd_detail_2').hide();
+        $('#acd_detail_3').hide();
+        $('#acd_detail_4').hide();
+        $('#acd_detail_1').hide();
+        $('#acd_detail_6').hide();
+    }, function () {
+        $('#acd_detail_5').hide();
+    });
+
+    $("#acd_pic_6").hover(function () {
+        $('#acd_detail_6').show();
+        $('#acd_detail_2').hide();
+        $('#acd_detail_3').hide();
+        $('#acd_detail_4').hide();
+        $('#acd_detail_5').hide();
+        $('#acd_detail_1').hide();
+    }, function () {
+        $('#acd_detail_6').hide();
+    });
+
+
+</script>

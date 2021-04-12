@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta http-equiv="content-type" content="text/html;charset=utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, minimum-scale=1.0"/>
+	<meta http-equiv="X-UA-Compatible" content="ie=edge,chrome=1"/>
+	<title>添加/修改系列</title>
+	<link href="/static/css/admin.css?v=2021021916" rel="stylesheet" type="text/css" />
+	<script src="/static/scripts/jquery-2.2.0.min.js?v=20210218" type="text/javascript"></script>
+	<script src="/static/scripts/admin.js?v=20210218" type="text/javascript"></script>
+    <script type="text/javascript" charset="utf-8" src="/static/ueditor/ueditor.config.js"></script>
+    <script type="text/javascript" charset="utf-8" src="/static/ueditor/ueditor.all.min.js?v=1.4.3"></script>
+    <script type="text/javascript" charset="utf-8" src="/static/ueditor/lang/zh-cn/zh-cn.js"></script>
+</head>
+<body>
+	<div class="mainer">
+		<form id="form1" method="post" onsubmit="return false">
+			<input type="hidden" name="id" th:value="${model?.id}" />
+			<table role="edit">
+				<tr>
+					<th width="120">单次抽奖金额：</th>
+					<td><input type="text" maxlength="8" name="unitPrice" th:value="${model?.unitPrice}" /> [(${UNIT})]/每次</td>
+				</tr>
+				<tr>
+					<th>系列名称：</th>
+					<td><input type="text" maxlength="255" size="100" name="name" th:value="${model?.name}" /></td>
+				</tr>
+				
+				<tr>
+					<th>系列介绍：</th>
+					<td><textarea rows="6" name="introduce" cols="100" maxlength="1000" th:text="${model?.introduce}"></textarea></td>
+				</tr>
+				<tr>
+					<th>系列图片：</th>
+					<td>
+						<div class="upload-files">
+							<div class="file" title="系列主图片">
+								<input type="file" />
+								<input type="hidden" name="imageUrl" th:value="${model?.imageUrl}" />
+								<img th:src="@{(${model?.imageUrl})}"/>
+							</div>
+							<div class="file" title="上传封面图片">
+								<input type="file" />
+								<input type="hidden" name="coverImageUrl" th:value="${model?.coverImageUrl}" />
+								<img th:src="@{(${model?.coverImageUrl})}"/>
+							</div>
+						</div><br>
+						<div class="upload-files">
+							<div class="file" title="上传图片" th:each="item,eStat:${model?.banners}" th:with="ext=${#strings.containsIgnoreCase(item,'.mp4')}">
+								<input type="file" />
+								<input type="hidden" name="banners" th:value="${item}" />
+								<img th:unless="${ext}" th:src="@{(${item.length > 0 ? item + '?imageMogr2/auto-orient/thumbnail/200x/format/webp' : ''})}"/>
+								<video th:if="${ext}" th:src="@{${item}}" muted="muted" preload="metadata"></video>
+							</div>
+						</div>
+					</td>
+				</tr>
+				
+				<tr>
+					<th>系列详情</th>
+					<td><textarea rows="15" style="width:100%" id="content" name="content" th:text="${model?.content}"></textarea></td>
+				</tr>
+				<tr>
+					<th></th>
+					<td>
+						<input class="button-submit" type="button" value="保存并提交" />
+						<a href="javascript:history.back()">返回</a>
+					</td>
+				</tr>
+			</table>
+		</form>
+	</div>
+	<script type="text/javascript">
+		var isok = false;
+		var editor_a = UE.getEditor('content',{initialFrameHeight:500});
+		uploadfiles('input[type=file]');
+		
+		
+		$('.button-submit').click(function(e) {
+			if (isok) return;
+			
+			var target = e.currentTarget, form = target.form;
+			if (form['unitPrice'].value.length == 0) {
+				alert('请输入单次抽奖金额。');
+				form['unitPrice'].focus()
+				return;
+			}
+			if (form['name'].value.length == 0) {
+				alert('请输入系列名称。');
+				form['name'].focus()
+				return;
+			}
+			
+			target.value='正在提交数据...';
+			isok = true;
+			$.post('../save', $(form).serialize(), function(model) {
+				alert(model.message);
+				top.location.href='../list';
+				isok = false;
+				target.value='保存并提交';
+			}, 'json');
+			
+			
+		});
+	</script>
+	
+</body>
+</html>

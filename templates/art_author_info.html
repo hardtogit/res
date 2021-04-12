@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<th:block th:replace="common/metas::metaConfig" />
+		<title>[(${model?.name})]</title>
+		<link rel="stylesheet" href="/static/css/common.css?v=202102222066" />
+		<link rel="stylesheet" href="/static/css/index.css?v=2021022311" />
+		<link rel="stylesheet" type="text/css" href="/static/css/zhang.css"/>
+		<link rel="stylesheet" href="/static/css/artist.css" />
+	</head>
+	<body>
+		<header class="header">
+			<img class="logo" src="/static/images/logo.png" alt="FM Gallery" />
+			<img class="mobile-nav" src="/static/images/icon-dian.png" />
+			<div class="head-right" th:replace="common/navi::naviBar"></div>
+		</header>
+		<div class="wallet">
+			<div class="top_img"><img src="/static/images/moneyimgs/head_bg.png" ></div>
+			<img class="phonebcak" src="/static/images/yishujia_phone/back.png">
+			<div class="flex top">
+				<div class="peoplecontent shrink">
+					<div class="user_info">
+						<div class="user_info_imgbox">
+							<img th:src="@{(${model?.avatar})}" />
+						</div>				
+						<p th:text="${model?.name}"></p>
+						<p th:text="${model?.introduce}"></p>
+					</div>
+				</div>
+				<div class="info flex jc_sb ali_center">
+					<div class="flex">
+						<div class="age flex ali_center jc_cen shrink">
+							<img src="/static/images/moneyimgs/age.png" >
+							<span th:text="${model?.country}">Country</span>
+						</div>
+						<div class="sex flex ali_center jc_cen shrink">
+							<img src="/static/images/moneyimgs/sex1.png" >
+							<span class="shrink">Gender：</span>
+							<img th:src="@{/static/images/mine/{sex}.png(sex=${model?.gender})}">
+						</div>
+					</div>
+					<div class="back flex ali_center jc_cen"><img onclick="history.back()" src="/static/images/yishujia_phone/back.png"></div>
+				</div>
+			</div>
+			<div class="pcright"> 
+				<span class="rightspan" th:each="item,eStat:${model?.socialList}">
+					<a th:href="@{(${item.url})}" target="_black"><img style="background:rgb(0,0,0,0.5);border-radius:10px" th:src="@{/static/images/social/{name}.png(name=${item.name.toLowerCase()})}"></a>
+				</span>
+			</div>
+			<div class="artistphone">
+				<div class="left">
+					<img th:src="@{(${model?.avatar})}" style="width:30%;display:block;margin:0 auto;transform:translateY(-20px);clear:both"> 
+					<p th:text="${model?.name}"></p>
+					<p th:text="${model?.introduce}"></p>
+					<div class="leftbottom">
+						<div style="flex:.8;">
+							<img src="/static/images/yishujia_phone/dizhi.png">
+							<span th:text="${model?.country}">Country</span>
+						</div>
+						<div style="flex:1;"> 
+							<img src="/static/images/yishujia_phone/xingbie1.png">
+							<span>Gender:</span>
+							<img th:src="@{/static/images/mine/{sex}.png(sex=${model?.gender})}">
+						</div>
+					</div>
+				</div>
+				<div class="right"> 
+					<span class="rightspan">
+						<img src="/static/images/yishujia_phone/foot2-active.png" alt="" >
+					</span>
+					<span class="rightspan">
+						<img src="/static/images/yishujia_phone/foot3-active.png" alt="" >
+					</span>
+					<span class="rightspan">
+						<img src="/static/images/yishujia_phone/foot4-active.png" alt="" >
+					</span>
+					<span class="rightspan">
+						<img src="/static/images/yishujia_phone/foot5-active.png" alt="" >
+					</span>
+					<span class="rightspan">
+						<img src="/static/images/yishujia_phone/foot6-active.png" alt="" >
+					</span>
+				</div>
+			</div>
+			<div class="introduce" th:utext="${model?.content}"></div>
+		</div>
+		<footer class="footer-box" th:replace="common/footer::footerBar"></footer>
+		<img class="back-top" src="/static/images/back-top.png" alt="" />
+	</body>
+	<script src="/static/js/jquery.min.js?v=2021022122"></script>
+	<script src="/static/js/common.js"></script>
+</html>

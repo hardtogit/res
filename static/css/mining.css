@@ -1,0 +1,118 @@
+body{background-color:#1a1938}
+@media screen and (min-width:1200px){.box{padding-top:100px;width:100%;background:url(/static/images/mining/bg.png) no-repeat;background-size:100% auto;position:relative}
+.remove{background:url(/static/images/mining/timetop.png) no-repeat!important;transform:translateY(-145px)!important}
+.textEndremove{transform:translateY(-22px)!important}
+.box .content{width:60%;margin:0 auto}
+.from{width:100%;background:rgba(255,255,255,.05);backdrop-filter:blur(40px);padding:0 5%;margin-top:100px}
+.timebox_top{width:37%;margin:0 auto;background:url(/static/images/mining/timetop.png) no-repeat;background-size:100% 100%;transform:translateY(-95px);padding:1% 0}
+.timebox_center{width:38%;margin:0 auto;background:url(/static/images/mining/timebg.png) no-repeat;background-size:100% 100%;padding:1%;transform:translateY(-95px);display:flex;justify-content:space-between;height:64px;position:relative}
+.timebox_center p{display:flex;color:#fff;width:95%;justify-content:space-around;position:absolute;text-align:center;top:0;font-size:12px}
+.timebox_center p>span{flex:1}
+.timebox_center div{flex:1;color:#fff;display:flex;align-items:center;justify-content:space-around}
+.timebox_center div:nth-child(2){background:url(/static/images/mining/shi.png) no-repeat;background-size:100% auto}
+.timebox_center div:nth-child(3){background:url(/static/images/mining/fen.png) no-repeat;background-size:100% auto}
+.timebox_center div:nth-child(4){background:url(/static/images/mining/miao.png) no-repeat;background-size:100% auto}
+.timebox_center .timeEndTxt{display:none;color:#fff;text-align:center;line-height:64px;width:100%}
+.timebox_bot{width:33%;margin:0 auto;display:flex;background:url(/static/images/mining/timebot.png) no-repeat;background-size:100% 100%;justify-content:space-between;transform:translateY(-95px);padding:1% 2%;align-items:center}
+.timebox_bot div{flex:2}
+.timebox_bot p,.timebox_top p{color:#fff;text-align:center;font-style:normal;font-weight:700;font-size:21px;line-height:40px}
+.txtbox{display:flex;justify-content:space-between;margin:20px 0;transform:translateY(-40px)}
+.txtbox div{width:30%;border:1px solid;-webkit-clip-path:polygon(5% 0,100% 0,100% 95%,100% calc(100% - 10px),95% 100%,0 100%,0 calc(100% - 40px));box-sizing:border-box;text-align:center;color:#fff;line-height:30px;border-radius:10px;background-color:#fff;overflow:hidden}
+.txtbox div>p{background-color:#262542}
+.MAX,.MAXtwo{display:flex;justify-content:space-between;margin:20px 0;align-items:center;height:55px;line-height:55px}
+.MAXleft,.MAXtwoleft{border:.5px solid rgba(255,255,255,.6);flex:6;color:#fff;border-radius:8px}
+.MAXleft input,.MAXtwoleft input{width:82%;background:0 0;padding-left:3%;display:inline-block;float:left;line-height:55px;border-right:.5px solid rgba(255,255,255,.6);color:#fff}
+.MAXleft span,.MAXtwoleft span{text-align:center;height:55px;display:block;line-height:55px}
+.MAXright,.MAXtworight{flex:2.6;color:#fff;margin-left:20px;display:flex;justify-content:space-between;align-items:center;border-radius:8px;overflow:hidden;background-color:#262542;-webkit-clip-path:polygon(5% 0,100% 0,100% 95%,100% calc(100% - 10px),95% 100%,0 100%,0 calc(100% - 40px))}
+.MAXright button:nth-child(1){width:100%;border:none;background-size:100% auto;color:#fff;height:55px;background:linear-gradient(275.44deg,#157edf 0,#6318c3 92.92%)}
+.MAXtworight button:nth-child(1){width:100%;border:none;color:#fff;height:55px;margin:0 auto;background:linear-gradient(275.44deg,#157edf 0,#6318c3 92.92%)}
+.profit{display:flex;justify-content:space-between;margin:20px 0}
+.profit span{flex:1;text-align:left;color:#fff}
+.claim{display:flex;justify-content:space-between;margin:20px 0;color:#fff;height:55px;line-height:55px}
+.claim span{flex:8;border:.5px solid rgba(255,255,255,.6);box-sizing:border-box;border-radius:5px;padding-left:2%;line-height:55px;border-radius:8px}
+.claim button{flex:1;background:url(/static/images/mining/mining.png) no-repeat;border:none;background-size:100% auto;color:#fff;margin-left:10px}
+.bottom{display:flex;justify-content:space-between;width:50%;margin:0 auto;color:#fff}
+.bottom div:nth-child(1){flex:1;display:flex;justify-content:center;align-items:center}
+.bottom div:nth-child(2){flex:1;display:flex;justify-content:center;align-items:center}
+.from2{display:none;width:100%;background:rgba(255,255,255,.05);backdrop-filter:blur(40px);padding:4% 5%;margin-top:128px}
+.from2top{display:flex;justify-content:space-between;align-items:center;margin-bottom:5 0}
+.from2top img{display:block;margin-top:10px}
+.from2bottom{display:none}
+.from2 p{font-style:normal;color:#fff;font-size:21px;line-height:30px;font-weight:700}
+.from2 span{color:#fff}
+.alt1{display:block!important;position:absolute;left:50%;top:50%;transform:translate(-50%,-15%)}
+.alt2{display:block!important;position:absolute;left:50%;top:30%;transform:translate(-50%,66%)}
+.mask{background-color:rgba(0,0,0,.5);width:100%;height:100vh;position:fixed;top:0;display:none}
+.miningart{z-index:999;display:none;font-style:normal;width:25%;padding:4%;background:url(/static/images/art/artbg.png) no-repeat;background-size:100% 100%}
+.artfive,.artfour,.artone,.arttwo,.atrthree{display:none}
+.miningart .artfive p,.miningart .artfour p,.miningart .artone p,.miningart .arttwo p,.miningart .atrthree p{color:#fff;font-size:21px;line-height:30px;font-weight:700}
+.miningart .artone .buttonbox{margin-top:40px;display:flex;justify-content:space-between}
+.miningart .artfive img,.miningart .arttwo img{transform:translateY(-40px);clear:both;margin:0 auto}
+.miningart .arttwo p{margin-top:40px}
+.miningart .atrthree img{display:block;margin:0 auto}
+.miningart .atrthree p{text-align:center;margin-top:20px}
+.miningart .artfour p{margin:20px 0;text-align:center}
+.miningart .artfour img{display:block;margin:0 auto}
+.miningart .artfive p{margin-top:40px;text-align:center}
+}
+@media screen and (max-width:1200px){.box{padding-top:60px;width:100%;background:url(/static/images/miningphone/bg.png) no-repeat;background-size:100% auto;position:relative;font-size:12px}
+.remove{background:url(/static/images/mining/timetop.png) no-repeat!important;transform:translateY(-145px)!important}
+.textEndremove{transform:translateY(-30px)!important}
+.box .content{width:90%;margin:0 auto}
+.box .content .txt{width:40%}
+.from{width:90%;background:rgba(255,255,255,.05);backdrop-filter:blur(40px);padding:0 5%;margin-top:100px}
+.timebox_top{width:76%;margin:0 auto;background:url(/static/images/mining/timetop.png) no-repeat;background-size:100% 100%;transform:translateY(-70px);padding:1% 0}
+.timebox_center{width:95%;margin:0 auto;background:url(/static/images/mining/timebg.png) no-repeat;background-size:100% 100%;padding:1%;transform:translateY(-70px);display:flex;justify-content:space-between;height:64px;position:relative}
+.timebox_center p{display:flex;color:#fff;width:95%;justify-content:space-around;position:absolute;text-align:center;top:0;font-size:12px}
+.timebox_center p>span{flex:1}
+.timebox_center div{flex:1;color:#fff;display:flex;align-items:center;justify-content:space-around}
+.timebox_center div:nth-child(2){background:url(/static/images/mining/shi.png) no-repeat;background-size:100% auto}
+.timebox_center div:nth-child(3){background:url(/static/images/mining/fen.png) no-repeat;background-size:100% auto}
+.timebox_center div:nth-child(4){background:url(/static/images/mining/miao.png) no-repeat;background-size:100% auto}
+.timebox_center .timeEndTxt{display:none;color:#fff;text-align:center;line-height:64px;width:100%}
+.timebox_bot{width:76%;margin:0 auto;display:flex;background:url(/static/images/mining/timebot.png) no-repeat;background-size:100% 100%;justify-content:space-between;transform:translateY(-70px);padding:1% 2%;align-items:center}
+.timebox_bot div{flex:3}
+.timebox_bot p,.timebox_top p{color:#fff;text-align:center;font-style:normal;font-weight:700;font-size:14px;line-height:40px}
+.txtbox{display:flex;justify-content:space-between;margin:20px 0;transform:translateY(-60px)}
+.txtbox div{width:30%;border:.5px solid rgba(255,255,255,.6);box-sizing:border-box;border-radius:10px;text-align:center;color:#fff;line-height:30px}
+.MAX,.MAXtwo{display:flex;justify-content:space-between;margin:20px 0;align-items:center;height:55px;line-height:55px;font-size:12px}
+.MAX{transform:translateY(-60px)}
+.MAXleft,.MAXtwoleft{border:.5px solid rgba(255,255,255,.6);flex:6;color:#fff;border-radius:3px}
+.MAXleft input,.MAXtwoleft input{width:82%;background:0 0;padding-left:3%;display:inline-block;float:left;line-height:55px;border-right:.5px solid rgba(255,255,255,.6);color:#fff}
+.MAXleft span,.MAXtwoleft span{text-align:center;height:55px;display:block;line-height:55px}
+.MAXright,.MAXtworight{flex:2.6;color:#fff;margin-left:20px;display:flex;justify-content:space-between;align-items:center;border-radius:8px;overflow:hidden;background-color:#262542;-webkit-clip-path:polygon(5% 0,100% 0,100% 95%,100% calc(100% - 10px),95% 100%,0 100%,0 calc(100% - 40px))}
+.MAXright button:nth-child(1){width:100%;border:none;background-size:100% auto;color:#fff;height:50px;background:linear-gradient(275.44deg,#157edf 0,#6318c3 92.92%)}
+.MAXtworight button:nth-child(1){width:100%;border:none;color:#fff;height:50px;margin:0 auto;background:linear-gradient(275.44deg,#157edf 0,#6318c3 92.92%)}
+.profit{display:flex;justify-content:space-between;margin:20px 0;transform:translateY(-60px)}
+.profit span{color:#fff}
+.profit span:nth-child(1){flex:2}
+.profit span:nth-child(2){flex:1}
+.claim{display:flex;justify-content:space-between;margin:20px 0;color:#fff;height:55px;line-height:55px;align-items:center;transform:translateY(-60px)}
+.claim span{flex:8;border:.5px solid rgba(255,255,255,.6);box-sizing:border-box;border-radius:5px;padding-left:2%}
+.claim button{flex:3;background:url(/static/images/miningphone/mining.png) no-repeat;border:none;background-size:100% auto;color:#fff;margin-left:10px;height:37px}
+.bottom{display:flex;justify-content:space-between;width:90%;margin:0 auto;color:#fff;transform:translateY(-60px)}
+.bottom div:nth-child(1){flex:1;display:flex;justify-content:center;align-items:center}
+.bottom div:nth-child(2){flex:1;display:flex;justify-content:center;align-items:center}
+.from2{display:none;width:90%;background:rgba(255,255,255,.05);backdrop-filter:blur(40px);padding:4% 5%;margin-top:88px}
+.from2top{display:flex;justify-content:space-between;align-items:center;margin-bottom:5 0;flex-direction:row-reverse}
+.from2top img{width:15%;display:block;margin-top:10px}
+.from2top span{display:none}
+.from2bottom{display:block}
+.from2 p{font-style:normal;color:#fff;font-size:12px;line-height:30px;font-weight:700}
+.from2 span{color:#fff}
+.alt1{display:block!important;position:absolute;left:50%;top:50%;transform:translate(-50%,-15%)}
+.alt2{display:block!important;position:absolute;left:50%;top:50%;transform:translate(-50%,-50%)}
+.mask{background-color:rgba(0,0,0,.5);width:100%;height:100vh;position:fixed;top:0;display:none}
+.miningart{display:none;font-style:normal;width:70%;padding:4%;background:url(/static/images/art/artbg.png) no-repeat;background-size:100% 100%}
+.artfive,.artfour,.artone,.arttwo,.atrthree{display:none}
+.miningart .artfive p,.miningart .artfour p,.miningart .artone p,.miningart .arttwo p,.miningart .atrthree p{color:#fff;font-size:21px;line-height:30px;font-weight:700}
+.miningart .artone .buttonbox{margin-top:40px;display:flex;justify-content:space-between}
+.miningart .artone .buttonbox img{width:45%}
+.miningart .artfive img,.miningart .arttwo img{clear:both;margin:0 auto}
+.miningart .arttwo p{margin-top:40px}
+.miningart .atrthree img{display:block;margin:0 auto}
+.miningart .atrthree p{text-align:center;margin-top:20px}
+.miningart .artfour p{margin:20px 0;text-align:center}
+.miningart .artfour img{display:block;margin:0 auto}
+.miningart .artfive p{margin-top:40px;text-align:center}
+}

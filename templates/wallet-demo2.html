@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta http-equiv="content-type" content="text/html;charset=utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, minimum-scale=1.0"/>
+	<meta http-equiv="X-UA-Compatible" content="ie=edge,chrome=1"/>
+	<title>钱包</title>
+	<script type="text/javascript" src="/static/scripts/jquery-2.2.0.min.js"></script>
+	<script type="text/javascript" src="/static/js/common.js"></script>
+	<script src="https://unpkg.com/@metamask/legacy-web3@latest/dist/metamask.web3.min.js"></script>
+</head>
+<body>
+	<a href="https://www.wenjiangs.com/doc/bgkqssn9" target="_black">Web3接口开发文档</a><br><br>
+	
+	<p>当前账号：<span th:text="${user?.walletId}">--</span></p>
+	<input class="auth" type="button" value="请求授权" />
+	<input class="profile" type="button" value="获取用户信息" />
+	<input class="logout" type="button" value="退出登录" />
+	<input class="balance" type="button" value="查询钱包余额" />
+	<input class="send" type="button" value="发起交易" />
+	
+	
+	<script type="text/javascript">
+		function getWeb3() {
+			return new Web3(window.ethereum); // web3js就是你需要的web3实例
+		}
+		function getEth() {
+			return getWeb3().eth;
+		}
+		
+		console.log(window.ethereum);
+		var walletId = ethereum.selectedAddress, ethWei = 1000000000000000000;
+		var netVer = window.ethereum.networkVersion;
+		
+		// 监听账户变更事件
+		ethereum.on('accountsChanged', function (accounts) {
+			if (accounts.length > 0) walletId = accounts[0];
+		  console.log(['accountsChanged', accounts]);
+		});
+		
+		// 监听网络变更事件
+		ethereum.autoRefreshOnNetworkChange = false;
+		ethereum.on('networkChanged', function (netVer) {
+		  console.log(['networkChanged', netVer])
+		})
+		
+		
+		// 请求钱包授权，并得到当前使用的钱包地址，ES6
+		$(".auth").click(function(e){
+            window.ethereum.enable().then(function (accounts) {
+            	walletId = accounts[0];
+            	console.log(['enable', accounts]);
+            	
+            	$.get('/api/user/loginByWallet/' + walletId, function(data) {
+            		document.setCookie('TOKEN', data.token, 15);
+            		console.log(data)
+            	});
+            	
+           	}).catch(function (reason) {
+           		console.log(['enable.error', reason])
+           	  	console.log(reason === "User rejected provider access")
+           	})
+		});
+		
+		
+		// 查询用户信息
+		$('.profile').click(function(e){
+			console.log(ethereum.selectedAddress)
+			$.get('/api/user/info?wallet=' + ethereum.selectedAddress, function(data) {
+				console.log(data)
+			})
+		});
+		
+		// 退出登录
+		$('.logout').click(function(e){
+			$.get('/api/user/logout', function(data){
+				document.setCookie('TOKEN', 0)
+				console.log(data)
+			})
+		});
+		
+		
+		// 查询钱包账户余额
+		$('.balance').click(function(e) {
+			getEth().getBalance(walletId).then(console.log);
+		});
+		
+		
+		// 发送交易请求
+		$('.send').click(function(e) {
+			getEth().sendTransaction({
+					from:walletId,
+					to:'0x9d1c06191C652ef2FFdaBa357dbC81c54B1fdD88',
+					value: ethWei
+				}).on('transactionHash', function(hash){
+					console.log(['hash',hash])
+				}).on('receipt', function(receipt){
+					console.log(['receipt',receipt])
+				}).on('error',function(err){
+					console.log(['error',err])
+				});
+			
+		});
+		
+		
+		
+	</script>
+	
+</body>
+</html>

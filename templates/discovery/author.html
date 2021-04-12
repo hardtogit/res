@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html style="padding:0px !important;" xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<th:block th:replace="common/metas::metaConfig" />
+		<title>Discovery Author</title>
+		<link rel="stylesheet" href="/static/css/common.css?v=20210221154444" />
+		<link rel="stylesheet" href="/static/css2/discovery.css" />
+		<link rel="stylesheet" type="text/css" href="/static/grid/css/demo.css" />
+		<link rel="stylesheet" type="text/css" href="/static/grid/css/component.css" />
+		<script src="/static/grid/js/modernizr.custom.js"></script>
+	</head>
+	<body>
+		<header class="header">
+			<img class="logo" src="/static/images/logo.png" alt="FM Gallery" />
+			<img class="mobile-nav" src="/static/images/icon-dian.png" />
+			<div class="head-right" th:replace="common/navi::naviBar"></div>
+		</header>
+		
+		<div class="di_author">
+			<div class="di_author_banner">
+				<img src="/static/images2/discovery/di_author_banner.png" />
+			</div>
+			<div class="di_author_info_1">
+				<div class="di_author_info_inside">
+					<div class="di_author_info_left">
+						<img src="/static/images2/discovery/di_author_1.png" style="margin-top:15px;margin-left:16px;">
+						<span th:text="${model?.country}">Country</span>
+					</div>
+					<div class="di_author_info_left di_author_info_left_2" style="padding-top:15px;padding-left:36px;">
+						<img src="/static/images2/discovery/di_author_2.png" />
+						<span>Gender:</span>
+						<img th:if="${model?.gender != null}" th:src="@{/static/images/mine/{sex}.png(sex=${model?.gender})}" />
+						<img th:if="${model?.gender == null}" src="/static/images/mine/male.png">
+					</div>
+					<div class="di_author_info_right">
+						<img onclick="history.back()" src="/static/images2/discovery/di_author_4.png" />
+					</div>
+				</div>
+				<div class="di_clear"></div>
+			</div>
+			<div class="di_author_info_2">
+				<div class="di_author_info_avatar">
+					<img th:src="@{(${model?.avatar})}" />
+				</div>
+				<div class="di_author_info_name" th:text="${model?.name}">author name</div>
+				<div class="di_author_info_intro">
+					<b style="font-weight:900;">Artist Profile:</b>[(${model?.introduce})]
+				</div>
+			</div>
+		</div>
+		
+		
+		<div class="di_author_tab_frame">
+			<div class="di_author_tab">
+				<div class="di_author_tab_left di_active" id="di_button_1">Artwork</div>
+				<div class="di_author_tab_left" id="di_button_2">Personal</div>
+			</div>
+		</div>
+		
+		
+		<div class="container" id="di_content_1" style="margin-top:88px;">
+			<div id="grid-gallery" class="grid-gallery">
+				<section class="grid-wrap">
+					<ul class="grid">
+						<li class="grid-sizer"></li>
+						<!-- for Masonry column width -->
+						<li th:each="item,eStat:${commodityModel.items}">
+							<a th:href="@{/discovery/art/{id}.html(id=${item.id})}">
+								<figure><img th:src="@{(${item.imageUrl})}" /></figure>
+							</a>
+						</li>
+					</ul>
+				</section>
+				<!-- // grid-wrap -->
+				<section class="slideshow">
+					<ul></ul>
+					<nav>
+						<span class="icon nav-prev"></span>
+						<span class="icon nav-next"></span>
+						<span class="icon nav-close"></span>
+					</nav>
+					<!--<div class="info-keys icon">Navigate with arrow keys</div>-->
+				</section>
+				<!-- // slideshow -->
+			</div>
+			<!-- // grid-gallery -->
+		</div>
+		<div id="di_content_2" class="di_author_des" style="display:none;" th:utext="${model?.content}"></div>
+		
+		
+		<div class="foot-padd"></div>
+		<footer class="footer-box" th:replace="common/footer::footerBar"></footer>
+		<img class="back-top" src="/static/images/back-top.png" />
+		<script src="/static/grid/js/imagesloaded.pkgd.min.js"></script>
+		<script src="/static/grid/js/masonry.pkgd.min.js"></script>
+		<script src="/static/grid/js/classie.js"></script>
+		<script src="/static/grid/js/cbpGridGallery.js"></script>
+		<script src="/static/js/jquery.min.js?v=20210221"></script>
+		<script src="/static/js/common.js"></script>
+		<script>new CBPGridGallery(document.getElementById('grid-gallery'));
+
+			$("#di_button_1").click(function() {
+				$('#di_content_1').show();
+				$('#di_content_2').hide();
+				$("#di_button_1").addClass("di_active");
+				$("#di_button_2").removeClass("di_active");
+			});
+
+			$("#di_button_2").click(function() {
+				$('#di_content_2').show();
+				$('#di_content_1').hide();
+				$("#di_button_2").addClass("di_active");
+				$("#di_button_1").removeClass("di_active");
+			});
+
+			$(".my_slide_box_title").hover(function(e) {
+				$(e.target.parentNode).find('.my_slide_box_under').show();
+			},
+			function(e) {
+				$(e.target.parentNode).find('.my_slide_box_under').hide();
+			});
+		</script>
+	</body>
+</html>

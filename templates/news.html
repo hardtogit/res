@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <th:block th:replace="common/metas::metaConfig" />
+    <title>Newsroom</title>
+    <link rel="stylesheet" href="/static/css/common.css?v=20210221154444" />
+    <link rel="stylesheet" href="/static/css/news.css?v=20210221154444" />
+    <style type="text/css">
+		.page-news{position:relative;padding-top:220px;margin-bottom:150px;background:url(/static/images/news-list-bkg.png?v=20210221111) no-repeat;min-height:683px}
+		.news-list{width:1400px;margin:0 auto;background:#0e0d0d}
+		.news-list .item{display:block;position:relative;padding-left:350px;height:220px;margin-bottom:60px}
+		.news-list .item:after{content:' ';position:absolute;height:1px;width:100%;background:rgb(255,255,255,0.2);left:0;bottom:-30px}
+		.news-list .item img{max-height:220px}
+		.news-list .item h3{color:#fff}
+		.news-list .item p{color:#b8b8b8;font-size:14px;padding-top:10px}
+		.news-list .item .img{position:absolute;top:0;left:0;width:320px;height:220px;text-align:center;background:#000;border:1px solid #4d4b4b;border-radius:6px}
+		.news-list .space{border-top:1px solid #777;margin:32px 0}
+    </style>
+  </head>
+  <body>
+    <header class="header">
+      <img class="logo" src="/static/images/logo.png" alt="FM Gallery" />
+      <img class="mobile-nav" src="/static/images/icon-dian.png" />
+      <div class="head-right" th:replace="common/navi::naviBar"></div>
+    </header>
+    <div class="pc-page" id="app">
+      <div class="page-news">
+        <div class="news-list">
+			<a th:each="item,eStat:${newsModel.items}" th:href="@{(${item.jumpUrl})}" target="_black" class="item">
+				<div class="img">
+					<img th:src="@{(${item.imageUrl})}" />
+				</div>
+				<h3 th:text="${item.title}"></h3>
+				<p th:text="${item.summary}"></p>
+			</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="mobile-page">
+      <div class="non-box">
+        <img class="news-logo" src="./static/images/news-logo.png" alt="" />
+        <div class="news-con">
+          <div class="news-right"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="foot-padd"></div>
+    <footer class="footer-box" th:replace="common/footer::footerBar"></footer>
+  </body>
+  <script src="/static/js/jquery.min.js?v=20210221"></script>
+  <script src="/static/js/common.js"></script>
+</html>

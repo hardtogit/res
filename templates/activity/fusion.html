@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<th:block th:replace="common/metas::metaConfig" />
+		<title th:text="${result?.name}">Activity Detail</title>
+		<link rel="stylesheet" href="/static/css/common.css?v=20210221154444" />
+		<link rel="stylesheet" href="/static/css2/activity_detail.css" />
+		<link rel="stylesheet" href="/static/css2/fusion_animation.css" />
+	</head>
+	<body id="addBoodyClass">
+	
+		<div id="element_to_hide">
+			<div class="circle" style="z-index:991;">
+				<div></div>
+				<div></div>
+				<div></div>
+				<div></div>
+				<div></div>
+			</div>
+			<div class="big" style="z-index:992;">
+				<div></div>
+				<div></div>
+				<div></div>
+				<div></div>
+				<div></div>
+			</div>
+			<div class="tri" style="z-index:993;"></div>
+		</div>
+		
+		<div id="element_to_show">
+			<header class="header">
+				<img class="logo" src="/static/images/logo.png" alt="FM Gallery" />
+				<img class="mobile-nav" src="/static/images/icon-dian.png" />
+				<div class="head-right" th:replace="common/navi::naviBar"></div>
+			</header>
+	
+			
+			<div class="acd_fusion_act">
+				<div class="acd_top">
+					<div class="acd_top_left">
+						<a href="javascript:history.back()">
+							<img src="/static/images2/activity/back_arrow.png">
+						</a>
+					</div>
+					<div class="acd_top_right">
+						<a href="#">
+							<div class="acd_top_right_3">
+								<div class="acd_text_center_v">My BTC</div>
+							</div>
+						</a>
+						<a href="#">
+							<div class="acd_top_right_2" id="exg">
+								<div class="acd_text_center_v">Artwork Exchange</div>
+							</div>
+						</a>
+						<a href="#">
+							<div class="acd_top_right_1" id="btc_list">
+								<div class="acd_text_center_v">BTC herose list</div>
+							</div>
+						</a>
+					</div>
+					<div class="ac_clear"></div>
+				</div>
+				<div class="acd_fusion">
+					<img th:src="@{(${result?.pic})}">
+				</div>
+				<a href="#">
+					<div class="acd_fusion_take_button" id="take_button">
+						<div class="acd_fusion_take_button_text">Take it</div>
+					</div>
+				</a>
+				<div class="take_hint_window" style="display:none" id="take_window">
+					<div class="take_hint_title">Congratulations!</div>
+					<div class="take_hint_content">You've fused the selected art fragments.</div>
+					<div class="take_hint_content">You've earned
+						<span th:text="${result.rewardBTC}">N/A</span>BTC and <span>1</span>NFT
+					</div>
+					<div class="take_hint_content">Reward will be issued at the end of the event</div>
+					<div class="take_hint_button">
+						<a href="">
+							<div class="take_hint_button_left">
+								<div class="take_hint_button_text">View</div>
+							</div>
+						</a>
+						<a href="">
+							<div class="take_hint_button_right">
+								<div class="take_hint_button_text">Back</div>
+							</div>
+						</a>
+					</div>
+				</div>
+				<div>
+					<a href="#">
+						<div class="acd_hint_fusion" style="display:none;" id="mbt_window">
+							<div class="acd_hint_button" id="no_hover">
+								<img src="/static/images2/activity/acd_hint_close.png">
+							</div>
+							<div class="acd_hint_text" id="no_hover">Please check back after the event</div>
+						</div>
+						<div class="ac_clear"></div>
+					</a>
+				</div>
+				<div class="ac_clear"></div>
+			</div>
+			
+			
+			<div class="foot-padd"></div>
+			<footer class="footer-box" th:replace="common/footer::footerBar"></footer>
+			<img class="back-top" src="/static/images/back-top.png" />
+		</div>
+		<script src="/static/js/jquery.min.js?v=20210221"></script>
+		<script src="/static/js/common.js"></script>
+	</body>
+</html>
+
+<script>
+$(document).ready(function(){
+	$("#element_to_hide").delay(6000).fadeOut(1000);
+	$("#element_to_show").delay(6000).fadeIn(1000);
+	
+	setTimeout(function() {
+	    $("#addBoodyClass").addClass('show_body');
+	}, 6000);
+});
+
+$("#exg").click(function() {
+	$('#mbt_window').show();
+});
+
+$("#btc_list").click(function() {
+	$('#mbt_window').show();
+});
+
+$("#mbt_window").click(function() {
+	$('#mbt_window').hide();
+});
+
+$("#take_button").click(function() {
+	$('#take_window').show();
+});
+</script>

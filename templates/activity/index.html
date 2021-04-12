@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<th:block th:replace="common/metas::metaConfig" />
+		<title>Activity</title>
+		<link rel="stylesheet" href="/static/css/common.css?v=202102222066" />
+		<link rel="stylesheet" href="/static/css2/activity.css" />
+	</head>
+	<body>
+		<header class="header">
+			<img class="logo" src="/static/images/logo.png" alt="FM Gallery" />
+			<img class="mobile-nav" src="/static/images/icon-dian.png" />
+			<div class="head-right" th:replace="common/navi::naviBar"></div>
+		</header>
+		<div class="ac_body">
+			<div class="ac_banner">
+				<img src="/static/images2/activity/activity_bg.jpg" />
+			</div>
+			<div class="ac_title">Art Fragments</div>
+			<a th:each="item,eStat:${result?.records}" th:href="@{/activity/detail/{id}.html(id=${item.id})}" th:attr="data-resttime=${item.restTime}">
+				<div class="ac_content">
+					<div class="ac_time_frame">
+						<div class="ac_time">
+							<div class="ac_time_1">
+								<p>0</p>
+							</div>
+							<div class="ac_time_2">
+								<p>0</p>
+							</div>
+							<div class="ac_time_1">
+								<p>0</p>
+							</div>
+							<div class="ac_time_2">
+								<p>0</p>
+							</div>
+							<div class="ac_time_1">
+								<p>0</p>
+							</div>
+							<div class="ac_time_2">
+								<p>0</p>
+							</div>
+							<div class="ac_clear"></div>
+						</div>
+						<div class="ac_time_text">
+							<div class="ac_time_text_1">days</div>
+							<div class="ac_time_text_1">hours</div>
+							<div class="ac_time_text_1">mins</div>
+							<div class="ac_clear"></div>
+						</div>
+					</div>
+					<div class="ac_clear"></div>
+					<div class="ac_pic">
+						<img th:src="@{(${item.pic})}" />
+					</div>
+					<div class="ac_clear"></div>
+					<div class="ac_info">
+						<div class="ac_info_left">
+							<div class="ac_info_left_name" th:text="${item.name}">Kali Yuga</div>
+							<div class="ac_info_left_detail">
+								<div class="ac_info_left_detail_left">
+									<img th:src="@{(${item.creatorHeadIcon})}" />
+								</div>
+								<div class="ac_info_left_detail_right">
+									<div class="ac_info_left_detail_1_info_1">Artist</div>
+									<div class="ac_info_left_detail_1_info_2" th:text="${item.creatorName}">KFN Kalyan</div>
+								</div>
+							</div>
+							<div class="ac_clear"></div>
+						</div>
+						<div class="ac_info_right">
+							<div class="ac_info_right_frame">
+								<div class="ac_info_right_content_left">Number of fragments</div>
+								<div class="ac_info_right_content_right" th:text="${item.requireCount}">6</div>
+							</div>
+							<div class="ac_info_right_frame">
+								<div class="ac_info_right_content_left">Works fused</div>
+								<div class="ac_info_right_content_right" th:text="${item.composedFinalCount}">10</div>
+							</div>
+							<div class="ac_info_right_frame">
+								<div class="ac_info_right_content_left">Works not yet fused</div>
+								<div class="ac_info_right_content_right" th:text="${item.notComposeFinalCount}">10</div>
+							</div>
+						</div>
+						<div class="ac_clear"></div>
+					</div>
+					<div class="ac_clear"></div>
+				</div>
+			</a>
+		</div>
+		<div class="foot-padd"></div>
+		<footer class="footer-box" th:replace="common/footer::footerBar"></footer>
+		<img class="back-top" src="/static/images/back-top.png" />
+		<script src="/static/js/jquery.min.js?v=2021022122"></script>
+		<script src="/static/js/common.js"></script>
+		<script type="text/javascript">
+			var resttime = $('a[data-resttime]').get(),d1=86400,h1=3600,m1=60;
+			for(var i=0;i<resttime.length;i++){
+				var m=$(resttime[i]),time=parseInt(m.data('resttime'));
+				var timeGroup=m.find('.ac_time p').get();
+				var day=time/d1,hour=(time%d1)/h1,minute=parseInt(time%d1%h1/m1);
+				day=parseInt(day),hour=parseInt(hour);
+				if (day <= 0){
+					day='00';
+				} else if (day < 10) {
+					day='0'+day;
+				}
+				if (hour <= 0) {
+					hour='00';
+				} else if (hour < 10) {
+					hour='0'+hour;
+				}
+				if (minute <= 0) {
+					minute='00';
+				} else if(minute < 10) {
+					minute='0'+minute;
+				}
+				var timeString=day+hour+minute;
+				for(var i=0;i<timeGroup.length;i++){
+					timeGroup[i].innerHTML=timeString.charAt(i)
+				}
+			}
+		</script>
+	</body>
+</html>

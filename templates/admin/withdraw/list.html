@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="content-type" content="text/html;charset=utf-8">
+    <title>提现审核</title>
+    <link href="/static/css/admin.css?v=2021021916" rel="stylesheet" type="text/css"/>
+    <script src="/static/scripts/jquery-2.2.0.min.js?v=20210218" type="text/javascript"></script>
+    <script src="/static/scripts/admin.js?v=20210218" type="text/javascript"></script>
+    <script src="https://unpkg.com/@metamask/legacy-web3@latest/dist/metamask.web3.min.js"></script>
+</head>
+</head>
+<body>
+<div th:replace="admin/navi::naviBar"></div>
+
+<div class="mainer">
+    <form name="queryForm" th:action="@{./list}">Token：<select name="token">
+        <option value="">请选择</option>
+        <option value="USDT">USDT</option>
+        <option value="FMG">FMG</option>
+    </select>
+        提现地址：<input name="address" style="width: 320px;height: 34px"/>
+        审核状态：<select name="status">
+            <option value="">请选择</option>
+            <option value="1">处理中</option>
+            <option value="2">成功</option>
+            <option value="3">失败</option>
+        </select>
+        <input type="submit" style="width: 120px;height: 34px"/>
+    </form>
+    <table role="list">
+        <tr>
+            <th width="100">Token</th>
+            <th width="100">钱包提现地址</th>
+            <th width="100">提现数</th>
+            <th width="100">账户余额</th>
+            <th width="100">提交时间</th>
+            <th width="80">审核状态</th>
+            <th width="180">操作</th>
+        </tr>
+        <tr th:each="item,stat:${model.items}">
+            <td th:text="${item.token}"></td>
+            <td th:text="${item.address}"></td>
+            <td th:text="${item.amount}"></td>
+            <td th:text="${item.balance}" th:if="${item.token == 'USDT'}"></td>
+            <td th:text="${item.wahCoin}" th:if="${item.token == 'FMG'}"></td>
+            <td th:text="${#dates.format(item.createTime,'yyyy-MM-dd HH:mm:ss')}"></td>
+            <td>
+                <span th:if="${item.status == 1}">待审核</span>
+                <span th:if="${item.status == 2}">成功</span>
+                <span th:if="${item.status == 3}">失败</span>
+            </td>
+            <td class="button">
+                <a class="button-approve" th:if="${item.status == 1}"
+                   th:attr="data-id=${item.id},data-address=${item.address},data-token=${item.token}">通过</a>
+                <a class="button-reject" th:if="${item.status == 1}" th:attr="data-id=${item.id}">拒绝</a>
+            </td>
+        </tr>
+    </table>
+    <div class="paging">
+        <p class="page">
+            <a th:each="i:${#numbers.sequence(1,model.pages)}" th:href="@{./list?index={pn}(pn=${i})}"
+               th:classappend="${model.index} eq ${i} ? 'active'" th:text="${i}"></a>
+        </p>
+    </div>
+</div>
+<script type="text/javascript">
+    var abi = [{
+        "constant": false,
+        "inputs": [
+            {
+                "name": "to",
+                "type": "address"
+            },
+            {
+                "name": "value",
+                "type": "uint256"
+            }
+        ],
+        "name": "transfer",
+        "outputs": [
+            {
+                "name": "success",
+                "type": "bool"
+            }
+        ],
+        "payable": false,
+        "type": "function"
+    }];
+
+    var walletId = ethereum.selectedAddress;
+    var ethWei = 1000000;
+    var address = '0xdac17f958d2ee523a2206206994597c13d831ec7';
+
+    ethereum.on('accountsChanged', function (accounts) {
+        if (accounts.length > 0) walletId = accounts[0];
+        console.log(['accountsChanged', accounts]);
+    });
+
+    function getWeb3() {
+        return new Web3(window.ethereum);
+    }
+
+    function getEth() {
+        return getWeb3().eth;
+    }
+
+    $('.button-approve').click(function (e) {
+        var that = $(e.target), id = that.data('id'), wallet = that.data('address'), token = that.data('token');
+        if (token == 'USDT') {
+            ethWei = 1000000;
+            address = '0xdac17f958d2ee523a2206206994597c13d831ec7';
+        } else if (token == 'FMG') {
+            ethWei = 1000000000000000000;
+            address = '0x2991341d28eaea277785d20e1d878d478c7ba4c7';
+        }
+        getEth().contract(abi).at(address).transfer(wallet, ethWei,
+            function (result, hash) {
+                if (hash && hash != '') {
+                    $.getJSON(["./updateWithdrawResult?id=", id, '&result=true&walletId=', walletId, '&remark=', hash].join(''), function (model) {
+                        alert(model.message);
+                        top.location.reload()
+                    });
+                }
+            });
+    });
+    $('.button-reject').click(function (e) {
+        var that = $(e.target), id = that.data('id');
+        var reason = prompt("请输入拒绝原因", "");
+        if (reason == '') {
+            window.alert("拒绝原因不能为空");
+            return;
+        }
+        if (reason && reason != '') {
+            $.getJSON(["./updateWithdrawResult?id=", id, '&result=', false, '&remark=', reason].join(''), function (model) {
+                alert(model.message);
+                top.location.reload()
+            });
+        }
+    });
+</script>
+</body>
+</html>

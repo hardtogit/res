@@ -1,0 +1,60 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<div class="my-header" th:fragment="naviBar">
+	<div class="top_img PC"><img src="/static/images/moneyimgs/head_bg.png"></div>
+	<div class="top_img mobile"><img src="/static/images/moneyimgs/head_mobile_bg.png"></div>
+	<div class="flex top">
+		<div class="peoplecontent shrink my-info">
+			<div class="user_info">
+				<img th:src="${user?.avatar}" class="headimg" />
+				<p th:text="${user?.nickName}"></p>
+				<p>ID: <span th:text="${user?.hashId}"></span></p>
+				<p th:text="${user?.introduce}"></p>
+				<div class="flex ali_center jc_cen">
+					<div class="age flex ali_center jc_cen shrink">
+						<img src="/static/images/moneyimgs/age.png">
+						<span class="shrink">Age：</span>
+						<span class="shrink" th:text="${user?.age}"></span>
+					</div>
+					<div class="sex flex ali_center jc_cen shrink">
+						<img src="/static/images/moneyimgs/sex1.png">
+						<span class="shrink">Gender：</span>
+						<img th:src="@{/static/images/mine/{url}.png(url=${user?.gender})}" >
+					</div>
+				</div>
+				<a href="/my/profile.html" class="btn flex jc_cen ali_center">Edit</a>
+			</div>
+		</div>
+		<div class="info flex jc_sb ali_center">
+			<div class="tab flex">
+				<a href="/my/index.html" class="my-navi blind">Blind Boxes</a>
+				<a href="/my/wallet.html" class="my-navi wallets">Wallets</a>
+			</div>
+			<div class="right flex ali_center">
+				<div class="age flex ali_center jc_cen shrink">
+					<img src="/static/images/moneyimgs/age.png" >
+					<span class="shrink">Age：</span>
+					<span class="shrink" th:text="${user?.age}">0</span>
+				</div>
+				<div class="sex flex ali_center jc_cen shrink">
+					<img src="/static/images/moneyimgs/sex1.png" >
+					<span class="shrink">Gender：</span>
+					<img th:if="${user?.gender != null}" th:src="@{/static/images/mine/{url}.png(url=${user?.gender})}">
+					<img th:if="${user?.gender == null}" src="/static/images/mine/male.png">
+				</div>
+				<img class="back" onclick="logout()" src="/static/images/moneyimgs/back.png">
+			</div>
+		</div>
+	</div>
+	<script type="text/javascript">
+	function logout() {
+		if (confirm("Are you sure you want to exit?")) {
+			$.get("/api/user/logout",function(data) {
+				document.setCookie("TOKEN", 0);
+				top.location.href = "/";
+			})
+		}
+	}
+	</script>
+</div>

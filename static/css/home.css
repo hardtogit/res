@@ -1,0 +1,26 @@
+.warp{background-image:url('/static/images/home_bkg.jpg?v=20210219');background-position:center top;background-repeat:no-repeat}
+.summary{position:relative;height:1455px;}
+.summary .text1,.summary .text2,.summary .button,.summary .image1,.summary .image2,.summary .image3,.summary .image4,.summary .text3,.summary .text4{position:absolute;}
+.summary .text1{top:78px;left:212px}
+.summary .text2{top:395px;left:212px}
+.summary .button{top:652px;left:215px}
+.summary .image1{top:89px;right:336px}
+.summary .image2{top:404px;right:781px}
+.summary .image3{top:388px;right:193px}
+.summary .image4{left:60px;top:860px}
+.summary .text3{left:210px;top:1079px}
+.summary .text4{left:210px;top:1241px}
+
+
+.nft-info{padding-left:212px;position:relative;height:900px;}
+.nft-info .img6{position:absolute;right:353px;top:1px}
+.nft-info .list{width:620px}
+.nft-info .list img{display:inline-block;margin-bottom:20px;margin-right:23px}
+
+
+.nft-fun{position:relative;height:932px;padding-left:213px}
+.nft-fun .img2{position:absolute;left:213px;top:164px}
+.nft-fun .list{width:980px;display:block;margin:215px auto 0;height:440px;}
+.nft-fun .list li{float:left;margin:15px 14px;position:relative;width:281px;height:201px}
+.nft-fun .list li img{position:absolute;transition:0.3s;top:0;width:281px;height:201px;max-width:initial;}
+.nft-fun .list li:hover img{top:-10px}

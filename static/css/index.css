@@ -1,0 +1,52 @@
+html{background:url(/static/images/home-bj.png?v=2021022112) no-repeat;background-size:100% 100%}
+.main{height:955px;position:relative}
+.eng{width:88px;height:35px;position:absolute;bottom:60px;left:60px}
+.main-con{width:583px;height:248px;margin-top:78px;margin-left:212px}
+.ban3{display:block;margin-top:33px;margin-left:212px}
+.ban-btn{width:191px;height:60px;display:block;line-height:60px;text-align:center;background:url(/static/images/ban-btn.png?v=20210221) no-repeat;background-size:100% 100%;position:relative;z-index:9;margin-left:212px;margin-top:80px;font-style:normal;font-weight:600;font-size:14px;color:#fff}
+.ban-bor{margin-left:212px;display:block;width:144px}
+.ban2{position:absolute;top:89px;right:50px}
+
+.art-box{width:1400px;margin:0 auto}
+.art-logo{width:294px;height:180px;display:block;margin-bottom:150px}
+.art img{width:587px;height:480px;display:block}
+.art-con{display:flex}
+.art-nav{width:585px;display:flex;flex-wrap:wrap;justify-content:space-between;margin-right:183px}
+.art-nav img{display:block;width:280px;height:192px;margin-bottom:20px}
+
+
+.non-box{width:1400px;margin:0 auto}
+.non-logo{width:704px;height:212px;display:block;margin-top:170px}
+.non-con{width:888px;margin:0 auto;margin-top:207px;margin-bottom:200px;display:flex;justify-content:space-between;flex-wrap:wrap}
+.non-con img{width:280px;height:201px;display:block;margin-bottom:24px}
+.non-con img{width:280px;height:201px;display:block;margin-bottom:24px;transition:.3s}
+.non-con img:hover{transform:translateY(-10px)}
+.news-btn{width:129px;height:60px;display:flex;background:url(/static/images/news-btn.png?v=20210221)}
+.news-bor{display:block;margin-top:60px}
+.page{font-style:normal;font-weight:400;font-size:10px;line-height:30px;color:#fff;margin-top:10px}
+.news-btn a{width:50%;height:100%;display:block}
+.news-logo{margin-bottom:180px;margin-top:60px}
+.non{background:url(/static/images/h-5.jpg?v=2021022655) no-repeat;background-size:100%;padding-top:300px;padding-bottom:200px}
+.news-con{width:1400px;display:flex;margin:0 auto}
+.news-left{flex:0 0 305px}
+.news-right{flex:1;overflow:hidden;white-space:nowrap}
+.news-item{width:432px;height:682px;margin-right:40px;display:inline-block}
+.news-item a{display:block}
+.item-img{display:block;width:432px;height:337px}
+.news-right .item-con{margin-top:40px;display:flex;white-space:initial}
+.time{font-style:normal;font-weight:400;font-size:14px;line-height:30px;color:#fff;flex:0 0 150px}
+.title{font-style:normal;font-weight:700;font-size:16px;line-height:30px;color:#fff;display:-webkit-box!important;-webkit-box-orient:vertical;-webkit-line-clamp:1;overflow:hidden}
+.con{font-style:normal;font-weight:400;font-size:14px;line-height:30px;color:#fff;height:120px;overflow:hidden;display:-webkit-box!important;-webkit-box-orient:vertical;-webkit-line-clamp:4;overflow:hidden}
+.item-detail{display:flex;align-items:center;justify-content:center;font-style:normal;font-weight:700;font-size:16px;color:#fff;padding-top:57px;padding-bottom:71px;background:url(/static/images/news-item-bor.png?v=20210221) no-repeat bottom;background-size:100%}
+
+
+.about{display:block;height:1157px;margin:0 auto}
+::-webkit-scrollbar{width:7px;height:7px;background-color:#000}
+::-webkit-scrollbar-track{box-shadow:inset 0 0 6px rgba(0,0,0,.3);-webkit-box-shadow:inset 0 0 6px rgba(0,0,0,.3);border-radius:10px;background-color:#aaa}
+::-webkit-scrollbar-thumb{border-radius:10px;box-shadow:inset 0 0 6px rgba(0,0,0,.1);-webkit-box-shadow:inset 0 0 6px rgba(0,0,0,.1);background-color:#c8c8c8}
+@media screen and (max-width:720px){.mobile-ban{position:relative}
+body{background-color:#0f0e20}
+	.mobile-ban-btn{width:144px;height:68px;position:absolute;bottom:80px;left:40px}
+	.mobile-ban-btn img{width:100%;height:100%}
+	.news-con{width:100%}
+}

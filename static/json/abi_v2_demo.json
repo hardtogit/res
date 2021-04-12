@@ -1,0 +1,24 @@
+{
+	"contract":["0xfB2bADe4Ab37C47705D6EA46959DE6E4A08E807A"],
+	"abi":[
+		{
+		    "inputs": [
+		      {
+		        "internalType": "address",
+		        "name": "account",
+		        "type": "address"
+		      }
+		    ],
+		    "name": "balanceOf",
+		    "outputs": [
+		      {
+		        "internalType": "uint256",
+		        "name": "",
+		        "type": "uint256"
+		      }
+		    ],
+		    "stateMutability": "view",
+		    "type": "function"
+		}
+	]
+}

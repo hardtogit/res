@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<th:block th:replace="common/metas::metaConfig" />
+		<title>[(${seriesModel?.name})]</title>
+		<link rel="stylesheet" type="text/css" href="/static/css/common.css"/>
+		<link rel="stylesheet" type="text/css" href="/static/css/zhang.css"/>
+		<link rel="stylesheet" type="text/css" href="/static/css/series_detail.css"/>
+		<link rel="stylesheet" type="text/css" href="/static/css2/art_detail_more.css"/>
+		<script src="/static/css2/jquery1.11.3.min.js"></script>
+		<script src="/static/css2/jquery.bxslider.min.js"></script>
+		<link href="/static/css2/jquery.bxslider.css" rel="stylesheet" />
+		<style type="text/css">
+			img,video{outline:none}
+		</style>
+	</head>
+	<body>
+		<header class="header">
+			<img class="logo" src="/static/images/logo.png" alt="FM Gallery" />
+			<img class="mobile-nav" src="/static/images/icon-dian.png" />
+			<div class="head-right" th:replace="common/navi::naviBar"></div>
+		</header>
+		
+		
+		<div class="fm_more_content">
+			<div class="content">
+			
+				<div class="bxslider">
+	  
+					<div class="fm_banner_frame" th:each="item,eStat:${commodityList}" th:attr="id='fm_banner_frame_'+${eStat.index+1}" th:with="ext=${#strings.containsIgnoreCase(item.fullImageUrl,'.mp4')}">
+						<div class="fm_banner_info"></div>
+						<div class="fm_hide" th:attr="id='fm_hide_'+${eStat.index+1}">
+							<div class="fm_hide_text" th:utext="${item.introduce}" style="white-space:pre-wrap;word-break:break-word;font-size:18px"></div>
+						</div>
+						<div class="fm_slide_artwork">
+							<img th:unless="${ext}" th:src="@{{url}?imageMogr2/auto-orient/thumbnail/1200x/format/webp(url=${item.fullImageUrl})}" th:title="${item.name}" />
+							<video th:if="${ext}" th:src="@{${item.fullImageUrl}}" controls="controls" autoplay="autoplay" preload="auto"></video>
+						</div>
+					</div>
+	
+				</div>
+			
+				<div class="fm_content_TEMP" th:utext="${seriesModel?.content}"></div>
+				<div class="fm-clear"></div>
+			</div>
+		</div>
+		<script src="/static/js/common.js"></script>
+		<script>
+		  $(function(){
+		  $('.bxslider').bxSlider({
+		    mode: 'fade',
+		    captions: false,
+		    slideWidth: 800,
+			auto:true,	
+			autoHover:true,
+			autoStart:true,
+			pause:5000,
+		  });
+		});
+		</script>
+	</body>
+</html>

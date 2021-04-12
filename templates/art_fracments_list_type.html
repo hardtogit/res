@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<th:block th:replace="common/metas::metaConfig" />
+		<title>Fracments list</title>
+		<link rel="stylesheet" type="text/css" href="/static/css/common.css" />
+		<link rel="stylesheet" type="text/css" href="/static/css/zhang.css" />
+		<link rel="stylesheet" type="text/css" href="/static/css/fracments_list.css" />
+		<style type="text/css">
+			video{width:60px;height:60px;border-radius:15px}
+		</style>
+	</head>
+	<body>
+		<header class="header">
+			<img class="logo" src="/static/images/logo.png" alt="FM Gallery" />
+			<img class="mobile-nav" src="/static/images/icon-dian.png" />
+			<div class="head-right" th:replace="common/navi::naviBar"></div>
+	    </header>
+		<div class="content flex">
+			<div class="back"><a th:href="@{/art/series/{id}.html(id=${seriesId})}" class="flex bor_radius"><img src="/static/images/preve.png"></a></div>
+			<div class="w1440">
+				<div class="title white">NFT List</div>
+				<div class="cate flex ali_center bor_radius">
+					<a th:href="@{/art/type/{id}.html(id=${seriesId})}" class="active">Details</a>
+				</div>
+				<div class="list">
+					<div class="fracments show">
+						<div class="flex jc_sb ali_center name white">
+							<span>Artworks</span>
+							<span>Name</span>
+							<span>Editions</span>
+							<span>Artists</span>
+						</div>
+						<ul class="fracments_list">
+							<li class="flex jc_sb ali_center bor_radius" th:each="item,eStat:${result.items}" th:with="mp4=${#strings.containsIgnoreCase(item.imageUrl,'.mp4')}">
+								<div class="headimg">
+									<img th:unless="${mp4}" th:src="@{{url}?imageMogr2/auto-orient/thumbnail/100x/format/webp(url=${item.imageUrl})}" />
+									<video th:if="${mp4}" muted="muted" th:src="@{${item.imageUrl}}" preload="metadata" autocapitalize="none"></video>
+								</div>
+								<span th:text="${item.name}"></span>
+								<span th:text="${item.quantity}">0</span>
+								<span class="flex jc_cen ali_center">
+									[(${item.creatorName})] 
+									<a th:href="@{/art/author/{id}.html(id=${item.hashCreatorId})}">
+										<img src="/static/images/jinru.png"/>
+									</a>
+								</span>
+							</li>
+						</ul>
+					</div>
+				</div>
+				<div class="page bor_radius flex ali_center">
+					<a th:href="@{?index={pn}(pn=${result.index}-1)}" class="flex"><img src="/static/images/preve.png"></a>
+					<div class="page_num">
+						<a th:each="i:${#numbers.sequence(1,result.pages)}" th:href="@{?index={pn}(pn=${i})}" th:classappend="${result.index} eq ${i} ? 'active'" th:text="${i}">1</a>
+					</div>
+					<a th:href="@{?index={pn}(pn=${result.index}+1)}" class="flex"><img src="/static/images/next.png"></a>
+				</div>
+			</div>
+		</div>
+	</body>
+	<script src="/static/js/jquery.min.js?v=2021022122"></script>
+	<script src="/static/js/common.js"></script>
+</html>

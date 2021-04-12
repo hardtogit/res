@@ -1,0 +1,65 @@
+body{background:#0f0e20;position:relative;color:#fff}
+.w1440{width:75%}
+.back{display:none}
+.detail .banner{text-align:center}
+.detail .banner .caozuo{display:inline-flex;border:.5px solid rgba(255,255,255,.2);border-radius:15px;height:50px}
+.detail .banner .swiper-slide img{width:100%;height:auto}
+.detail .mid_txt .name{padding-top:30px}
+.detail .mid_txt h4{font-style:normal;font-weight:700;font-size:24px;line-height:30px;margin-right:20px;text-transform:uppercase}
+.detail .mid_txt .money{margin-top:10px;padding-bottom:10px;border-bottom:1px solid rgba(255,255,255,.2)}
+.detail .mid_txt .money .num{font-size:24px;font-weight:700;margin-right:10px}
+.detail .mid_txt .click{display:inline-flex;margin:20px 0;padding:0 20px;height:50px;border:1px solid rgba(255,255,255,.2);border-radius:20px 6px 20px 6px}
+.detail .mid_txt .click img{width:12px;height:auto;margin-right:14px}
+.detail .mid_txt .info{border-top:.5px solid rgba(255,255,255,.2);border-bottom:.5px solid rgba(255,255,255,.2);padding:10px}
+.detail .mid_txt .info p{line-height:30px}
+.detail .mid_txt .btn{font-style:normal;font-size:16px;color:#fff;background:#0f0e20;border:1px solid #0f0e20;background-image:url(/static/detail_img/draw_now.png);background-repeat:no-repeat;background-size:100% auto}
+.detail .mid_txt .btn:before{content:"";display:block;padding-top:14.74%}
+.detail .right_txt .tab span{line-height:40px;position:relative;color:rgba(255,255,255,.2);font-weight:700;margin-right:45px}
+.detail .right_txt .tab span.act{color:#fff}
+.detail .right_txt .tab span.act::after{content:'';position:absolute;width:15px;height:2px;background:#fff;left:50%;bottom:0;transform:translateX(-50%)}
+.detail .right_txt .text_detail .first{display:none}
+.detail .right_txt .text_detail .first.show{display:block}
+.detail .right_txt .text_detail .cont{font-style:normal;font-weight:400;font-size:14px;line-height:30px;white-space:pre-wrap;word-break:break-word;}
+.detail .right_txt .more{display:inline-flex;color:#fff;border:1px solid rgba(255,255,255,.2);border-radius:20px 8px 20px 8px;margin-top:20px}
+.detail .right_txt .more img{width:30px;height:30px}
+.cate{border:none;margin:30px auto 20px}
+.cate span{font-style:normal;font-weight:700;font-size:14px;color:#fff;text-align:center;margin-right:30px}
+.cate span.active{padding:8px 12px;border-radius:15px 4px 15px 4px;background:linear-gradient(78.84deg,#a410ea 13.29%,#ba2b92 100.06%)}
+.detail .right_txt .text_detail .list{overflow-x:auto}
+.fracments{display:none}
+.fracments.show{display:block}
+.fracments .name{font-size:12px;line-height:46px;padding-right:12px}
+.fracments .fracments_list li span,.fracments .name span{min-width:130px;text-align:center}
+.fracments .name span:nth-of-type(1){padding-left:12px;box-sizing:border-box;text-align:left}
+.fracments .fracments_list li span{font-weight:700}
+.fracments .fracments_list li{height:80px;margin-bottom:6px;padding-right:12px;color:#fff;min-width:max-content;min-width:-moz-max-content}
+.fracments .fracments_list .headimg{min-width:130px}
+.fracments .fracments_list .headimg img{width:80px;height:80px;border-radius:15px}
+.fracments .fracments_list li .address{max-width:130px;word-wrap:break-word;word-break:normal}
+.fracments .fracments_list li span img{width:20px;height:auto;margin-left:13px}
+@media screen and (min-width:1200px){.content{padding-bottom:86px;overflow:hidden}
+.swiper-container{width:79.62%;padding-top:60px;margin:0 auto}
+.detail .banner .caozuo{margin-top:10%}
+.detail .mid_txt .pc_back{width:60px;height:60px;position:absolute;left:-90px;top:30px;display:block}
+.detail .mid_txt .pc_back img{width:20px;height:auto;margin:20px auto}
+.page_name{height:125px;line-height:125px;padding:0 60px;color:#dedcf8;font-style:normal;font-weight:700;font-size:16px;display:block;border-bottom:.5px solid rgba(255,255,255,.2)}
+.detail .banner{width:30.41%;margin:0 60px;border-left:.5px solid rgba(255,255,255,.2);position:relative}
+.detail .banner::after{content:'';position:absolute;width:.5px;height:100%;top:90px;right:0;background:rgba(255,255,255,.2)}
+.detail .mid_txt{width:24.47%;padding-right:60px;border-right:.5px solid rgba(255,255,255,.2);position:relative}
+.detail .mid_txt .btn{width:100%;margin-top:396px}
+.detail .right_txt{padding:10px 60px 0;box-sizing:border-box;width:32.6%}
+.detail .right_txt .tab{border-bottom:.5px solid rgba(255,255,255,.2)}
+.detail .right_txt .text_detail .cont{padding:50px 0}
+.detail .right_txt .more{padding:20px 45px}
+}
+@media screen and (max-width:1200px){body{max-width:460px;width:100%;margin:0 auto}
+.page_name{display:none}
+.detail{flex-direction:column;-webkit-flex-direction:column;-moz-flex-direction:column;-ms-flex-direction:column}
+.detail .banner .caozuo{margin-top:30px}
+.detail .mid_txt{width:100%;padding:0 20px;box-sizing:border-box;border-bottom:.5px solid rgba(255,255,255,.2)}
+.detail .mid_txt .mobile_back{display:inline-block;width:30px;height:30px;flex-shrink:0}
+.detail .mid_txt .btn{width:calc(100% - 140px);margin:50px auto 36px}
+.detail .right_txt{padding:20px 20px 70px}
+.detail .right_txt .text_detail .cont{padding-top:10px}
+.detail .right_txt .more{float:right;padding:14px 45px}
+}

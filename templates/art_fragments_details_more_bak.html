@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<th:block th:replace="common/metas::metaConfig" />
+		<title>[(${seriesModel?.name})]</title>
+		<link rel="stylesheet" type="text/css" href="/static/css/common.css" />
+		<link rel="stylesheet" type="text/css" href="/static/css/zhang.css" />
+		<link rel="stylesheet" type="text/css" href="/static/css/series_detail.css" />
+		<link rel="stylesheet" type="text/css" href="/static/css2/art_detail_more.css" />
+		<script src="/static/scripts/jquery-2.2.0.min.js"></script>
+		<script src="/static/css2/jquery.bxslider.min.js"></script>
+		<link href="/static/css2/jquery.bxslider.css" rel="stylesheet" />
+		<style type="text/css">
+			.fm_hide333{margin:auto;height:auto;width:auto;right:81px;top:-19px;position:absolute;left:81px;bottom:-25px;background:rgba(0,0,0,.8);padding:30px;border-radius:15px}
+			.fm_hide_text333{margin-left:0;margin-top:0;white-space:pre-wrap;word-break:break-word;width:100%;height:100%}
+		</style>
+	</head>
+	<body>
+		<header class="header">
+			<img class="logo" src="/static/images/logo.png" alt="FM Gallery" />
+			<img class="mobile-nav" src="/static/images/icon-dian.png" />
+			<div class="head-right" th:replace="common/navi::naviBar"></div>
+		</header>
+		<div class="fm_more_content">
+			<div class="content">
+				<div class="head">
+					<a href="javascript:history.back()" class="back">
+						<img src="/static/images2/back.png">
+					</a>
+				</div>
+			</div>
+			<div class="fm—banner">
+				<img src="/static/images2/fm_banner.png" style="width:100% !important;margin:0 auto !important;" />
+			</div>
+			<!--slide start-->
+			<div class="bxslider">
+			
+				<div class="fm_banner_frame" th:each="item,eStat:${commodityList}" th:attr="id='fm_banner_frame_'+${eStat.index+1}">
+					<div class="fm_banner_info">
+						<div class="fm_banner_info_bg">
+							<img src="/static/images2/Frame_3.png" />
+						</div>
+						<div class="fm_banner_info_title" th:text="${item.name}">Title of Work</div>
+						<div class="fm_banner_info_content">
+							<div class="fm_banner_info_content_left">
+								<img th:src="@{(${item.creatorAvatar})}" style="max-width:45px;max-height:45px"/>
+							</div>
+							<div class="fm_banner_info_content_right" th:text="${item.creatorName}">Zain Workman</div>
+						</div>
+					</div>
+					<div class="fm_hide" th:attr="id='fm_hide_'+${eStat.index+1}">
+						<div class="fm_hide_text" th:utext="${item.introduce}" style="white-space:pre-wrap;word-break:break-word;font-size:18px"></div>
+					</div>
+					<div class="fm_slide_artwork">
+						<img th:src="@{{url}?imageMogr2/auto-orient/thumbnail/1200x/format/webp(url=${item.fullImageUrl})}" th:title="${item.name}" />
+						
+					</div>
+				</div>
+				
+			</div>
+			<div class="bxslider_dir_bg">
+				<img src="/static/images2/bxslider_dir_bg.png" />
+			</div>
+			<!--slide end-->
+			<div class="fm_authors">
+				<div class="fm_author" th:each="item,eStat:${seriesModel?.creatorList}" th:classappend="${eStat.index == 0} ? 'fm_author_fisrt' : ''">
+					<div class="fm_author_bg">
+						<img src="/static/images2/Frame_2.png" />
+					</div>
+					<div class="fm_author_avatar">
+						<img th:src="@{(${item.avatar})}" />
+					</div>
+					<div class="fm_author_name" th:text="${item.name}">Zain Workman</div>
+					<div class="fm_author_gender">
+						<div class="fm_author_inside_title">Gender&nbsp;:</div>
+						<div class="fm_author_inside_gender">
+							<img th:src="@{/static/images2/xingbie-{sex}.png(sex=${item.gender == 'female' ? '2' : '1'})}" />
+						</div>
+					</div>
+					<div class="fm_author_Region">
+						<span class="fm_author_inside_title_2">Region&nbsp;:</span>
+						<span class="fm_author_Region_place" th:text="${item.country}">CN</span>
+						</div>
+					<div class="fm_author_Tag" th:text="${item.introduce}">Artist Tags</div>
+				</div>
+			</div>
+			<div class="fm-clear">
+				<div>
+					<img class="back-top" src="/static/images/back-top.png" />
+				</div>
+			</div>
+		</div>
+		<script src="/static/js/common.js"></script>
+		<script>
+		  $(function(){
+		  $('.bxslider').bxSlider({
+		    mode: 'fade',
+		    captions: false,
+		    slideWidth: 800,
+			auto:true,	
+			autoHover:true,
+			autoStart:true,
+			pause:3000,
+		  });
+		});
+		
+		$("#fm_banner_frame_1").hover(function(){
+		    $('#fm_hide_1').show();
+		},function(){
+		    $('#fm_hide_1').hide();
+		});
+		
+		$("#fm_banner_frame_2").hover(function(){
+		    $('#fm_hide_2').show();
+		},function(){
+		    $('#fm_hide_2').hide();
+		});
+		
+		$("#fm_banner_frame_3").hover(function(){
+		    $('#fm_hide_3').show();
+		},function(){
+		    $('#fm_hide_3').hide();
+		});
+		
+		$("#fm_banner_frame_4").hover(function(){
+		    $('#fm_hide_4').show();
+		},function(){
+		    $('#fm_hide_4').hide();
+		});
+		
+		$("#fm_banner_frame_5").hover(function(){
+		    $('#fm_hide_5').show();
+		},function(){
+		    $('#fm_hide_5').hide();
+		});
+		</script>
+	</body>
+</html>

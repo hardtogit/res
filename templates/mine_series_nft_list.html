@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<th:block th:replace="common/metas::metaConfig" />
+		<title>[(${seriesInfo.name})]</title>
+		<link rel="stylesheet" type="text/css" href="/static/css/common.css?v=202102222066" />
+		<link rel="stylesheet" type="text/css" href="/static/css/zhang.css" />
+		<link rel="stylesheet" type="text/css" href="/static/css/money.css" />
+		<script src="https://unpkg.com/@metamask/legacy-web3@latest/dist/metamask.web3.min.js"></script>
+		<style>
+		.list .item .item_img video,.list .item .item_img img{width:auto;height:100%;outline:none;max-height:555px;display:inline-block;}
+		.prefix-mint{background-image:url(/static/images/mine/mint-note.png);width:12px;height:12px;float:left;background-size:cover;position:absolute;top:30%;left:8%}
+		.mint-status{background-image:url(/static/images/mine/mine-vector.png);width:107px;height:34px;color:#fff;background-size:cover;position:relative}
+		.mint{position:absolute;left:30%;font-size:12px;top:20%}
+		.list .item .photolist{width:auto;overflow:auto}
+		.creator-name{width:auto;margin-left:10px;color:rgba(255,255,255,.6);padding-top:5px}
+		span.title{font-size:21px;line-height:31px}
+		</style>
+	</head>
+	<body>
+		<header class="header">
+			<img class="logo" src="/static/images/logo.png" alt="FM Gallery" />
+			<img class="mobile-nav" src="/static/images/icon-dian.png" alt="" />
+			<div class="head-right" th:replace="common/navi::naviBar"></div>
+		</header>
+		<div class="wallet">
+			<div th:replace="common/mine_header::naviBar"></div>
+			<div class="address">
+                <a href="/my/index.html" th:text="${seriesInfo.name}"></a>&nbsp&nbsp
+                <span>>&nbsp&nbspDetails</span>
+            </div>
+			<div class="cont">
+				<div class="flex list jc_sb flex_w first show">
+					<div class="item hide" th:each="item,eStat:${result.items}">
+						<div class="people flex jc_sb ali_center">
+							<div class="photolist flex">
+								<div class="headimg shrink">
+									<img th:src="@{(${item.creatorAvatar})}">
+								</div>
+								<div class="creator-name" th:text="${item.creatorName}">
+								</div>
+							</div>
+							<div class="mint-status flex">
+								<div class="prefix-mint"></div>
+								<div class="mint" th:if="${item.mintStatus!=2}">
+									Not Minted
+								</div>
+								<div class="mint" th:if="${item.mintStatus==2}">
+									Minted
+								</div>
+							</div>
+						</div>
+						<div class="item_img" th:with="ext=${#strings.containsIgnoreCase(item.imageUrl,'.mp4')}">
+							<img th:unless="${ext}" th:src="@{(${item.imageUrl})}" />
+							<video th:if="${ext}" th:src="@{${item.imageUrl}}" controls="controls" autoplay="autoplay" preload="auto"></video>
+						</div>
+						<div class="NFTitemtext">
+							<span th:text="${item.name}" class="title"></span>
+                            <div class="NFTitemtextlist"><p>My NFT:</p> <span class="nft-number" th:data="${item.commodityTypeId}">--</span></div>
+                            <div class="NFTitemtextlist"><p>Minted on:</p> <span class="nft-minted-time">[[${#dates.format(item.mintTime, 'yyyy/MM/dd')}]]</span></div>
+                            <!-- <div class="NFTitemtextlist"> <p>NTF Weght: </p><span th:text="${item.weight}">1</span></div>
+                            <div class="NFTitemtextlist"><p>Mind on:</p><span th:text="${item.mintTime}">2021/03/01</span></div> -->    
+						</div>
+						<a th:href="@{/my/story/{id}.html(id=${item.commodityId})}" class="itembutton">View Story</a>
+					</div>
+				</div>
+			</div>
+		</div>
+		<footer class="footer-box" th:replace="common/footer::footerBar"></footer>
+		<img class="back-top" src="/static/images/back-top.png" alt="" />
+		<script src="/static/js/jquery.min.js?v=2021022122"></script>
+		<script src="/static/js/common.js"></script>
+		<script src="/static/js/nft_staking.js?v=1.0.1"></script>
+		<script>
+			var walletId='[[${user.walletId}]]';
+			var abi = [{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"_owner","type":"address"},{"indexed":true,"internalType":"address","name":"_operator","type":"address"},{"indexed":false,"internalType":"bool","name":"_approved","type":"bool"}],"name":"ApprovalForAll","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"_operator","type":"address"},{"indexed":true,"internalType":"address","name":"_from","type":"address"},{"indexed":true,"internalType":"address","name":"_to","type":"address"},{"indexed":false,"internalType":"uint256[]","name":"_ids","type":"uint256[]"},{"indexed":false,"internalType":"uint256[]","name":"_values","type":"uint256[]"}],"name":"TransferBatch","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"_operator","type":"address"},{"indexed":true,"internalType":"address","name":"_from","type":"address"},{"indexed":true,"internalType":"address","name":"_to","type":"address"},{"indexed":false,"internalType":"uint256","name":"_id","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"_value","type":"uint256"}],"name":"TransferSingle","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"string","name":"_value","type":"string"},{"indexed":true,"internalType":"uint256","name":"_id","type":"uint256"}],"name":"URI","type":"event"},{"constant":true,"inputs":[{"internalType":"address","name":"_owner","type":"address"},{"internalType":"uint256","name":"_id","type":"uint256"}],"name":"balanceOf","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"internalType":"address[]","name":"_owners","type":"address[]"},{"internalType":"uint256[]","name":"_ids","type":"uint256[]"}],"name":"balanceOfBatch","outputs":[{"internalType":"uint256[]","name":"","type":"uint256[]"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"internalType":"uint256","name":"_initialSupply","type":"uint256"},{"internalType":"string","name":"_uri","type":"string"}],"name":"create","outputs":[{"internalType":"uint256","name":"_id","type":"uint256"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"internalType":"uint256","name":"","type":"uint256"}],"name":"creators","outputs":[{"internalType":"address","name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"internalType":"address","name":"_owner","type":"address"},{"internalType":"address","name":"_operator","type":"address"}],"name":"isApprovedForAll","outputs":[{"internalType":"bool","name":"","type":"bool"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"internalType":"uint256","name":"_id","type":"uint256"},{"internalType":"address[]","name":"_to","type":"address[]"},{"internalType":"uint256[]","name":"_quantities","type":"uint256[]"}],"name":"mint","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"internalType":"uint256","name":"_id","type":"uint256"},{"internalType":"address","name":"_to","type":"address"},{"internalType":"uint256","name":"_quantities","type":"uint256"}],"name":"mintSingle","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"nonce","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"internalType":"address","name":"_from","type":"address"},{"internalType":"address","name":"_to","type":"address"},{"internalType":"uint256[]","name":"_ids","type":"uint256[]"},{"internalType":"uint256[]","name":"_values","type":"uint256[]"},{"internalType":"bytes","name":"_data","type":"bytes"}],"name":"safeBatchTransferFrom","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"internalType":"address","name":"_from","type":"address"},{"internalType":"address","name":"_to","type":"address"},{"internalType":"uint256","name":"_id","type":"uint256"},{"internalType":"uint256","name":"_value","type":"uint256"},{"internalType":"bytes","name":"_data","type":"bytes"}],"name":"safeTransferFrom","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"internalType":"address","name":"_operator","type":"address"},{"internalType":"bool","name":"_approved","type":"bool"}],"name":"setApprovalForAll","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"internalType":"string","name":"_uri","type":"string"},{"internalType":"uint256","name":"_id","type":"uint256"}],"name":"setURI","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"internalType":"bytes4","name":"_interfaceId","type":"bytes4"}],"name":"supportsInterface","outputs":[{"internalType":"bool","name":"","type":"bool"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"internalType":"uint256","name":"","type":"uint256"}],"name":"tokenUris","outputs":[{"internalType":"string","name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"internalType":"uint256","name":"_id","type":"uint256"}],"name":"uri","outputs":[{"internalType":"string","name":"uri","type":"string"}],"payable":false,"stateMutability":"view","type":"function"}];
+			$(function(){
+				console.log("init");
+				//合约地址
+				address = '[[${contractAddress}]]';
+				// 通过ABI和地址获取已部署的合约对象
+				var helloContract = getWeb3().eth.contract(abi).at(address);
+				typeIds=[]
+				walletIds =[]
+				$(".nft-number").each(function(){
+					typeIds.push($(this).attr("data"));
+					walletIds.push(walletId)
+				})
+				console.log(typeIds)
+				console.log(walletIds)
+				helloContract.balanceOfBatch(walletIds, typeIds, {
+					//非必填，该合约方法的调用者
+					from: walletId
+				}, function (error, result) {
+					console.log('error:' + error)
+					for (let i = 0; i < typeIds.length; i++) {
+						$(".nft-number[data='"+typeIds[i]+"']").text(result[i]);
+						if(result[i]>0){
+							$(".nft-number[data='"+typeIds[i]+"']").parent().parent().parent().removeClass("hide")
+						}
+					}
+					console.log('result:' + result)
+				})
+			})
+		var val = $('.item').length;
+		if(val == 0) {
+			$(".item").css("display","none");
+			$(".list").css('background','url(/static/images/moneyimgs/kongzhuangtai1.png) 100% 100% no-repeat')
+			$(".list").css('background-position','center center')
+			$(".list").css("height",'250px')
+		}
+		$(".list").on("click",'.more', function() {
+			var index = $(this).parents('.item').index();
+			if (!$(this).parents('.item').find(".property").hasClass('act')) {
+				$(this).parents('.item').find(".property").addClass('act');
+				$(this).parents('.item').siblings().find('.property').removeClass('act');
+			} else {
+				$(this).parents('.item').find(".property").removeClass('act');
+			}
+		})
+	</script>
+	</body>
+</html>

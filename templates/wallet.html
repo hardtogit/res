@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <th:block th:replace="common/metas::metaConfig" />
+        <title>Connect wallet</title>
+        <link rel="stylesheet" href="/static/css/common.css" />
+        <link rel="stylesheet" href="/static/css/wallet.css" />
+        <script src="https://cdn.jsdelivr.net/gh/ethereum/web3.js/dist/web3.min.js"></script>
+    </head>
+    <body>
+        <div class="wallet-con">
+            <img class="back" src="./static/images/mine/back.png" />
+            <img class="wallet-title pc-page" src="./static/images/mine/wallet-title.png" />
+            <img class="wallet-title mobile-page" src="./static/images/mine/mobile_wallet_title.png" />
+            <div class="wallet-btn">
+                <a href="#" class="btn"><img src="./static/images/mine/wallet1.png" alt="" /></a>
+                <!-- a href="#"><img src="./static/images/mine/wallet2.png" alt="" /></a>
+                <a href="#"><img src="./static/images/mine/wallet3.png" alt="" /></a>
+                <a href="#"><img src="./static/images/mine/wallet4.png" alt="" /></a>
+                <a href="#"><img src="./static/images/mine/wallet5.png" alt="" /></a -->
+            </div>
+            <p class="desc">We don`t have your private key and cannot access your funds without your authorization.</p>
+        </div>
+    </body>
+    <script src="/static/js/jquery.min.js"></script>
+    <script src="/static/js/common.js"></script>
+    <script>
+		function getWeb3() {
+			return new Web3(window.ethereum);
+		}
+		function getEth() {
+			return getWeb3().eth;
+		}
+		
+	    $('.back').click(function (e) {
+	        window.location.href='javascript:history.go(-1)'
+	    });
+		$(".wallet-btn a").click(function(e) {
+			if (window.ethereum) {
+				var ethWei = 1000000000000000000;
+	            window.ethereum.enable().then(function (accounts) {
+	            	var walletId = accounts[0];
+	            	$.get(['/api/user/loginByWallet/', walletId, '?coin=0'].join(''), function(data) {
+            			document.setCookie('TOKEN', data.token, 15);
+	            		top.location.href='/'
+	            	});
+	           	}).catch(function (reason) {
+	           		console.log(['enable.error', reason]);
+	           		alert(reason.message);
+	           	});
+			} else {
+				alert('Please connect your wallet on a desktop web browser')
+			}
+            
+		});
+    </script>
+</html>

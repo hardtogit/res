@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta http-equiv="content-type" content="text/html;charset=utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, minimum-scale=1.0"/>
+	<meta http-equiv="X-UA-Compatible" content="ie=edge,chrome=1"/>
+	<title>添加/修改系列</title>
+	<link href="/static/css/admin.css?v=2021021916" rel="stylesheet" type="text/css" />
+	<script src="/static/scripts/jquery-2.2.0.min.js?v=20210218" type="text/javascript"></script>
+	<script src="/static/scripts/common.js?v=20210218" type="text/javascript"></script>
+</head>
+<body>
+	<div class="mainer">
+		<form id="form1" method="post" onsubmit="return false">
+			<input type="hidden" name="id" th:value="${model?.id}" />
+			<table role="edit">
+				<tr>
+					<th width="160">所属系列：</th>
+					<td>
+						<select name="seriesId">
+							<option value="0">请选择所属系列</option>
+							<option th:each="item,eStat:${seriesModel.items}" th:value="${item.id}">[(${item.name})]</option>
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th>设置奖励包种类：</th>
+					<td>
+						<div class="group-input">
+							<input type="text" maxlength="2" size="10" th:value="${model?.packNum}" name="packNum" class="pack-num" />
+							<input type="button" class="button-pack-num" value="确定" />
+						</div>
+						<span class="error">输入奖励包种类，数量不可为0，最多设置10种奖励包</span>
+					</td>
+				</tr>
+				<tr>
+					<th></th>
+					<td>
+						<div class="wah-list">
+							<div class="head">
+								<span>奖励包数量</span>
+								<span>单个奖励包内[(${TOKEN})]数量</span>
+								<span title="输入阈值（当抽奖次数大于该值时释放该项奖励）">参与奖励的阈值</span>
+							</div>
+							<div class="list-item">
+								<div class="item" th:each="item,eStut:${model?.wahList}">
+									<input type="text" th:attr="name='pack_' + ${eStut.index}" maxlength="5" placeholder="输入奖励包数量" title="输入奖励包数量" th:value="${item.rewardNum}"  />
+									<input type="text" th:attr="name='wah_' + ${eStut.index}" maxlength="5" th:placeholder="'输入'+${TOKEN}+'单包奖励数'" th:title="'输入'+${TOKEN}+'单包奖励数'" th:value="${item.wahNum}"  />
+									<input type="text" th:attr="name='valve_' + ${eStut.index}" maxlength="5" placeholder="输入阈值（当抽奖次数大于该值时释放该项奖励）" title="输入阈值（当抽奖次数大于该值时释放该项奖励）" th:value="${item.valve}"  />
+								</div>
+							</div>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<th></th>
+					<td>
+						<input class="button-submit" type="button" value="保存并提交" />
+						<a href="javascript:history.back()">返回</a>
+					</td>
+				</tr>
+			</table>
+		</form>
+	</div>
+	<script id="list-item-template" type="text/template">
+		<div class="item">
+			<input type="text" name="pack_{i}" maxlength="5" placeholder="输入奖励包数量" title="输入奖励包数量" />
+			<input type="text" name="wah_{i}" maxlength="5" th:placeholder="'输入'+${TOKEN}+'单包奖励数'" th:title="'输入'+${TOKEN}+'单包奖励数'" />
+			<input type="text" name="valve_{i}" maxlength="5" placeholder="输入阈值（当抽奖次数大于该值时释放该项奖励）" title="输入阈值（当抽奖次数大于该值时释放该项奖励）" />
+		</div>
+	</script>
+	<script type="text/javascript">
+		var isok = false;
+		document.forms[0]['seriesId'].value='[(${model?.seriesId})]';
+		
+		$(".button-pack-num").click(function(e) {
+			var list = $('.list-item'),num=$('.pack-num').val(),tmp=$("#list-item-template").text();
+			if (num > 10) $('.pack-num').val(num=10);
+			list.html('');
+			for(var i=0;i<num;i++)list.append(tmp.format({'i':i}));
+		});
+		
+		$('.button-submit').click(function(e) {
+			if (isok) return;
+			
+			var target = e.currentTarget, form = target.form, data={};
+			var packNum = form['packNum'].value,wahList=[];
+			
+			if (form['seriesId'].value == 0) {
+				alert('请选择所属系列。');
+				form['seriesId'].focus()
+				return;
+			}
+			if (packNum.length == 0 || packNum < 1) {
+				alert('请设置奖励包种类。');
+				form['packNum'].focus()
+				return;
+			}
+			
+			for(var i=0;i<packNum;i++){
+				var p=form['pack_'+i].value,w=form['wah_'+i].value,v=form['valve_'+i].value;
+				wahList.push({'rewardNum':p,'wahNum':w,'valve':v});
+			}
+			
+			data.id=form['id'].value,
+			data.seriesId=form['seriesId'].value,
+			data.packNum=packNum,
+			data.wahList=wahList;
+			
+			target.value='正在提交数据...';
+			isok = true;
+			
+			$.ajax({
+		        url: '../save', 
+		        type:'POST',
+		        contentType: "application/json; charset=utf-8",
+		        cache: false,
+		        dataType: "json",
+		        data: JSON.stringify(data),
+		        success: function(model) {
+		        	alert(model.message);
+					top.location.href='../list';
+					isok = false;
+					target.value='保存并提交';
+		        },
+		        error: function(err) {
+		 			alert(err);
+		 			isok = false;
+		 			target.value='保存并提交';
+		        }
+		    })
+			
+		});
+	</script>
+	
+</body>
+</html>

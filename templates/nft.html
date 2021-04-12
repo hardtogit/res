@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<th:block th:replace="common/metas::metaConfig" />
+		<title>NFT Staking</title>
+		<link rel="stylesheet" href="/static/css/common.css?v=20210318" />
+		<script src="/static/js/jquery.min.js?v=2021022122"></script>
+		<script src="https://unpkg.com/@metamask/legacy-web3@latest/dist/metamask.web3.min.js"></script>
+	</head>
+	<body>
+		<header class="header">
+			<img class="logo" src="/static/images/logo.png" alt="FM Gallery" />
+			<img class="mobile-nav" src="/static/images/icon-dian.png" />
+			<div class="head-right" th:replace="common/navi::naviBar"></div>
+		</header>
+		<div class="pc-page">
+			<img class="wait" src="/static/images/nft.jpg?v=20210221" />
+		</div>
+		<div class="mobile-page">
+			<img class="wait" src="/static/images/mobile/nft-mobile.jpg?v=20210221" />
+		</div>
+		<div class="foot-padd"></div>
+		<footer class="footer-box" th:replace="common/footer::footerBar"></footer>
+		<script src="/static/js/common.js"></script>
+	</body>
+</html>

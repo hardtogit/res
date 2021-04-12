@@ -1,0 +1,29 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+
+<div class="head-right" th:fragment="naviBar">
+	<ul class="nav">
+		<li><a class="hot" href="/art/index.html"><i></i>DROPS<i></i></a></li>
+	    <li><a href="/news.html">NEWS</a></li>
+	    <li><a href="/discovery/index.html">DISCOVERY</a></li>
+	    <li><a href="/activity/index.html">ACTIVITY</a></li>
+	    <li style="margin-left:10px"><a href="/mining.html">MINING</a></li>
+	    <li th:if="${user?.id} == 0"><a href="/wallet.html">CONNECT</a></li>
+	</ul>
+	<div class="userinfo" th:if="${user?.id} > 0" style="padding-left:20px">
+	    <div class="head-wallet">
+	        <p class="name" th:text="${user?.walletId}"></p>
+	        <p class="wallet-banle">
+	        	<span th:text="${user?.wahCoinString}"></span>[(${TOKEN})]
+	        	<sub style="font-size:12px;vertical-align:middle;display:inline-block;margin-top:-6px;padding-left:5px;">2nd term</sub>
+	        </p>
+	    </div>
+	    <a href="/my/index.html">
+	    	<img class="user" th:src="${user?.avatar}" />
+	    </a>
+	</div>
+	<div class="userinfo" th:if="${user?.id} == 0">
+	    <img class="user" th:src="${user?.avatar}" />
+	</div>
+</div>

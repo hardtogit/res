@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html;charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, minimum-scale=1.0"/>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge,chrome=1"/>
+    <title>支付测试</title>
+    <script type="text/javascript" src="/static/scripts/jquery-2.2.0.min.js"></script>
+    <script src="https://www.paypal.com/sdk/js?client-id=AXCZGMPP8ayxOD-ZLIPc5QHN8TKf6iM7w5AyJ37ckxiSokezq3bd2kRId7QVbmX6n_aPbmPxp7reYXeG&commit=false&components=buttons"></script>
+</head>
+<body>
+
+<table>
+    <tr>
+        <td>沙盒</td>
+        <td>线网</td>
+    </tr>
+    <tr>
+        <td>
+            Client ID:<span>AXCZGMPP8ayxOD-ZLIPc5QHN8TKf6iM7w5AyJ37ckxiSokezq3bd2kRId7QVbmX6n_aPbmPxp7reYXeG</span>
+
+            secret:<span>EDWz52LxGEeY78oE5f-Pygs0gUau2dkhRp9GOhBpv82JZIq5pLs8fojkPOvCVrJF_7ZHF02SEVPRwVG6</span>
+        </td>
+        <td>
+            AVldjHS3kf_ieT7SYVlINW7R_0Ig6NIQOVfQuEMk7WyJIksLM7v0W_fgR-0fKx35iFlG3A4wLlchQG1c
+        </td>
+    </tr>
+</table>
+
+<form id="form-obj" style="margin-top: 20px; margin-bottom: 20px;">
+    <div>
+        <label for="seriesId">系列ID</label>
+        <input type="number" id="seriesId"/>
+    </div>
+    <div>
+        <label for="quantity">购买数量</label>
+        <input type="number" id="quantity"/>
+    </div>
+    <div>
+        <label for="amountDesc">金额：</label>
+        <span style="color:red;" id="amountDesc"></span>
+    </div>
+    <div>
+        <button type="button" onclick="buy()">购买</button>
+    </div>
+    <input type="hidden" id="amount"/>
+    <input type="hidden" id="custom"/>
+</form>
+
+<div id="paypal-button-container"></div>
+
+<script type="text/javascript">
+
+    function buy() {
+        var seriesId = $('#seriesId').val();
+        var quantity = $('#quantity').val();
+        if (!seriesId || !quantity) {
+            alert('请输入系列ID和购买数量！');
+            return false;
+        }
+        $.ajax({
+            async: true,
+            type: 'POST',
+            url: '/api/payment/buy',
+            contentType: 'application/x-www-form-urlencoded',
+            data: {
+                seriesId: seriesId,
+                quantity: quantity
+            },
+            xhrFields: {
+                withCredentials: true //允许跨域带Cookie
+            },
+            success: function (data) {
+                if (data.errCode == 'OK') {
+                    $('#custom').val(data.data.orderId);
+                    $('#amount').val(data.data.totalAmount);
+                    $('#amountDesc').text(data.data.totalAmount + 'USD');
+                    $('#paypal-button-container').show();
+                } else {
+                    console.log(data);
+                    alert(data.errCode + ' - ' + data.message);
+                }
+            },
+            error: function (xhr, error, ex) {
+                console.error(error);
+            }
+        });
+    }
+
+    paypal.Buttons({
+        createOrder: function (data, actions) {
+            return actions.order.create({
+                purchase_units: [{
+                    amount: {
+                        value: $('#amount').val()
+                    },
+                    custom_id: $('#custom').val(), // orderId，由/payment/buy接口返回
+                    invoice_id: $('#custom').val()
+                }]
+            })
+        },
+        onApprove: function (data, actions) {
+            return actions.order.capture().then(function (details) {
+                console.log(details)
+                alert('Transaction completed by ' + details.payer.name.given_name);
+                var count = 60;
+                var checkPaid = function () {
+                    if (count <= 0) {
+                        return false;
+                    }
+                    count--;
+                    $.ajax({
+                        async: true,
+                        type: 'POST',
+                        url: '/api/payment/find/' + $('#custom').val(),
+                        xhrFields: {
+                            withCredentials: true //允许跨域带Cookie
+                        },
+                        success: function (data) {
+                            if (data.errCode == 'OK' && data.data.status == 1) {
+                                alert('支付成功！');
+                            } else {
+                                console.log(data);
+                                setTimeout(checkPaid, 500);
+                            }
+                        },
+                        error: function (xhr, error, ex) {
+                            console.error(error);
+                            setTimeout(checkPaid, 500);
+                        }
+                    });
+                };
+                setTimeout(checkPaid, 500);
+            });
+        }
+    }).render('#paypal-button-container')
+
+
+</script>
+
+</body>
+</html>

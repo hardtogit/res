@@ -1,0 +1,53 @@
+.content{position:relative}
+.content img{width:100%;height:auto;display:block}
+.content .btn{position:absolute}
+.web .btn{width:auto;height:auto;left:13.4375%;top:13%}
+.phone .btn{width:46%;height:auto;left:9.8%;top:11.8%}
+
+.non-box{width:1400px;margin:0 auto}
+.non-logo{width:704px;height:212px;display:block;margin-top:170px}
+.non-con{width:888px;margin:0 auto;margin-top:207px;margin-bottom:200px;display:flex;justify-content:space-between;flex-wrap:wrap}
+.non-con img{width:280px;height:201px;display:block;margin-bottom:24px}
+.non-con img{width:280px;height:201px;display:block;margin-bottom:24px;transition:.3s}
+.non-con img:hover{transform:translateY(-10px)}
+.news-btn{width:129px;height:60px;display:flex;background:url(/static/images/news-btn.png?v=20210221)}
+.news-bor{display:block;margin-top:60px}
+.news-btn a{width:50%;height:100%;display:block}
+.news-logo{margin-bottom:180px;margin-top:60px}
+.non{background-size:100%;padding-top:300px;padding-bottom:200px}
+.news-con{width:1400px;display:flex;margin:0 auto}
+.news-left{flex:0 0 305px}
+.news-right{flex:1;overflow:hidden;white-space:nowrap}
+.news-item{width:432px;height:682px;margin-right:40px;display:inline-block}
+.news-item a{display:block}
+.item-img{display:block;width:432px;height:337px}
+.news-right .item-con{margin-top:40px;display:flex;white-space:initial}
+.time{font-style:normal;font-weight:400;font-size:14px;line-height:30px;color:#fff;flex:0 0 150px}
+.title{font-style:normal;font-weight:700;font-size:16px;line-height:30px;color:#fff;display:-webkit-box!important;-webkit-box-orient:vertical;-webkit-line-clamp:1;overflow:hidden}
+.con{font-style:normal;font-weight:400;font-size:14px;line-height:30px;color:#fff;height:120px;overflow:hidden;display:-webkit-box!important;-webkit-box-orient:vertical;-webkit-line-clamp:4;overflow:hidden}
+.item-detail{display:flex;align-items:center;justify-content:center;font-style:normal;font-weight:700;font-size:16px;color:#fff;padding-top:57px;padding-bottom:71px;background:url(/static/images/news-item-bor.png?v=20210221) no-repeat bottom;background-size:100%}
+.item-detail img{width:auto}
+
+@media screen and (min-width:1200px) {
+	.phone {display:none;}
+	.non{background:url(/static/index_img/web/index_5.jpg?v=20210311) no-repeat;}
+}
+
+@media screen and (max-width:1400px) {
+	.web .btn{top:12.5%}
+}
+
+@media screen and (max-width:1300px) {
+	.web .btn{top:12%}
+}
+
+@media screen and (max-width:1200px) {
+	body {
+		max-width: 460px;
+		width: 100%;
+		margin: 0 auto;
+	}
+	.non{background:url(/static/index_img/phone/phone_5.jpg?v=20210311) no-repeat;}
+	.web {display:none;}
+	.content{padding-top:125px;}
+}

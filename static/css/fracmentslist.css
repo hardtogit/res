@@ -1,0 +1,31 @@
+body{background:#0f0e20;position:relative}
+.content{padding-top:30px}
+.content::after,.content::before{content:'';width:.5px;height:100%;background:rgba(255,255,255,.2);top:90px;position:absolute}
+.content::before{left:60px}
+.content::after{right:60px}
+.back{margin-left:30px;height:60px}
+.back a{width:60px;height:60px}
+.back a img{width:20px;height:20px;margin:auto}
+.content .w1440{margin-left:5%}
+.title{font-style:normal;font-weight:700;position:relative;margin-top:20px}
+.title::before{content:'';width:112px;height:.5px;background:rgba(255,255,255,.2);position:absolute;left:0;bottom:-9px}
+.title::after{content:'';position:absolute;width:5px;height:5px;background:#fff;left:112px;bottom:-11px}
+.cate{height:60px;margin:42px auto 32px}
+.cate a{width:150px;line-height:58px;font-style:normal;font-weight:700;font-size:14px;color:rgba(255,255,255,.2);text-align:center;border-right:.5px solid rgba(255,255,255,.2)}
+.cate a.active{color:#fff}
+.fracments{padding-bottom:130px;display:none}
+.fracments.show{display:block}
+.fracments .name{line-height:46px;padding:0 12px;font-size:12px}
+.fracments .fracments_list li span,.fracments .name span{min-width:130px;text-align:center}
+.fracments .name span:nth-of-type(1){text-align:left}
+.fracments .fracments_list li{height:80px;margin-bottom:6px;padding:0 12px;color:#fff}
+.fracments .fracments_list li span img{width:20px;height:auto;margin-left:13px}
+.fracments .fracments_list li span:nth-last-of-type(1){max-width:130px;word-wrap:break-word;word-break:normal}
+.fracments .fracments_list .headimg{min-width:130px}
+.fracments .fracments_list .headimg img{width:60px;height:60px;border-radius:15px}
+.page{margin:0 auto;width:max-content;width:-webkit-max-content;width:-moz-max-content;width:max-content;height:40px}
+.page .flex{padding:0 12px}
+.page img{width:16px;height:auto}
+.page .page_num{line-height:38px;border-left:.5px solid rgba(255,255,255,.2);border-right:.5px solid rgba(255,255,255,.2);padding:0 10px}
+.page .page_num a{font-style:normal;font-weight:400;font-size:12px;color:rgba(255,255,255,.2);padding:0 10px}
+.page .page_num a.active{color:#fff}

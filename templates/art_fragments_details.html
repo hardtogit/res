@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<th:block th:replace="common/metas::metaConfig" />
+		<title>[(${seriesModel?.name})]</title>
+		<link rel="stylesheet" type="text/css" href="/static/css/common.css"/>
+		<link rel="stylesheet" type="text/css" href="/static/css/zhang.css"/>
+		<link rel="stylesheet" type="text/css" href="/static/css/details-fragments.css" />
+		<link rel="stylesheet" type="text/css" href="/static/css/swiper.min.css" />
+		<style type="text/css">
+			.banner{padding-top:60px}
+			.cate{position:relative;}
+			.nft-more{padding:5px 10px !important;position:absolute;right:0;top:0;margin-top:0 !important;}
+			.swiper-slide{display:block}
+			.swiper-slide img,.swiper-slide video{width:100%}
+			.fracments .fracments_list .headimg video{width:80px;height:80px;border-radius:15px}
+		</style>
+	</head>
+	<body>
+		<header class="header">
+			<img class="logo" src="/static/images/logo.png" alt="FM Gallery" />
+			<img class="mobile-nav" src="/static/images/icon-dian.png" />
+			<div class="head-right" th:replace="common/navi::naviBar"></div>
+	    </header>
+		<div class="content">
+			<div class="page_name"></div>
+			<div class="detail flex">
+				<div class="banner">
+				
+					<div class="swiper-container">
+						<div class="swiper-wrapper">
+							<a class="swiper-slide" th:each="item,eStat:${seriesModel?.banners}" target="_preview" th:with="ext=${#strings.containsIgnoreCase(item,'.mp4')}" th:href="@{${item}}">
+								<img th:unless="${ext}" th:src="@{{url}?imageMogr2/auto-orient/thumbnail/1200x/format/webp(url=${item})}" />
+								<video th:if="${ext}" th:src="@{${item}}" muted="muted" controls="controls" preload="auto"></video>
+							</a>
+						</div>
+					</div>
+					<div class="ali_center caozuo">
+						<div class="swiper-button-prev"></div> <!-- 上一张 -->
+						<div class="swiper-pagination flex ali_center"></div>
+						<div class="swiper-button-next"></div> <!-- 下一张 -->
+					</div>
+					
+				</div>
+				<div class="mid_txt">
+					<a href="/art/index.html" class="bor_radius pc_back back"><img src="/static/images/preve.png"></a>
+					<div class="flex jc_sb name"><h4 th:text="${seriesModel?.name}">LOREM IPSUM</h4><img class="back mobile_back" src="/static/detail_img/mobile_back.png" ></div>
+					<p class="money flex ali_center"><span class="num" th:text="${seriesModel?.price}">1</span><span>[(${UNIT})] / DRAW</span></p>
+					<div class="click ali_center"><img src="/static/images/Emoji.png">NFT Data</div>
+					<div class="info">
+						<!-- <p class="flex ali_center jc_sb"><span class="font_w">Artistic value</span><span>[(${seriesModel?.getMarketPriceString})] [(${UNIT})]</span></p> -->
+						<p class="flex ali_center jc_sb"><span class="font_w">NFT Types</span><span th:text="${seriesModel?.nftType}">1</span></p>
+					</div>
+					<a th:if="${seriesModel?.status} eq 1" th:href="@{/art/buy/{id}.html(id=${seriesModel?.id})}" class="btn flex ali_center jc_cen">Draw Now</a>
+					<a th:if="${seriesModel?.status} eq 10" href="javascript:;" class="btn flex ali_center jc_cen gray">Draw Now</a>
+					<a th:if="${seriesModel?.status} eq 9" href="javascript:;" class="btn flex ali_center jc_cen gray">Draw Now</a>
+				</div>
+				<div class="right_txt">
+					<div class="tab flex">
+						<span class="act">Pack Details</span>
+						<span>NFT List</span>
+					</div>
+					<div class="text_detail">
+						<div class="first show">
+							<div class="cont" th:utext="${seriesModel?.introduce}" ></div>
+							<a th:href="@{/art/detail/{id}.html(id=${seriesModel?.id})}" class="more ali_center">View more <img src="/static/detail_img/right.png"></a>
+						</div>
+						<div class="first">
+							<div class="cate flex ali_center bor_radius">
+								<span class="active">Details</span>
+								<a th:href="@{/art/type/{id}.html(id=${seriesModel?.id})}" class="more ali_center nft-more">View more <img src="/static/detail_img/right.png"></a>
+							</div>
+							<div class="list">
+								<div class="fracments" style="display:block;">
+									<div class="scroll">
+										<div class="flex jc_sb ali_center cate_name white">
+											<span>Artworks</span>
+											<span>Name</span>
+											<span>Editions</span>
+											<span>Artists</span>
+										</div>
+										<ul class="fracments_list">
+											<li class="flex jc_sb ali_center bor_radius" th:each="item,eStat:${nftTypesList}" th:with="mp4=${#strings.containsIgnoreCase(item.imageUrl,'.mp4')}">
+												<div class="headimg">
+													<img th:unless="${mp4}" th:src="@{{url}?imageMogr2/auto-orient/thumbnail/100x/format/webp(url=${item.imageUrl})}" />
+													<video th:if="${mp4}" muted="muted" th:src="@{${item.imageUrl}}" preload="metadata" autocapitalize="none"></video>
+												</div>
+												<span style="width: 0;" th:text="${item.name}"></span>
+												<span style="width: 0;" th:text="${item.quantity}">0</span>
+												<span style="width: 0;" class="flex jc_cen ali_center">[(${item.creatorName})] <a th:href="@{/art/author/{id}.html(id=${item.hashCreatorId})}"><img src="/static/images/jinru.png" /></a></span>
+											</li>
+										</ul>
+									</div>
+									
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</body>
+	<script src="/static/scripts/jquery-2.2.0.min.js"></script>
+	<script src="/static/js/common.js"></script>
+	<script src="/static/js/swiper.min.js" type="text/javascript"></script>
+	<script type="text/javascript">
+		$(function() {
+			var mySwiper = new Swiper('.swiper-container', {
+				autoplay: {
+				    delay: 4000,
+				    stopOnLastSlide: false,
+				    disableOnInteraction: true,
+				},
+				pagination: {
+					el: '.swiper-pagination',
+				},
+				navigation: {
+					nextEl: '.swiper-button-next',
+					prevEl: '.swiper-button-prev',
+				}
+			});
+
+			$('.tab span').click(function() {
+				var index = $(this).index();
+				if (!$(this).hasClass('act')) {
+					$(this).addClass('act').siblings().removeClass('act');
+				}
+				$(this).addClass('act').siblings().removeClass('act');
+				$('.text_detail').find('.first').eq(index).addClass('show').siblings().removeClass('show');
+			})
+		});
+	</script>
+</html>

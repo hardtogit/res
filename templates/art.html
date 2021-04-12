@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <th:block th:replace="common/metas::metaConfig" />
+    <title>Art Fragments</title>
+    <link rel="stylesheet" href="/static/css/common.css?v=20210221154444" />
+  </head>
+  <body>
+    <header class="header">
+      <!-- <span class="logo">FM Gallery</span> -->
+      <img class="logo" src="./static/images/logo.png" alt="FM Gallery" />
+      <img class="mobile-nav" src="./static/images/icon-dian.png" alt="" />
+      <div class="head-right" th:replace="common/navi::naviBar"></div>
+    </header>
+    <div class="pc-page">
+      <img class="wait" src="./static/images/art.jpg?v=20210226" alt="" />
+    </div>
+    <div class="mobile-page">
+      <img
+        class="wait"
+        src="./static/images/mobile/art-mobile.jpg?v=20210221"
+        alt=""
+      />
+    </div>
+    <div class="foot-padd"></div>
+    <footer class="footer-box" th:replace="common/footer::footerBar"></footer>
+  </body>
+  <script src="/static/js/jquery.min.js?v=20210221"></script>
+  <script src="/static/js/common.js"></script>
+</html>

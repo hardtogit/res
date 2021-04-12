@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<th:block th:replace="common/metas::metaConfig" />
+		<title>Purchase and extract NFT</title>
+		<link rel="stylesheet" type="text/css" href="/static/css/common.css" />
+		<link rel="stylesheet" type="text/css" href="/static/css/zhang.css" />
+		<link rel="stylesheet" type="text/css" href="/static/css/jiang.css" />
+		<script src="https://unpkg.com/@metamask/legacy-web3@latest/dist/metamask.web3.min.js"></script>
+		<style type="text/css">
+			.pay-list{padding:20px 0;}
+			.pay-list .item{font-size:16px;font-weight:400;margin-bottom:15px;color:#fff;display:block;text-align:center;height:55px;line-height:55px;border-radius:4px}
+			.pay-list .item i,.pay-list .item b{display:inline-block;vertical-align:middle;}
+			.pay-list .wallet{background:#51b15d;cursor:pointer;}
+			.pay-list .wallet:hover{background:#4ea359}
+			.pay-list .wallet i{width:21px;height:21px;background:url('/static/images/mh/icon_wallet.png');margin-right:10px}
+			.payment-wait-dialog{position:absolute;top:30%;width:600px;left:40% !important;height:200px;}
+			.payment-wait-dialog .result{line-height:140px;font-size:23px;width:100%;padding:0;margin:0}
+		</style>
+	</head>
+	<body>
+		<header class="header">
+			<img class="logo" src="/static/images/logo.png" alt="FM Gallery" />
+			<img class="mobile-nav" src="/static/images/icon-dian.png" />
+			<div class="head-right" th:replace="common/navi::naviBar"></div>
+	    </header>
+	    
+		<div class="page">
+			<div class="content flex">
+				<img src="/static/images/mh/withdraw1.png" onclick="history.back()" class="back" >
+				<div class="left">
+					<img class="fanimg" src="/static/images/mh/box.png">
+					<img class="box_img success" src="/static/images/mh/nftbg.png" >
+					<img class="box_img success2" src="/static/images/mh/chipbg.png" >
+					<span class="USD">0</span>
+				</div>
+				<div class="right" style="position:relative;">
+					<div class="start">
+						<img src="/static/images/mh/tit.png">
+						<img src="/static/images/mh/buttonlin.png">
+						<div class="add flex ali_center jc_sb bor_radius">
+							<span style="flex:4.5;text-align:left">Select quantity</span>
+							<span style="flex:1.5;font-size:20px;line-height:100%;font-weight:bold;cursor:pointer;" class="last" >-</span>
+							<span style="flex:1.5" class="time">1</span>
+							<span class="timeadd" style="flex:1.5;font-size:20px;line-height:100%;font-weight:bold;cursor:pointer;">+</span>
+						</div>
+						<div class="num flex ali_center jc_sb bor_radius">
+							<span style="flex:5;text-align:left">Total</span>
+							<span style="flex:3" class="numcontent" th:text="${model?.unitPrice}">0</span>
+							<span class="last" style="flex:2">[(${UNIT})]</span>
+						</div>
+						<img th:if="${model?.status} eq 10" src="/static/images/mh/button.png" class="gray" />
+						<img th:if="${model?.status} eq 9" src="/static/images/mh/button.png" class="gray" />
+						<img th:if="${model?.status} eq 1" src="/static/images/mh/button.png" style="cursor:pointer" class="go"/>
+					</div>
+					
+					<div class="alert payment-dialog" th:if="${model?.status} eq 1">
+						<div class="alerttit">
+							<span>Payments</span>
+							<img src="/static/images/mh/alertcloss.png" class="close">
+						</div>
+						<div class="alertbox pay-list">
+							<a id="payment-wallet" class="item wallet"><i></i><b>[(${UNIT})] Wallet Payments</b></a>
+						</div>
+					</div>
+					
+					<div class="open">
+						<img src="/static/images/mh/open.png">
+						<img src="/static/images/mh/openline.png">
+						<img src="/static/images/mh/openbutton.png" class="art-flop-anmi">
+					</div>
+					<div class="chip">
+						<img src="/static/images/mh/nfttiti1.png">
+						<img src="/static/images/mh/nfttit2.png">
+						<img src="/static/images/mh/chipline.png">
+						<div class="chiptxt">
+							<p id="prod-name">Lorem Ipsum</p>
+							<div class="chiptxtitem">
+								<p>NFT NUMBER:</p>
+								<span id="prod-number">--</span>
+							</div>
+							<!-- <div class="chiptxtitem">
+								<p>NFT Weght:</p>
+								<span id="prod-weght">10</span>
+							</div> -->
+							<!-- <div class="chiptxtitem">
+								<p>Mind on:</p>
+								<span id="prod-mindon">--</span>
+							</div> -->
+							<div class="chiptxtitem">
+								<img src="/static/images/mh/chipphoto.png" id="prod-creator-image" style="margin-top:0">
+								<span style="color:rgba(255,255,255,0.6);" id="prod-creator-name">Zain Workman</span>
+							</div>
+						</div>
+						<img src="/static/images/mh/nftbutton.png" style="cursor:pointer;" class="chipbutton" onclick="moreopen()">
+					</div>
+					<div class="NFT">
+						<img src="/static/images/mh/NFTtit.png">
+						<img src="/static/images/mh/nftline.png">
+						<img src="/static/images/mh/nftbutton.png" style="cursor:pointer;" class="reward" onclick="moreopen()">
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		<div class="alert payment-wait-dialog">
+			<div class="alerttit">
+				<span>Payment results</span>
+			</div>
+			<div class="result">Querying payment results...</div>
+		</div>
+		
+	</body>
+	<script src="/static/scripts/jquery-2.2.0.min.js"></script>
+	<script src="/static/js/owl.carousel.min.js"></script>
+	<script src="/static/js/common.js"></script>
+	<script src="/static/js/art_buy.js" th:if="${model?.status} eq 1"></script>
+	<script th:src="@{/static/js/nft_staking{mode}.js?v=1.0.1.27(mode=${MODE})}"></script>
+	<script type="text/javascript">
+		NFT.init();
+		var price=parseFloat('[(${model?.unitPrice})]').toFixed(2),num=1,seriesId='[(${model?.id})]';
+		$('.timeadd').on('click', function() {
+			++num;
+			if (num > 10) {
+				num = 10;
+				alert('每次最多只能购买10个');
+				return;
+			}
+			$(".time").text(num),$(".numcontent").text(parseFloat(price * num).toFixed(2));
+		});
+		$('.last').on('click', function() {
+			if (num > 1) {
+				--num;
+				$(".time").text(num),$(".numcontent").text(parseFloat(price * num).toFixed(2))
+			}
+		});
+		$('.go').on('click', function() {
+			$(".payment-dialog").css("display", "block");
+		});
+		// 新增
+		$('.play,.close').on('click', function() {
+			$(".alert").css("display", "none");
+		});
+		$('.art-flop-anmi').click(artFlopAnmi);
+    </script>
+</html>

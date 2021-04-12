@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="content-type" content="text/html;charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, minimum-scale=1.0"/>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge,chrome=1"/>
+    <title>盲盒列表</title>
+    <link href="/static/css/admin.css?v=2021021916" rel="stylesheet" type="text/css"/>
+    <script src="/static/scripts/jquery-2.2.0.min.js?v=20210218" type="text/javascript"></script>
+    <script src="/static/scripts/admin.js?v=20210218" type="text/javascript"></script>
+    <script src="/static/js/api.js?v=20210218" type="text/javascript"></script>
+    <script src="/static/js/util.js?v=20210218" type="text/javascript"></script>
+</head>
+<body>
+<div th:replace="admin/navi::naviBar"></div>
+<div class="mainer">
+    <table id="table" role="list" class="no">
+        <tr>
+            <th width="70">编号</th>
+            <th width="150">分类</th>
+            <th width="150">名称</th>
+            <th width="180">开始时间</th>
+            <th width="180">结束时间</th>
+            <th width="100">状态</th>
+            <th width="180">创建时间</th>
+            <th>操作</th>
+        </tr>
+    </table>
+    <div class="paging">
+        <p class="button">
+            <a href="./edit">添加DROPS</a>
+        </p>
+        <p id="page" class="page">
+        </p>
+    </div>
+</div>
+</body>
+<script type="text/javascript">
+
+    var curPage = 1;
+
+    //更新状态
+    function updateStatus(btn) {
+        let status = $(btn).attr('data-status');
+        let id = $(btn).attr('data-id');
+        let targetStatus;
+        if (status == 'Y') {
+            targetStatus = 'N';
+        } else {
+            targetStatus = 'Y';
+        }
+
+        formAjax('post','admin/drops/upd', {id:id,isUse:targetStatus}, function () {
+            refreshPage();
+        })
+    }
+
+    function btnHtml(record) {
+        let str = "";
+        if (record.isUse === 'Y') {
+            str += ('<a class="button-status" onclick="updateStatus(this)" data-status="{0}" data-id="{1}">禁用</a>'.format(record.isUse==null?'':record.isUse, record.id));
+        } else {
+            str += ('<a class="button-status" onclick="updateStatus(this)" data-status="{0}" data-id="{1}">启用</a>'.format(record.isUse==null?'':record.isUse, record.id));
+        }
+        str += ('<a href="./edit?id={0}">编辑</a>'.format(record.id));
+        str += ('<a class="button-delete" data-id="{0}" title="{1}">删除</a>'.format(record.id, record.drName));
+        return str;
+    }
+
+    function refreshPage() {
+        showPage(curPage);
+    }
+
+    function showPage(cPage) {
+        formAjax("post","admin/drops/list",{"pageSize": 3, "index": cPage}, function (data) {
+            $(".table_row").remove();
+            debugger
+            curPage = data.index;
+            let records = data.items;
+            for (const idx in records) {
+                let record = records[idx];
+                record.acBeginTime = formatDateTime(record.acBeginTime);
+                record.acEndTime = formatDateTime(record.acEndTime);
+                record.createTime = formatDateTime(record.createTime);
+                $("#table").append(('<tr class="table_row">' +
+                    '<td>{0}</td>' +
+                    '<td>{1}</td>' +
+                    '<td>{2}</td>' +
+                    '<td>{3}</td>' +
+                    '<td>{4}</td>' +
+                    '<td>{5}</td>' +
+                    '<td>{6}</td>' +
+                    '<td class="button">{7}</td>' +
+                    '</tr>').format(record.id, record.drType, record.drName, record.acBeginTime, record.acEndTime,
+                    (record.isUse === 'Y') ? '启用' : '禁用', record.createTime,
+                    btnHtml(record))
+                )
+            }
+
+            let totalPage = data.pages;
+            let current = data.index;
+            $("#page").empty()
+            for (let i = 1; i <= totalPage; i++) {
+                $("#page").append('<a href="#" onclick="showPage(' + i + ')" class="' + ((i === current) ? 'active' : '') + '">' + i + '</a>')
+            }
+
+            $('.button-delete').click(function (e) {
+                let that = $(e.target), id = that.attr('data-id'), title = that.attr('title')
+                if (!confirm('确定要删除【' + title + '】吗？')) return;
+                formAjax('post','admin/drops/upd', {id:id,delFlag:'Y'}, function () {
+                    refreshPage();
+                });
+            });
+        });
+    }
+
+    $(document).ready(function () {
+        showPage(1)
+    })
+
+
+    function formAjax(method, url, param, successFunc, errorFunc) {
+        $.ajax({
+            type: method,
+            url: "/" + url,
+            contentType: "application/x-www-form-urlencoded;charset=utf-8",
+            data: param,
+            dataType: "json",
+            success: function (res) {
+                let message = res['message'];
+                if (message !== 'OK') {
+                    alert(res.message);
+                    return;
+                }
+
+                if (successFunc) {
+                    successFunc.call(this, res.data);
+                }
+            },
+            error: function (message) {
+                if (errorFunc != null) {
+                    errorFunc.call(this, message);
+                } else {
+                    alert("请求失败");
+                }
+            }
+        });
+    }
+</script>
+</html>

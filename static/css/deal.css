@@ -1,0 +1,18 @@
+.deal {
+    max-width: 100%;
+    display: block;
+    margin: 0 auto;
+}
+body {
+    background-color: #fff;
+}
+.deal-box {
+    margin: 50px 80px;
+}
+.header,
+.footer-box {
+    background-color: #0f0e20 !important;
+}
+.footer-box {
+    padding-top: 60px;
+}

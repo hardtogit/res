@@ -1,0 +1,23 @@
+.content{margin:auto;}
+.content img{display:block}
+.content .head{position:relative}
+.content .head .head_bg{width:100%;height:auto}
+.content .head .back{position:absolute;top:16%;left:4%;width:30px;height:auto;z-index:200;background:rgb(255,255,255,0.2);padding:20px;border-radius:100%;}
+.content .cont{position:relative;color:#fff;white-space:pre-wrap;word-break:break-word;margin:auto;}
+.content .cont .zuopin{width:40%;height:auto;margin:0 auto 30px}
+.content .cont .zuopin img{max-width:100%;height:auto}
+.content .cont p,.content .cont span{font-size:14px;line-height:30px}
+.content .artist_info{width:46%;height:auto;border-radius:15px;box-shadow:0 0 10px 1px rgb(0,0,0,.3);margin:30px auto;padding:10px 20px}
+.content .artist_info .head_img{width:50px;height:50px}
+.content .artist_info .head_img img{width:100%;height:100%;border-radius:50%}
+.content .artist_info span{margin-left:50px}
+@media screen and (min-width:1200px){.content{padding-top:125px}
+.content .cont{margin-top:-90px;padding:0 40px;width:55%}
+.content .artist_info{padding:20px 30px}
+}
+@media screen and (max-width:1200px){body{max-width:460px;width:100%;margin:0 auto}
+.content{padding-top:125px}
+.content .cont{margin-top:-30px;padding:0 30px;width:90%}
+.content .artist_info{padding:10px 20px}
+.content .head .back{padding:8px;width:18px;top:0}
+}

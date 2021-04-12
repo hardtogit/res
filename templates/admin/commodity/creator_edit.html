@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta http-equiv="content-type" content="text/html;charset=utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, minimum-scale=1.0"/>
+	<meta http-equiv="X-UA-Compatible" content="ie=edge,chrome=1"/>
+	<title>添加/修改创作者</title>
+	<link href="/static/css/admin.css?v=2021021916" rel="stylesheet" type="text/css" />
+	<script src="/static/scripts/jquery-2.2.0.min.js?v=20210218" type="text/javascript"></script>
+</head>
+<body>
+	<div class="mainer">
+		<form id="form1" method="post" onsubmit="return false">
+			<input type="hidden" name="id" th:value="${model?.id}" />
+			<input type="hidden" name="avatar" th:value="${model?.avatar}" />
+			<input type="hidden" name="coverUrl" th:value="${model?.coverUrl}" />
+			<table role="edit">
+				<tr>
+					<th width="120">姓名：</th>
+					<td><input type="text" maxlength="100" name="name" th:value="${model?.name}" /></td>
+				</tr>
+				<tr style="display:none">
+					<th>生日：</th>
+					<td><input type="date" name="birthday" th:value="${model?.birthday}" /></td>
+				</tr>
+				<tr>
+					<th>国籍：</th>
+					<td><input type="text" name="country" th:value="${model?.country}" /></td>
+				</tr>
+				<tr>
+					<th>性别：</th>
+					<td>
+							<label><input name="gender" type="radio" value="male" /> 男</label>
+							<label><input name="gender" type="radio" value="female" /> 女</label>
+					</td>
+				</tr>
+				<tr>
+					<th>简介：</th>
+					<td><input type="text" maxlength="255" size="100" name="introduce" th:value="${model?.introduce}" /></td>
+				</tr>
+				<tr>
+					<th>上传头像：</th>
+					<td>
+						<input type="file" name="file1" />
+						<img th:src="@{(${model?.avatar})}" style="max-width:100px;max-height:100px;"/>
+					</td>
+				</tr>
+				<tr>
+					<th>上传背景图：</th>
+					<td>
+						<input type="file" name="file2" />
+						<img th:src="@{(${model?.coverUrl})}" style="max-width:100px;max-height:100px;"/>
+					</td>
+				</tr>
+				<tr>
+					<th>详情</th>
+					<td><textarea rows="15" style="width:100%" name="content" th:text="${model?.content}"></textarea></td>
+				</tr>
+				<tr th:each="item,eStat:${model?.socialList}">
+					<th th:text="${item.name}"></th>
+					<td><input type="text" maxlength="255" size="100" th:attr="name=${item.name}" th:value="${item.url}" /></td>
+				</tr>
+				<tr>
+					<th></th>
+					<td>
+						<input class="button-submit" type="button" value="保存并提交" />
+						<a href="javascript:history.back()">返回</a>
+					</td>
+				</tr>
+			</table>
+		</form>
+	</div>
+	<script type="text/javascript">
+		var isok = false;
+		document.forms[0]['gender'].value='[(${model?.gender})]';
+		$('.button-submit').click(function(e) {
+			if (isok) return;
+			
+			var target = e.currentTarget, form = target.form;
+			if (form['name'].value.length == 0) {
+				alert('请输入姓名。');
+				form['name'].focus()
+				return;
+			}
+			
+			target.value='正在提交数据...';
+			isok = true;
+			var fd = new FormData(form);
+			$.ajax({
+		        url: '../save', 
+		        type:'POST',
+		        cache: false, 
+		        processData: false,
+		        contentType: false,
+		        data: fd,
+		        success: function(model) {
+		        	alert(model.message);
+					top.location.href='../list';
+					isok = false;
+					target.value='保存并提交';
+		        },
+		        error: function(err) {
+		 			alert(err);
+		 			isok = false;
+		 			target.value='保存并提交';
+		        }
+		    })
+		});
+	</script>
+</body>
+</html>

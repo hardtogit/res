@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta http-equiv="content-type" content="text/html;charset=utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, minimum-scale=1.0"/>
+	<meta http-equiv="X-UA-Compatible" content="ie=edge,chrome=1"/>
+	<title>添加/修改作品</title>
+	<link href="/static/css/admin.css?v=2021021916" rel="stylesheet" type="text/css" />
+	<script src="/static/scripts/jquery-2.2.0.min.js?v=20210218" type="text/javascript"></script>
+	<script src="/static/scripts/admin.js?v=20210218" type="text/javascript"></script>
+	<script type="text/javascript" charset="utf-8" src="/static/ueditor/ueditor.config.js"></script>
+    <script type="text/javascript" charset="utf-8" src="/static/ueditor/ueditor.all.min.js?v=1.4.3"> </script>
+    <script type="text/javascript" charset="utf-8" src="/static/ueditor/lang/zh-cn/zh-cn.js"></script>
+</head>
+<body>
+	<div class="mainer">
+		<form id="form1" method="post" onsubmit="return false">
+			<input type="hidden" name="id" th:value="${model?.id}" />
+			<table role="edit">
+				<tr>
+					<th width="120">所属系列：</th>
+					<td>
+						<select name="seriesId">
+							<option value="0">请选择所属系列</option>
+							<option th:each="item,eStat:${seriesModel?.items}" th:value="${item.id}">[(${item.name})]</option>
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th>创作人：</th>
+					<td>
+						<select name="creatorId">
+							<option value="0">请选择创作人</option>
+							<option th:each="item,eStat:${creatorModel?.items}" th:value="${item.id}">[(${item.name})]</option>
+						</select>
+						<label style="margin-left:20px;"><input type="checkbox" name="exceed" /> 是否可以超发</label>
+					</td>
+				</tr>
+				<tr>
+					<th>发售数量：</th>
+					<td>
+						<input type="text" maxlength="8" name="quantity" th:value="${model?.quantity}" />
+						<span class="error">输入发售数量，数量不可为0，不填默认为1</span>
+					</td>
+				</tr>
+				<tr>
+					<th>出奖阀值：</th>
+					<td>
+						<input type="text" name="valve" maxlength="8" th:value="${model?.valve}" />
+						<span class="error">输入数值，当奖励抽取次数大于此数值时释放该奖励（不填默认为0）</span>
+					</td>
+				</tr>
+				<tr>
+					<th>作品权重：</th>
+					<td>
+						<input type="text" maxlength="8" name="weight" th:value="${model?.weight}" />
+						<span class="error">输入权重数量，不填默认执行逻辑</span>
+					</td>
+				</tr>
+				<tr>
+					<th>艺术价值：</th>
+					<td>
+						<input type="text" maxlength="10" name="marketPrice" th:value="${model?.marketPrice}" />
+						<span class="error">输入艺术价值，默认为 0</span>
+					</td>
+				</tr>
+				<tr>
+					<th>作品外链：</th>
+					<td><input type="text" maxlength="2083" placeholder="输入作品外链" size="100" name="externalLink" th:value="${model?.externalLink}" /></td>
+				</tr>
+				<tr>
+					<th>作品名称：</th>
+					<td><input type="text" maxlength="255" placeholder="输入作品名称" size="100" name="name" th:value="${model?.name}" /></td>
+				</tr>
+				<tr>
+					<th>关键词：</th>
+					<td><input type="text" placeholder="以中文输入法逗号分开，最多5个，可不填" maxlength="255" size="100" name="keywords" th:value="${model?.keywords}" /></td>
+				</tr>
+				<tr>
+					<th>作品图片：</th>
+					<td>
+						<div class="upload-files">
+							<div class="file" title="上传图片" th:with="ext=${#strings.containsIgnoreCase(model?.imageUrl+'','.mp4')}">
+								<input type="file" />
+								<input type="hidden" name="imageUrl" th:value="${model?.imageUrl}" />
+								<img th:unless="${ext}" th:src="@{(${(model?.imageUrl==null || model?.imageUrl.length==0) ? '':model?.imageUrl+'?imageMogr2/auto-orient/thumbnail/200x/format/webp'})}"/>
+								<video th:if="${ext}" th:src="@{${model?.imageUrl}}" muted="muted" preload="metadata"></video>
+							</div>
+							<div class="file" title="上传封面图片">
+								<input type="file" />
+								<input type="hidden" name="coverImageUrl" th:value="${model?.coverImageUrl}" />
+								<img th:src="@{(${model?.coverImageUrl})}"/>
+							</div>
+							<div class="file" title="上传完整图片" th:with="ext=${#strings.containsIgnoreCase(model?.fullImageUrl+'','.mp4')}">
+								<input type="file" />
+								<input type="hidden" name="fullImageUrl" th:value="${model?.fullImageUrl}" />
+								<img th:unless="${ext}" th:src="@{(${(model?.fullImageUrl==null||model?.fullImageUrl.length==0)?'':model?.fullImageUrl+'?imageMogr2/auto-orient/thumbnail/200x/format/webp'})}"/>
+								<video th:if="${ext}" th:src="@{${model?.fullImageUrl}}" muted="muted" preload="metadata"></video>
+							</div>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<th>作品介绍：</th>
+					<td><textarea rows="6" placeholder="输入作品介绍内容" name="introduce" cols="100" maxlength="2000" th:text="${model?.introduce}"></textarea></td>
+				</tr>
+				<tr>
+					<th>作品详情</th>
+					<td><textarea rows="15" style="width:100%" id="content" name="content" th:text="${model?.content}"></textarea></td>
+				</tr>
+				<tr>
+					<th></th>
+					<td>
+						<input class="button-submit" type="button" value="保存并提交" />
+						<a href="javascript:history.back()">返回</a>
+					</td>
+				</tr>
+			</table>
+		</form>
+	</div>
+	<script type="text/javascript">
+		var isok = false,f = document.forms[0];
+		var editor_a = UE.getEditor('content',{initialFrameHeight:500});
+		f['seriesId'].value='[(${model?.seriesId})]';
+		f['creatorId'].value='[(${model?.creatorId})]';
+		f['exceed'].checked="[(${model?.canExceed} == 1 ? 'true' : '')]";
+		uploadfiles('input[type=file]');
+		
+		$('.button-submit').click(function(e) {
+			if (isok) return;
+			
+			var target = e.currentTarget, form = target.form;
+			if (form['seriesId'].value == '0') {
+				alert('请选择作品所属系列。');form['seriesId'].focus();return;
+			}
+			if (form['creatorId'].value == '0') {
+				alert('请选择作品作者。');form['creatorId'].focus();return;
+			}
+			if (form['name'].value.length == 0) {
+				alert('请输入作品名称。');form['name'].focus();return;
+			}
+			if (form['introduce'].value == '0') {
+				alert('请选择作品作者。');form['introduce'].focus();return;
+			}
+			target.value='正在提交数据...';
+			isok = true;
+			
+			var fd = new FormData(form);
+			$.ajax({
+		        url: '../save', 
+		        type:'POST',
+		        cache: false, 
+		        processData: false,
+		        contentType: false,
+		        data: fd,
+		        success: function(model) {
+		        	alert(model.message);
+					top.location.href='../list';
+					isok = false;
+					target.value='保存并提交';
+		        },
+		        error: function(err) {
+		 			alert(err);
+		 			isok = false;
+		 			target.value='保存并提交';
+		        }
+		    })
+		});
+		
+	</script>
+</body>
+</html>

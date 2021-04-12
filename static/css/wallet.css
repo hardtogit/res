@@ -1,0 +1,23 @@
+body{width:100%;min-height:100vh;background:url(/static/images/mine/wallet-bj.png?v=20210224) no-repeat;background-size:100%;padding:60px;box-sizing:border-box}
+.wallet-con{width:432px;background:rgba(255,255,255,.05);backdrop-filter:blur(60px);border-radius:20px 10px;padding:0 152px;padding-top:46px;padding-bottom:80px}
+.back{display:block;width:63px;height:20px}
+.wallet-title{display:block;width:446px;height:166px;margin-top:57px;margin-left:-13px}
+.wallet-btn{margin-top:58px}
+.wallet-btn a{display:block;margin-bottom:24px}
+.wallet-btn img{width:432px;height:60px;display:block}
+.wallet-btn .btn{margin-bottom:14px}
+.wallet-btn .btn img{height:80px}
+.desc{font-style:normal;font-weight:500;font-size:14px;line-height:25px;text-align:center;color:#fff;margin-top:60px}
+.pc-page{display:block!important}
+.mobile-page{display:none!important}
+@media screen and (max-width:720px){.pc-page{display:none!important}
+.mobile-page{display:block!important}
+body{background:url(/static/images/mine/mobile-wallet-bj.png?v=20210224) no-repeat;padding:65px 20px}
+.wallet-con{width:100%;padding:0 20px;padding-top:14px;box-sizing:border-box}
+.back{width:48px;height:15px}
+.wallet-title{width:223px;height:77px;margin-top:8px;margin-left:10px}
+.wallet-btn{margin-top:19px}
+.wallet-btn .btn img{height:50px}
+.wallet-btn img{height:40px}
+.desc{font-size:12px;padding-bottom:40px;margin-top:30px}
+}

@@ -1,0 +1,824 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="content-type" content="text/html;charset=utf-8">
+    <title>铸币管理</title>
+    <link href="/static/css/admin.css?v=20210219" rel="stylesheet" type="text/css"/>
+    <script src="/static/scripts/jquery-2.2.0.min.js?v=20210218" type="text/javascript"></script>
+    <script src="/static/scripts/admin.js?v=20210218" type="text/javascript"></script>
+</head>
+<style>
+    /**页签样式 begin**/
+    * {
+        margin: 0;
+        padding: 0;
+    }
+
+    #tab li {
+        float: left;
+        list-style: none;
+        width: 112px;
+        height: 40px;
+        line-height: 40px;
+        cursor: pointer;
+        text-align: center;
+    }
+
+    #container {
+        position: relative;
+    }
+
+    #content1, #content2, #content3, #content4, #content5 {
+        width: 100%;
+        height: 600px;
+        padding: 10px;
+        position: absolute;
+        top: 40px;
+        left: 0;
+    }
+
+    #tab1, #content1 {
+        background-color: #FFFFFF;
+    }
+
+    #tab2, #content2 {
+        background-color: #FFFFFF;
+    }
+
+    #tab3, #content3 {
+        background-color: #FFFFFF;
+    }
+
+    #tab4, #content4 {
+        background-color: #FFFFFF;
+    }
+
+    #tab5, #content5 {
+        background-color: #FFFFFF;
+    }
+
+    .li_style {
+        font-weight: bold;
+        line-height: 24px
+    }
+
+    /**页签样式 end**/
+
+    /*比对tokenUri弹窗样式-begin*/
+    #form5CompareWindow {
+        display: none;
+        position: absolute;
+        top: 5%;
+        left: 5%;
+        width: 90%;
+        height: 80%;
+        padding: 5px;
+        border: 3px solid #ccc;
+        background-color: white;
+        z-index: 2;
+        overflow: auto;
+    }
+
+    #form5CompareBackGround {
+        display: none;
+        position: absolute;
+        top: 0%;
+        left: 0%;
+        width: 100%;
+        height: 1080px;
+        background-color: black;
+        z-index: 1;
+        -moz-opacity: 0.8;
+        opacity: .80;
+        filter: alpha(opacity=88);
+    }
+
+    #form5CompareClose:hover {
+        cursor: pointer;
+        color: rgb(55, 198, 192);
+    }
+
+    code {
+        white-space: pre-wrap;
+    }
+    code {
+        overflow-x: auto;
+    }
+
+    /*比对tokenUri弹窗样式-end*/
+</style>
+<body>
+<div th:replace="admin/navi::naviBar"></div>
+<div class="mainer">
+    <ul id="tab">
+        <li id="tab1" onclick="show(1)" class="li_style">发布合约</li>
+        <li id="tab2" onclick="show(2)">创建系列</li>
+        <li id="tab3" onclick="show(3)">分发代币</li>
+        <li id="tab4" onclick="show(4)">交易代币</li>
+        <li id="tab5" onclick="show(5)">修改TOKEN_URI</li>
+    </ul>
+    <div id="container">
+        <div id="content1" style="z-index: 1;">
+            <form id="form1" method="post" onsubmit="return false">
+                <table role="edit" style="float: left">
+                    <tr>
+                        <th width="120">私钥：</th>
+                        <td><input type="text" maxlength="255" size="100" name="privateKey"
+                                   onchange="changePrivateKey(this.value)" placeholder="如不填会使用默认密钥"/></td>
+                    </tr>
+                    <tr>
+                        <th width="120">用户钱包地址：</th>
+                        <td><input type="text" maxlength="255" size="100" name="address"
+                                   onchange="changeAddress(this.value)" placeholder="如不填会使用默认地址"/></td>
+                    </tr>
+                    <tr>
+                        <th width="120">GAS_PRICE：</th>
+                        <td><input type="text" maxlength="255" size="100" name="gasPrice"
+                                   placeholder="单位：WEI，默认136,000,000,000"/></td>
+                    </tr>
+                    <tr>
+                        <th width="120">GAS_LIMIT：</th>
+                        <td><input type="text" maxlength="255" size="100" name="gasLimit"
+                                   placeholder="默认4,300,000"/></td>
+                    </tr>
+                    <tr>
+                        <th></th>
+                        <td>
+                            <input class="form1-submit" type="button" value="提交"/>
+                            <a href="javascript:history.back()">返回</a>
+                        </td>
+                    </tr>
+                </table>
+            </form>
+            <script>
+                var isok = false;
+                $('.form1-submit').click(function (e) {
+                    if (isok) return;
+
+                    let target = e.currentTarget, form = target.form;
+                    if ((form['privateKey'].value.length != 0 && form['address'].value.length == 0) ||
+                        (form['privateKey'].value.length == 0 && form['address'].value.length != 0)) {
+                        alert('私钥和地址要么都有值，要么都为空');
+                        form['privateKey'].focus()
+                        return;
+                    }
+
+                    target.value = '正在提交数据...';
+                    isok = true;
+                    var fd = new FormData(form);
+                    $.ajax({
+                        url: '/api/token/deploy',
+                        type: 'POST',
+                        cache: false,
+                        processData: false,
+                        contentType: false,
+                        data: fd,
+                        success: function (model) {
+                            if (model.errCode == 'OK') {
+                                $('input[name="contractAddress"]').val(model.data.contractAddress);
+                                alert('创建成功：\r\n 合约地址：' + model.data.contractAddress + '\r\n 交易编码：' + model.data.receipt.transactionHash + ' \r\n钱包地址：' + model.data.receipt.from);
+                            } else {
+                                alert(model.message);
+                            }
+                            isok = false;
+                            target.value = '提交';
+                        },
+                        error: function (err) {
+                            alert(err);
+                            isok = false;
+                            target.value = '提交';
+                        }
+                    })
+                });
+
+                //同步修改其他 privateKey
+                function changePrivateKey(val) {
+                    $('input[name="privateKey"]').val(val);
+                }
+                function changeAddress(val) {
+                    $('input[name="address"]').val(val);
+                }
+            </script>
+        </div>
+        <div id="content2">
+            <form id="form2" method="post" onsubmit="return false">
+                <table role="edit" style="float: left">
+                    <tr>
+                        <th width="120">私钥：</th>
+                        <td><input type="text" maxlength="255" size="100" name="privateKey" placeholder="不填会使用默认密钥"/></td>
+                    </tr>
+                    <tr>
+                        <th width="120">用户钱包地址：</th>
+                        <td><input type="text" maxlength="255" size="100" name="address" placeholder="如不填会使用默认地址"/></td>
+                    </tr>
+                    <tr>
+                        <th width="120">合约地址<em style="color:red">*</em>：</th>
+                        <td><input type="text" maxlength="255" size="100" name="contractAddress"/></td>
+                    </tr>
+                    <tr>
+                        <th width="120">TOKEN_URI<em style="color:red">*</em>：</th>
+                        <td><input type="text" maxlength="255" size="100" name="tokenUrls"
+                                   placeholder="支持多值：多个值请用英文逗号分隔"/></td>
+                    </tr>
+                    <tr>
+                        <th width="120">额度<em style="color:red">*</em>：</th>
+                        <td><input type="text" maxlength="255" size="100" name="values" placeholder="支持多值：多个值请用英文逗号分隔"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th width="120">GAS_PRICE：</th>
+                        <td><input type="text" maxlength="255" size="100" name="gasPrice"
+                                   placeholder="单位：WEI，默认136,000,000,000"/></td>
+                    </tr>
+                    <tr>
+                        <th></th>
+                        <td>
+                            <input class="form2-submit" type="button" value="提交"/>
+                            <a href="javascript:history.back()">返回</a>
+                        </td>
+                    </tr>
+                </table>
+            </form>
+            <script>
+                var isok = false;
+                $('.form2-submit').click(function (e) {
+                    if (isok) return;
+                    var target = e.currentTarget, form = target.form;
+
+
+                    if ((form['privateKey'].value.length != 0 && form['address'].value.length == 0) ||
+                        (form['privateKey'].value.length == 0 && form['address'].value.length != 0)) {
+                        alert('私钥和地址要么都有值，要么都为空');
+                        form['privateKey'].focus()
+                        return;
+                    }
+                    if (form['contractAddress'].value.length == 0) {
+                        alert('请输入合约地址.');
+                        form['contractAddress'].focus()
+                        return;
+                    }
+                    if (form['tokenUrls'].value.length == 0) {
+                        alert('请输入TOKEN_URI.');
+                        form['tokenUrls'].focus()
+                        return;
+                    }
+                    if (form['values'].value.length == 0) {
+                        alert('请输入额度.');
+                        form['values'].focus()
+                        return;
+                    }
+                    target.value = '正在提交数据...';
+                    isok = true;
+                    var fd = new FormData(form);
+                    $.ajax({
+                        url: '/api/token/batch_create_type',
+                        type: 'POST',
+                        cache: false,
+                        processData: false,
+                        contentType: false,
+                        data: fd,
+                        success: function (model) {
+                            if (model.errCode == 'OK') {
+                                if (model.data.length > 0) {
+                                    let html = '创建结果：\n';
+                                    for (let i = 0; i < model.data.length; i++) {
+                                        if (model.data[i].errCode == 'OK') {
+                                            html += '创建成功：交易编码：' + model.data[i].data.transactionHash + ',系类编码：' + model.data[i].data.typeId + '\n';
+                                        } else {
+                                            html += '创建失败：' + model.data[i].message + '\n';
+                                        }
+                                    }
+                                    alert(html);
+                                }
+                            } else {
+                                alert(model.message);
+                            }
+                            isok = false;
+                            target.value = '提交';
+                        },
+                        error: function (err) {
+                            alert(err);
+                            isok = false;
+                            target.value = '提交';
+                        }
+                    })
+                });
+            </script>
+        </div>
+        <div id="content3">
+            <form id="form3" method="post" onsubmit="return false">
+                <table role="edit" style="float: left">
+                    <tr>
+                        <th width="120">私钥：</th>
+                        <td><input type="text" maxlength="255" size="100" name="privateKey" placeholder="不填会使用默认密钥"/></td>
+                    </tr>
+                    <tr>
+                        <th width="120">用户钱包地址：</th>
+                        <td><input type="text" maxlength="255" size="100" name="address" placeholder="如不填会使用默认地址"/></td>
+                    </tr>
+                    <tr>
+                        <th width="120">合约地址<em style="color:red">*</em>：</th>
+                        <td><input type="text" maxlength="255" size="100" name="contractAddress"/></td>
+                    </tr>
+                    <tr>
+                        <th width="120">系列ID<em style="color:red">*</em>：</th>
+                        <td><input type="text" maxlength="255" size="100" name="typeIds"
+                                   placeholder="查询账户余额时支持多值：多个值请用英文逗号分隔"/></td>
+                    </tr>
+                    <tr>
+                        <th width="120">钱包地址<em style="color:red">*</em>：</th>
+                        <td><input type="text" maxlength="255" size="100" name="addressList"
+                                   placeholder="支持多值：多个值请用英文逗号分隔"/></td>
+                    </tr>
+                    <tr>
+                        <th width="120">数量<em style="color:red">*</em>：</th>
+                        <td><input type="text" maxlength="255" size="100" name="quantities"
+                                   placeholder="支持多值：多个值请用英文逗号分隔"/></td>
+                    </tr>
+                    <tr>
+                        <th width="120">GAS_PRICE：</th>
+                        <td><input type="text" maxlength="255" size="100" name="gasPrice"
+                                   placeholder="单位：WEI，默认136,000,000,000"/></td>
+                    </tr>
+                    <tr>
+                        <th></th>
+                        <td>
+                            <input class="form3-submit" type="button" value="提交"/>
+                            <input class="form3-check" type="button" value="账户余额"/>
+                            <a href="javascript:history.back()">返回</a>
+                        </td>
+                    </tr>
+                </table>
+            </form>
+            <script>
+                var isok = false;
+                //分发代币
+                $('.form3-submit').click(function (e) {
+                    if (isok) return;
+                    let target = e.currentTarget, form = target.form;
+
+
+                    if ((form['privateKey'].value.length != 0 && form['address'].value.length == 0) ||
+                        (form['privateKey'].value.length == 0 && form['address'].value.length != 0)) {
+                        alert('私钥和地址要么都有值，要么都为空');
+                        form['privateKey'].focus()
+                        return;
+                    }
+                    if (form['contractAddress'].value.length == 0) {
+                        alert('请输入合约地址.');
+                        form['contractAddress'].focus()
+                        return;
+                    }
+                    let typeIds = form['typeIds'].value;
+                    if (typeIds.length == 0) {
+                        alert('请输入系列ID.');
+                        form['typeIds'].focus()
+                        return;
+                    }
+                    if (typeIds.indexOf(",") > 0) {
+                        alert('系列ID只能输入单值.');
+                        form['typeIds'].focus()
+                        return;
+                    }
+                    if (form['addressList'].value.length == 0) {
+                        alert('请输入钱包地址.');
+                        form['addressList'].focus()
+                        return;
+                    }
+                    if (form['quantities'].value.length == 0) {
+                        alert('请输入数量.');
+                        form['quantities'].focus()
+                        return;
+                    }
+                    target.value = '正在提交数据...';
+                    isok = true;
+                    var fd = new FormData(form);
+                    $.ajax({
+                        url: '/admin/token/create_token',
+                        type: 'POST',
+                        cache: false,
+                        processData: false,
+                        contentType: false,
+                        data: fd,
+                        success: function (model) {
+                            if (model.errCode == 'OK') {
+                                alert('交易成功：' + model.data.transactionHash);
+                            } else {
+                                alert(model.message);
+                            }
+                            isok = false;
+                            target.value = '提交';
+                        },
+                        error: function (err) {
+                            alert(err);
+                            isok = false;
+                            target.value = '提交';
+                        }
+                    })
+                });
+
+                //账户余额
+                $('.form3-check').click(function (e) {
+                    if (isok) return;
+
+                    var target = e.currentTarget, form = target.form;
+                    if (form['contractAddress'].value.length == 0) {
+                        alert('请输入合约地址.');
+                        form['contractAddress'].focus()
+                        return;
+                    }
+                    if (form['typeIds'].value.length == 0) {
+                        alert('请输入系列ID.');
+                        form['typeId'].focus()
+                        return;
+                    }
+                    if (form['addressList'].value.length == 0) {
+                        alert('请输入钱包地址.');
+                        form['addressList'].focus()
+                        return;
+                    }
+                    target.value = '正在查询数据...';
+                    isok = true;
+                    var fd = new FormData(form);
+                    $.ajax({
+                        url: '/api/token/get_token_balances',
+                        type: 'POST',
+                        cache: false,
+                        processData: false,
+                        contentType: false,
+                        data: fd,
+                        success: function (model) {
+                            if (model.errCode == 'OK') {
+                                alert('查询成功：对应用户余额数量为' + model.data.toString());
+                            } else {
+                                alert(model.message);
+                            }
+                            isok = false;
+                            target.value = '账户余额';
+                        },
+                        error: function (err) {
+                            alert(err);
+                            isok = false;
+                            target.value = '账户余额';
+                        }
+                    })
+                });
+            </script>
+        </div>
+        <div id="content4">
+            <form id="form4" method="post" onsubmit="return false">
+                <!--查询账户余额-->
+                <input type="hidden" name="addressList" id="form4_address"/>
+                <table role="edit" style="float: left">
+                    <tr>
+                        <th width="120">私钥：</th>
+                        <td><input type="text" maxlength="255" size="100" name="privateKey"  placeholder="不填会使用默认密钥"/></td>
+                    </tr>
+                    <tr>
+                        <th width="120">合约地址<em style="color:red">*</em>：</th>
+                        <td><input type="text" maxlength="255" size="100" name="contractAddress"/></td>
+                    </tr>
+                    <tr>
+                        <th width="120">系列ID<em style="color:red">*</em>：</th>
+                        <td><input type="text" maxlength="255" size="100" name="typeIds" placeholder="大于零的数字（多个值请用英文逗号分隔）"/></td>
+                    </tr>
+                    <tr>
+                        <th width="120">转出地址<em style="color:red">*</em>：</th>
+                        <td><input type="text" maxlength="255" size="100" name="from" placeholder="转出的钱包地址（查询时支持多值，多值请用英文逗号分隔）"/></td>
+                    </tr>
+                    <tr>
+                        <th width="120">转进地址<em style="color:red">*</em>：</th>
+                        <td><input type="text" maxlength="255" size="100" name="to" placeholder="转进的钱包地址（查询时支持多值，多值请用英文逗号分隔）"/></td>
+                    </tr>
+                    <tr>
+                        <th width="120">转出数额<em style="color:red">*</em>：</th>
+                        <td><input type="text" maxlength="255" size="100" name="values" placeholder="大于零的数字（多个值请用英文逗号分隔）"/></td>
+                    </tr>
+                    <tr>
+                        <th width="120">GAS_PRICE：</th>
+                        <td><input type="text" maxlength="255" size="100" name="gasPrice"
+                                   placeholder="单位：WEI，默认136,000,000,000"/></td>
+                    </tr>
+                    <tr>
+                        <th width="120">GAS_LIMIT：</th>
+                        <td><input type="text" maxlength="255" size="100" name="gasLimit"
+                                   placeholder="默认4300000"/></td>
+                    </tr>
+                    <tr>
+                        <th></th>
+                        <td>
+                            <input class="form4-submit" type="button" value="提交"/>
+                            <input class="form4-check" type="button" value="账户余额"/>
+                            <a href="javascript:history.back()">返回</a>
+                        </td>
+                    </tr>
+                </table>
+            </form>
+            <script>
+                $('.form4-submit').click(function (e) {
+                    if (isok) return;
+                    let target = e.currentTarget, form = target.form;
+
+                    if (form['contractAddress'].value.length == 0) {
+                        alert('请输入合约地址.');
+                        form['contractAddress'].focus()
+                        return;
+                    }
+                    if (form['typeIds'].value.length == 0) {
+                        alert('请输入系列ID.');
+                        form['typeId'].focus()
+                        return;
+                    }
+                    if (form['from'].value.length == 0) {
+                        alert('请输入转出的钱包地址.');
+                        form['from'].focus()
+                        return;
+                    }
+                    if (form['to'].value.length == 0) {
+                        alert('请输入转进的钱包地址.');
+                        form['to'].focus()
+                        return;
+                    }
+                    let value = form['values'].value;
+                    if (value.length == 0) {
+                        alert('请输入转出数额.');
+                        form['value'].focus()
+                        return;
+                    }
+                    target.value = '正在提交数据...';
+                    isok = true;
+                    var fd = new FormData(form);
+                    $.ajax({
+                        url: '/api/token/transfer',
+                        type: 'POST',
+                        cache: false,
+                        processData: false,
+                        contentType: false,
+                        data: fd,
+                        success: function (model) {
+                            if (model.errCode == 'OK') {
+                                alert('交易成功：' + model.data.transactionHash);
+                            } else {
+                                alert(model.message);
+                            }
+                            isok = false;
+                            target.value = '提交';
+                        },
+                        error: function (err) {
+                            alert(err);
+                            isok = false;
+                            target.value = '提交';
+                        }
+                    })
+                });
+
+                //账户余额
+                $('.form4-check').click(function (e) {
+                    if (isok) return;
+
+                    let target = e.currentTarget, form = target.form;
+                    if (form['contractAddress'].value.length == 0) {
+                        alert('请输入合约地址.');
+                        form['contractAddress'].focus()
+                        return;
+                    }
+                    if (form['typeIds'].value.length == 0) {
+                        alert('请输入系列ID.');
+                        form['typeIds'].focus()
+                        return;
+                    }
+                    //确认查询的账户地址
+                    let queryAddress = '';
+                    if (form['from'].value.length == 0 && form['to'].value.length == 0) {
+                        alert('请输入转出或者转进钱包地址.');
+                        return;
+                    }
+                    if (form['from'].value.length != 0 && form['to'].value.length == 0) {
+                        queryAddress = form['from'].value;
+                    }
+                    if (form['from'].value.length == 0 && form['to'].value.length != 0) {
+                        queryAddress = form['to'].value;
+                    }
+                    if (form['from'].value.length != 0 && form['to'].value.length != 0) {
+                        if (confirm("查询转出钱包地址的账户余额吗？")) {
+                            queryAddress = form['from'].value;
+                        } else {
+                            queryAddress = form['to'].value;
+                        }
+                    }
+                    //查询代币数量
+                    $('#form4_address').val(queryAddress);
+                    target.value = '正在查询数据...';
+                    isok = true;
+                    let fd = new FormData(form);
+                    $.ajax({
+                        url: '/api/token/get_token_balances',
+                        type: 'POST',
+                        cache: false,
+                        processData: false,
+                        contentType: false,
+                        data: fd,
+                        success: function (model) {
+                            if (model.errCode == 'OK') {
+                                alert('查询成功：对应用户余额为' + model.data.toString());
+                            } else {
+                                alert(model.message);
+                            }
+                            isok = false;
+                            target.value = '账户余额';
+                        },
+                        error: function (err) {
+                            alert(err);
+                            isok = false;
+                            target.value = '账户余额';
+                        }
+                    })
+                });
+            </script>
+        </div>
+        <div id="content5">
+            <form id="form5" method="post" onsubmit="return false">
+                <table role="edit" style="float: left">
+                    <tr>
+                        <th width="120">私钥：</th>
+                        <td><input type="text" maxlength="255" size="100" name="privateKey"/></td>
+                    </tr>
+                    <tr>
+                        <th width="120">钱包地址：</th>
+                        <td><input type="text" maxlength="255" size="100" name="address" placeholder="如不填会使用默认地址"/></td>
+                    </tr>
+                    <tr>
+                        <th width="120">合约地址<em style="color:red">*</em>：</th>
+                        <td><input type="text" maxlength="255" size="100" name="contractAddress"/></td>
+                    </tr>
+                    <tr>
+                        <th width="120">系列ID<em style="color:red">*</em>：</th>
+                        <td><input type="text" maxlength="255" size="100" name="typeId"/></td>
+                    </tr>
+                    <tr>
+                        <th width="120">TOKEN_URI<em style="color:red">*</em>：</th>
+                        <td><input type="text" maxlength="255" size="100" name="tokenUri"/></td>
+                    </tr>
+                    <tr>
+                        <th width="120">GAS_PRICE：</th>
+                        <td><input type="text" maxlength="255" size="100" name="gasPrice"
+                                   placeholder="单位：WEI，默认136,000,000,000"/></td>
+                    </tr>
+                    <tr>
+                        <th></th>
+                        <td>
+                            <input class="form5-submit" type="button" value="提交"/>
+                            <input class="form5-compare" type="button" value="比对URL内容"/>
+                            <a href="javascript:history.back()">返回</a>
+                        </td>
+                    </tr>
+                </table>
+            </form>
+            <script>
+                $('.form5-submit').click(function (e) {
+                    if (isok) return;
+                    let target = e.currentTarget, form = target.form;
+
+
+                    if ((form['privateKey'].value.length != 0 && form['address'].value.length == 0) ||
+                        (form['privateKey'].value.length == 0 && form['address'].value.length != 0)) {
+                        alert('私钥和地址要么都有值，要么都为空');
+                        form['privateKey'].focus()
+                        return;
+                    }
+                    if (form['contractAddress'].value.length == 0) {
+                        alert('请输入合约地址.');
+                        form['contractAddress'].focus()
+                        return;
+                    }
+                    if (form['typeId'].value.length == 0) {
+                        alert('请输入系列ID.');
+                        form['typeId'].focus()
+                        return;
+                    }
+                    if (form['tokenUri'].value.length == 0) {
+                        alert('请输入TOKEN_URI.');
+                        form['tokenUri'].focus()
+                        return;c
+                    }
+                    target.value = '正在提交数据...';
+                    isok = true;
+                    var fd = new FormData(form);
+                    $.ajax({
+                        url: '/api/token/update_token_uri',
+                        type: 'POST',
+                        cache: false,
+                        processData: false,
+                        contentType: false,
+                        data: fd,
+                        success: function (model) {
+                            if (model.errCode == 'OK') {
+                                alert('修改成功：' + model.data.transactionHash);
+                            } else {
+                                alert(model.message);
+                            }
+                            isok = false;
+                            target.value = '提交';
+                        },
+                        error: function (err) {
+                            alert(err);
+                            isok = false;
+                            target.value = '提交';
+                        }
+                    })
+                });
+
+                $('.form5-compare').click(function (e) {
+                    if (isok) return;
+
+                    let target = e.currentTarget, form = target.form;
+                    if (form['contractAddress'].value.length == 0) {
+                        alert('请输入合约地址.');
+                        form['contractAddress'].focus()
+                        return;
+                    }
+                    if (form['typeId'].value.length == 0) {
+                        alert('请输入系列ID.');
+                        form['typeId'].focus()
+                        return;
+                    }
+                    if (form['tokenUri'].value.length == 0) {
+                        alert('请输入TOKEN_URI.');
+                        form['tokenUri'].focus()
+                        return;
+                    }
+                    target.value = '正在获取比对数据...';
+                    isok = true;
+                    var fd = new FormData(form);
+                    $.ajax({
+                        url: '/admin/token/compare_token_uri',
+                        type: 'POST',
+                        cache: false,
+                        processData: false,
+                        contentType: false,
+                        data: fd,
+                        success: function (model) {
+                            isok = false;
+                            target.value = '比对URL内容';
+                            if (model.errCode == 'OK') {
+                                $('#old_token_uri').html('');
+                                $('#new_token_uri').html('');
+                                $('#old_token_uri').html(JSON.stringify(JSON.parse(model.data[0]), null, 4));
+                                $('#new_token_uri').html(JSON.stringify(JSON.parse(model.data[1]), null, 4));
+                                //打开弹窗
+                                $("#form5CompareWindow").slideDown(300);
+                                $("#form5CompareBackGround").show();
+                            } else {
+                                alert(model.message);
+                            }
+                        },
+                        error: function (err) {
+                            alert(err);
+                            isok = false;
+                            target.value = '比对URL内容';
+                        }
+                    })
+                });
+            </script>
+        </div>
+    </div>
+</div>
+
+<!--修改tokenUri比较弹窗-->
+<div id="form5CompareWindow">
+    <label id="form5CompareClose" style="position: absolute;top:2px;left: 98%;font-size: 25px;">x</label>
+    <div style="height: 49%; margin-top: 5px;overflow: auto;">
+        <img src="/static/images/old_token_uri.png" width="24px"/>
+        <code id="old_token_uri"></code>
+    </div>
+    <div style="height: 49%; padding-top: 5px; border-top: 2px solid #ccc;overflow: auto;">
+        <img src="/static/images/new_token_uri.png" width="24px"/>
+        <code id="new_token_uri"></code>
+    </div>
+</div>
+<div id="form5CompareBackGround"></div>
+<script>
+    /**
+     * 切换页签
+     * @param n
+     */
+    function show(n) {
+        var curr = document.querySelector("div[style]");
+        curr.removeAttribute("style");
+        document.getElementById("content" + n).style.zIndex = "1";
+        //li添加样式
+        $('#tab' + n).siblings().removeClass("li_style");
+        $('#tab' + n).addClass("li_style");
+    }
+
+    /**
+     * 比对tokenUri关闭事件
+     */
+    $("#form5CompareClose").click(function () {
+        $("#form5CompareWindow").slideUp(300);
+        $("#form5CompareBackGround").hide();
+    })
+</script>
+
+</body>
+</html>

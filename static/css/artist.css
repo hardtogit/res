@@ -1,0 +1,53 @@
+@media screen and (min-width:1200px){.wallet{background-image:url(/static/images/moneyimgs/bg.png);background-repeat:no-repeat;background-size:100% auto;padding:125px 0 300px}
+.top_img{width:93.75%;margin-left:3.125%;height:auto}
+.artistphone,.phonebcak{display:none}
+.peoplecontent{background: linear-gradient(180deg, rgba(156, 155, 183, 0.1) 0%, rgba(65, 64, 89, 0.1) 100%);backdrop-filter: blur(40px);background-size:100% auto;background-repeat:no-repeat;width:24.32%;margin:-11% 0 0 12.5%;font-family:Exo;font-style:normal;color:#fff;position:relative}
+.peoplecontent::before{content:'';display:block;padding-top:67.23%}
+.peoplecontent .user_info{width:100%;padding:0 14.98%;box-sizing:border-box;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%)}
+/* .peoplecontent img{margin:0 auto;width:35.55%;height:auto} */
+.peoplecontent .user_info_imgbox{background: url(/static/images/pcborder.png) no-repeat;background-size: 100%;overflow: hidden;width: 35.55%;margin: 0 auto;padding:3%;}
+.peoplecontent p:nth-child(2){text-align:center;margin-top:15px;font-weight:700;font-size:24px;line-height:32px}
+.peoplecontent p:nth-child(3){text-align:center;margin-top:10px;font-weight:700;font-size:14px;line-height:19px}
+.peoplecontent p:nth-child(4){text-align:center;margin-top:3px;font-weight:700;font-size:14px;line-height:19px;margin-bottom:25px}
+.peoplecontent .btn{background:url(/static/images/moneyimgs/Group147.png);background-size:100% auto;width:40.9%;font-size:14px;color:#fff;margin:0 auto}
+.peoplecontent .btn::before{content:'';display:block;padding-top:31.4%}
+.age,.sex{height:60px;border-left:.5px solid rgba(255,255,255,.2)}
+.age{padding:0 15px;color:#fff;font-family:Poppins}
+.age img{width:19px;height:19px;margin-right:11px}
+.sex{padding:0 15px;color:#fff;border-right:.5px solid rgba(255,255,255,.2)}
+.sex img:nth-child(1){width:19px;height:19px;margin-right:11px}
+.sex img:nth-child(2){width:19px;height:19px}
+.info{width:100%;padding-left:5%;margin-right:3.125%;height:60px;position:relative}
+.info::after{content:'';position:absolute;left:5%;bottom:0;width:95%;height:.5px;background:rgba(255,255,255,.2)}
+.info .back{height:100%;border-left:.5px solid rgba(255,255,255,.2);padding:0 20px}
+.info .back img{width:28px;height:28px}
+.pcright{width: 30%;display: flex;justify-content: flex-start;float: right;right: 5%;position: absolute;top: 33.5%;align-items: center;}
+
+.introduce{white-space:pre-wrap;word-break:break-word;background-image:url(/static/images/yishujia/Group194.png);background-size:100% 100%;background-repeat:no-repeat;width:56%;margin:5% 0 0 21.6%;padding:3.6%;font-style:normal;font-weight:500;font-size:16px;line-height:22px;color:#fff}
+}
+@media screen and (max-width:1200px){body{max-width:460px;width:100%;margin:0 auto;padding-top:100px;background-color:#101021}
+.age,.flex,.sex,.pcright{display:none}
+.artistphone{display:block;display:flex;width:88.6%;margin:0 auto;justify-content:space-between;position:relative;top:-30px}
+.artistphone .left{width:50%;font-family:Exo;font-style:normal;background:linear-gradient(180deg,rgba(156,155,183,.1) 0,rgba(65,64,89,.1) 100%);backdrop-filter:blur(40px);border-radius:15px;padding-bottom:20px}
+.artistphone .left p{width:82%;font-size:12px;color:#fff;margin:0 auto;text-align:center}
+.artistphone .left p:nth-child(2){font-weight:700;font-size:12px}
+.artistphone .left .leftbottom{width:80%;margin:0 auto;height:20px;display:flex;justify-content:space-between}
+.artistphone .left .leftbottom div{display:flex;justify-content:space-around;align-items:center}
+.artistphone .left .leftbottom span{font-size:12px;color:#fff}
+.artistphone .left .leftbottom img{width:12px;height:12px}
+.artistphone .right{width:45%;height:48px;position:absolute;right:0;bottom:0;border-bottom:1px solid #fff;display:flex;justify-content:space-around;align-items:center}
+.artistphone .right .rightspan{width:30px}
+.introduce{
+    width: 80%;
+    margin: 0 auto;
+    color: #fff;
+    background-image: url(/static/images/yishujia_phone/Group194.png);
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    font-size: 12px;
+    margin-bottom: 20px;
+    padding: 10px;
+    }
+.phonebcak{position:absolute;top:100px;width:15px;margin-left:10px;margin-top:5px}
+.footer-box {min-height: 360px;padding: 20px 0;position: relative;}
+}

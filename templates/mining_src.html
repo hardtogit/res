@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport"
+        content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=yes">
+    <title>FM Gallery</title>
+    <link rel="stylesheet" href="/static/css/common.css" />
+    <link rel="stylesheet" type="text/css" href="/static/css/zhang.css" />
+    <link rel="stylesheet" type="text/css" href="/static/css/mining.css" />
+</head>
+
+<body>
+    <div class="box">
+        <div class="content">
+            <img src="../static/images/mining/txt.png" class="txt">
+            <img src="../static/images/mining/textline.png">
+            <div class="from">
+                <div class="timebox_top">
+                    <p>Epoch 1 Starting in</p>
+                </div>
+                <div class="timebox_center" >
+                    <p class="timeblock">
+                        <span>D</span>
+                        <span>H</span>
+                        <span>Min</span>
+                    </p>
+                    <div class="timeblock">
+                        <span>0</span>
+                        <span>0</span>
+                    </div>
+                    <div class="timeblock">
+                        <span>0</span>
+                        <span>0</span>
+                    </div>
+                    <div class="timeblock">
+                        <span>0</span>
+                        <span>0</span>
+                    </div>
+                    <p class="timeEndTxt">this epoch has ENDED</p>
+                </div>
+                <div class="timebox_bot">
+                    <div>
+                        <img src="../static/images/mining/logoleft.png" style="float: left;">
+                        <img src="../static/images/mining/logoright.png">
+                    </div>
+                    <p style="flex:8">[(${TOKEN})]/ETH Uniswap LP</p>
+                </div>
+                
+                
+                <div class="txtbox">
+                    <div class="txtboxone">
+                        <p>10000000</p>
+                        <p>Total [(${TOKEN})] for epoch 1</p>
+                    </div>
+                    <div>
+                        <p>100.00k</p>
+                        <p>Total LP tokens deposited</p>
+                    </div>
+                    <div>
+                        <p>100.06784435</p>
+                        <p>Cumulative [(${TOKEN})] earned</p>
+                    </div>
+                </div>
+                
+                
+                <div class="MAX">
+                    <div class="MAXleft">
+                        <input type="number" value="0.00">
+                        <span>MAX</span>
+                    </div>
+                    <div class="MAXright">
+                        <button class='loading'>Deposit</button>
+                    </div>
+                </div>
+                
+                <div class="profit">
+                    <span style="text-align: left;">Your LP tokens deposited : 0.00</span>
+                    <!-- <span style="text-align: right;">Wallet balance: 10 LP</span> -->
+                </div>
+                <div class="MAX">
+                    <div class="MAXleft">
+                        <input type="number" value="0.00">
+                        <span>MAX</span>
+                    </div>
+                    <div class="MAXright">
+                        <button class="shouyi">Withdraw</button>
+                    </div>
+                </div>
+                
+                
+                <div class="profit">
+                    <span style="text-align: left;">Your LP tokens deposited : 0.00</span>
+                    <!-- <span style="text-align: right;">Wallet balance: 10 LP</span> -->
+                </div>
+                <div class="claim">
+                    <span>[(${TOKEN})] to be collected 10.06784435</span>
+                    <button class="claimbutton">claim</button>
+                </div>
+                <div class="bottom">
+                    <div>
+                        <!-- <img src="../static/images/mining/logbot.png" alt="" style="flex: 1;">  -->
+                        <!-- <span style="flex: 2;text-align: center;">Buy [(${TOKEN})]</span> -->
+                        <span>Buy [(${TOKEN})]</span>
+                        <!-- <img src="../static/images/mining/shou.png" alt="" style="flex: 1;"> -->
+                        <img src="../static/images/mining/shou.png" alt="">
+                    </div>
+                    <div>
+                        <span>Get LP tokens</span>
+                        <img src="../static/images/mining/shou.png" alt="">
+                    </div>
+                </div>
+            </div>
+            
+            
+            <div class="from2">
+                <div class="from2top">
+                    <img src="../static/images/mining/back.png" alt="" class="back">
+                    <p>Withdraw [(${TOKEN})]/ETH LP Tokens</p>
+                    <span>Available：10.00</span>
+                </div>
+                <div class="MAXtwo">
+                    <div class="MAXtwoleft">
+                        <input type="number" value="0.00">
+                        <span>MAX</span>
+                    </div>
+                    <div class="MAXtworight">
+                        <button>Deposit</button>
+                    </div>
+                </div>
+                <span class="from2bottom">Available：10.00</span>
+            </div>
+            
+        </div>
+        <div class=mask></div>
+        <div class="miningart">
+            <div class="artone">
+                <p>Are you sure you'd like to unstake</p>
+                <div class="buttonbox">
+                    <img src="../static/images/art/artone_left.png" class="Withdraw">
+                    <img src="../static/images/art/artone_right.png" class="artonerightbutton">
+                </div>
+            </div>
+            <div class="arttwo">
+                <img src="../static/images/art/arttwo_close.png" class="close">
+                <p>You've unstaked your tokensAwaiting block confirmation</p>
+            </div>
+            <div class="atrthree">
+                <img src="../static/images/art/artlod.png">
+                <p>Processing</p>
+            </div>
+            <div class="artfour">
+                <img src="../static/images/art/artwaring.png">
+                <p>Transaction Cancelled</p>
+                <img src="../static/images/art/artworing_button.png" class="warningbutton">
+            </div>
+            <div class="artfive">
+                <img src="../static/images/art/arttwo_close.png" class="artfiveclose">
+                <p>We’ve sent the tokens to your wallet</p>
+            </div>
+        </div>
+    </div>
+</body>
+<script src="/static/js/jquery.min.js?v=2021022122"></script>
+<script src="/static/js/common.js?v=2021022312"></script>
+<script>
+    // 去判断条件是否够提取例子  Withdraw按钮元素是eq(1)
+    var num=1
+    if(num<2){
+        $(".MAXright button").eq(0).css('background','linear-gradient(275.44deg, #8B6D7B 0%, #534D61 92.92%)')
+    }else{
+        $(".MAXright button").eq(0).css('background','linear-gradient(275.44deg, #157EDF 0%, #6318C3 92.92%)')
+    }
+    //活动结束后应该展示的样式 
+    // if(true){
+    //     // 结束表单展示
+    //     $('.timeblock,.txtboxone').css("display", 'none')
+    //     $('.timebox_top').css('display','none')
+    //     $('.timebox_bot').addClass('remove')
+    //     $('.timebox_center').addClass('textEndremove')
+    //     $('.txtbox').css('justify-content','space-around')
+    //     $('.timeEndTxt').css({"display":'block',"line-height":"87px","font-size":"20px"})
+    // }
+    // 跳转到第二个表单页
+    $('.shouyi').on("click", function () {
+        $('.from2').css("display", 'block')
+        $('.from').css("display", 'none')
+        $('.artone,.arttwo').css("display", 'none')
+    })
+    // 第二个表单页中的按钮触发弹窗1
+    $('.MAXtworight').on("click", function () {
+        $('.artone,.mask').css("display", 'block')
+        $('.miningart').addClass('alt1')
+    })
+     // 弹窗1左按钮
+     $('.Withdraw').on("click", function () {
+        $('.arttwo').css("display", 'block')
+        $('.artone').css("display", 'none')
+    })
+    // 弹窗1右按钮
+    $('.artonerightbutton').on("click", function () {
+        $('.artone,.mask').css("display", 'none')
+        $('.miningart').removeClass('alt1')
+    })
+    //弹框2顶部关闭/表单2中的返回
+     $('.close,.back').on("click", function () {
+        $('.from2,.arttwo,.mask').css("display", 'none')
+        $('.from').css("display", 'block')
+        $('.miningart').removeClass('alt1')
+    })
+    //Deposit按钮事件
+    $('.loading').on("click",function(){
+        $('.artfour').css("display", 'none')
+        $('.atrthree,.mask').css("display", 'block')
+        $('.miningart').addClass('alt2')
+    })
+    // 点击loding 弹窗
+    $(".atrthree").on("click",function(){
+        $('.atrthree').css("display", 'none')
+        $('.artfour').css("display", 'block')
+    })
+    //点击弹窗4按钮
+    $(".warningbutton").on("click",function(){
+        $('.artfour,.mask,.profit').css("display", 'none')
+        $('.miningart').removeClass('alt2')
+    })
+    //claim按钮
+    $(".claimbutton").on("click",function(){
+        $('.artfive,.mask').css("display", 'block')
+        $('.miningart').addClass('alt2')
+    })
+    //弹窗5关闭按钮
+    $(".artfiveclose").on('click',function(){
+        $('.artfive,.mask').css("display", 'none')
+        $('.miningart').removeClass('alt2')
+    })
+</script>
+</html>

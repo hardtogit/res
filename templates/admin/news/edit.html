@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta http-equiv="content-type" content="text/html;charset=utf-8">
+	<title>发布/编辑资讯</title>
+	<link href="/static/css/admin.css?v=20210219" rel="stylesheet" type="text/css" />
+	<script src="/static/scripts/jquery-2.2.0.min.js?v=20210218" type="text/javascript"></script>
+</head>
+<body>
+	<div class="mainer">
+		<form id="form1" method="post" onsubmit="return false">
+			<input type="hidden" name="id" th:value="${model?.id}" />
+			<input type="hidden" name="imageUrl" th:value="${model?.imageUrl}" />
+			<table role="edit">
+				<tr>
+					<th width="120">资讯标题：</th>
+					<td><input type="text" maxlength="255" size="100" name="title" th:value="${model?.title}" /></td>
+				</tr>
+				<tr>
+					<th>资讯介绍：</th>
+					<td><textarea rows="10" name="summary" cols="100" th:text="${model?.summary}"></textarea></td>
+				</tr>
+				<tr>
+					<th>资讯图片：</th>
+					<td>
+						<input type="file" name="file1" />
+						<img th:src="@{(${model?.imageUrl})}" style="max-width:100px;max-height:100px;"/>
+					</td>
+				</tr>
+				<tr>
+					<th>跳转链接：</th>
+					<td><input type="text" maxlength="255" size="100" name="jumpUrl" th:value="${model?.jumpUrl}" /></td>
+				</tr>
+				<tr>
+					<th>显示顺序：</th>
+					<td><input type="text" name="sort" maxlength="6" th:value="${model?.sort}" /></td>
+				</tr>
+				<tr>
+					<th>发布时间：</th>
+					<td><input type="text" maxlength="20" size="25" name="createTime" th:value="${#dates.format(model?.createTime,'yyyy-MM-dd HH:mm:ss')}" /></td>
+				</tr>
+				<tr>
+					<th></th>
+					<td>
+						<input class="button-submit" type="button" value="保存并提交" />
+						<a href="javascript:history.back()">返回</a>
+					</td>
+				</tr>
+			</table>
+		</form>
+	</div>
+	<script type="text/javascript">
+		var isok = false;
+		$('.button-submit').click(function(e) {
+			if (isok) return;
+			
+			var target = e.currentTarget, form = target.form;
+			if (form['title'].value.length == 0) {
+				alert('请输入资讯标题.');
+				form['title'].focus()
+				return;
+			}
+			if (form['summary'].value.length == 0) {
+				alert('请输入资讯介绍.');
+				form['summary'].focus()
+				return;
+			}
+			
+			target.value='正在提交数据...';
+			isok = true;
+			var fd = new FormData(form);
+			$.ajax({
+		        url: '../save', 
+		        type:'POST',
+		        cache: false, 
+		        processData: false,
+		        contentType: false,
+		        data: fd,
+		        success: function(model) {
+		        	alert(model.message);
+					top.location.href='../list';
+					isok = false;
+					target.value='保存并提交';
+		        },
+		        error: function(err) {
+		 			alert(err);
+		 			isok = false;
+		 			target.value='保存并提交';
+		        }
+		    })
+		});
+	</script>
+	
+</body>
+</html>

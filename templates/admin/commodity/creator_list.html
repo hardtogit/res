@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta http-equiv="content-type" content="text/html;charset=utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, minimum-scale=1.0"/>
+	<meta http-equiv="X-UA-Compatible" content="ie=edge,chrome=1"/>
+	<title>创作者列表</title>
+	<link href="/static/css/admin.css?v=2021021916" rel="stylesheet" type="text/css" />
+	<script src="/static/scripts/jquery-2.2.0.min.js?v=20210218" type="text/javascript"></script>
+	<script src="/static/scripts/admin.js?v=20210218" type="text/javascript"></script>
+</head>
+<body>
+	<div th:replace="admin/navi::naviBar"></div>
+	<div class="mainer">
+		<table role="list" class="no">
+			<tr>
+				<th width="70">编号</th>
+				<th width="130">国籍</th>
+				<th width="180">名称</th>
+				<th width="170">性别</th>
+				<th width="100">年龄</th>
+				<th width="100">在售数量</th>
+				<th width="100">已售数量</th>
+				<th>操作</th>
+			</tr>
+			<tr th:each="item,stat:${model.items}">
+				<td th:text="${item.id}"></td>
+				<td th:text="${item.country}">--</td>
+				<td th:text="${item.name}">--</td>
+				<td th:text="${item.gender}">--</td>
+				<td th:text="${item.age}">0</td>
+				<td th:text="${item.progress}">0</td>
+				<td th:text="${item.sales}">0</td>
+				<td class="button">
+					<a th:href="@{./edit/{id}(id=${item.id})}">编辑</a>
+					<a class="button-delete" th:attr="data-id=${item.id},data-title=${item.name}">删除</a>
+				</td>
+			</tr>
+		</table>
+		<div class="paging">
+			<p class="button">
+				<a href="./edit/0">添加作者</a>
+			</p>
+			<p class="page">
+				<a th:each="i:${#numbers.sequence(1,model.pages)}" th:href="@{./list?index={pn}(pn=${i})}" th:classappend="${model.index} eq ${i} ? 'active'" th:text="${i}"></a>
+			</p>
+		</div>
+	</div>
+	<script type="text/javascript">
+		$('.button-delete').click(function(e) {
+			var that = $(e.target), id = that.data('id'), title = that.data('title')
+			if (!confirm('确定要删除【' + title + '】系列吗？')) return;
+			$.getJSON("./delete?id=" + id, function(model) {
+				alert(model.message);
+				top.location.reload()
+			});
+		});
+	</script>
+</body>
+</html>

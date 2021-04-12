@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<th:block th:replace="common/metas::metaConfig" />
+		<title>[(${model?.name})]</title>
+		<link rel="stylesheet" type="text/css" href="/static/css/common.css?v=202102222066" />
+		<link rel="stylesheet" type="text/css" href="/static/css/zhang.css" />
+		<link rel="stylesheet" type="text/css" href="/static/css/money.css" />
+	</head>
+	<body>
+		<header class="header">
+			<img class="logo" src="/static/images/logo.png" alt="FM Gallery" />
+			<img class="mobile-nav" src="/static/images/icon-dian.png" />
+			<div class="head-right" th:replace="common/navi::naviBar"></div>
+		</header>
+		<div class="wallet">
+			<div th:replace="common/mine_header::naviBar"></div>
+            <div class="storyaddress" style="margin:5% auto 0;">
+                <a href="/my/index.html" th:text="${seriesName}"></a>
+                &nbsp;&nbsp; > &nbsp;&nbsp;
+                <a th:href="@{/my/nft/{id}.html(id=${model?.seriesId})}" th:text="${model?.name}">Details</a>
+                &nbsp;&nbsp; > &nbsp;&nbsp;<span>Story</span>
+            </div>
+			<div class="cont">
+				<div class="flex list jc_sb flex_w first show" style="margin:2% auto 0">
+					<div class="storyitem">
+                        <div class="item_img">
+							<img th:src="@{(${model.imageUrl})}">
+						</div>
+					</div>	
+                    <div class="storytxt">
+                        <span>Story</span>
+                        <img src="/static/images/story/storytit.png">
+                        <div class="storytxttop">
+                            <div class="storyleft">
+                                <img src="/static/images/story/storyphone.png"> 
+                                <span style="padding-left:10px" th:text="${model.name}"></span>
+                            </div>
+							<a th:href="@{/art/author/{hashId}.html(hashId=${model?.creatorId})}"><span class="storyright">View Details</span></a>
+                        </div>
+                        <div class="storytxtbottom" style="width:80%;margin-top:10px;">
+                            <!-- <div class="storytxtlist">
+                                <p>Artistic value</p>
+                                <span>[(${model.marketPrice})] [(${UNIT})]</span>
+                            </div> -->
+                           <div class="storytxtlist">
+                                <p>MINTED ON</p>
+                                <span th:text="${model.mintTime == null ? '--' : model.mintTime}"></span>
+                            </div>
+                            <!-- <div class="storytxtlist">
+                                <p>NFT weight</p>
+                                <span th:text="${model.weight}">0</span>
+                            </div> -->
+                            <div class="storytxtlist">
+                                <p>NFT NUMBER</p>
+                                <span th:text="${model.nftCode}">--</span>
+                            </div>
+                        </div>
+                    </div>
+				</div>
+				<div class="content" style="width:75%;margin:50px auto;color:#fff;white-space:pre-line" th:utext="${model.content}"></div>
+			</div>
+			<div class="storycontent" style="border-top:1px solid #CFCFCF;width:100%;height:auto;"></div>
+		</div>
+		<footer class="footer-box" th:replace="common/footer::footerBar"></footer>
+		<img class="back-top" src="/static/images/back-top.png" alt="" />
+		<script src="/static/js/jquery.min.js?v=2021022122"></script>
+		<script src="/static/js/common.js"></script>
+	</body>
+</html>
